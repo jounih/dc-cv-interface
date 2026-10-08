@@ -1,0 +1,22 @@
+* input AC/noise
+
+.include models.lib
+Vin jack 0 DC 0 AC 1
+R1 jack m 49900
+R2 m adc 49900
+Rsh adc 0 9090
+Csh adc 0 3.3e-10
+Vavdd avdd 0 3.3
+X1 adc avdd ADCIN
+.control
+ac dec 50 10 10meg
+let g = abs(v(adc))
+let g0 = g[0]
+meas ac f3db when g=0.7071*g0 fall=1
+echo RES f3db = $&f3db
+noise v(adc) Vin dec 50 20 20k
+setplot noise2
+let tot = onoise_total
+echo RES onoise = $&tot
+.endc
+.end

@@ -1,0 +1,16 @@
+* rail reverse protection
+.include models.lib
+Vp hp 0 DC 12
+Dp hp p12 SS14
+Rl p12 0 300
+.control
+alter Vp dc=12
+op
+let v1 = v(p12)
+echo RES fwd_rail_V = $&v1
+alter Vp dc=-12
+op
+let i2 = -i(vp)
+echo RES rev_current = $&i2
+.endc
+.end

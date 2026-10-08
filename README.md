@@ -18,6 +18,10 @@ Status: **designed and verified in software, not built.** `./check.sh` passes: 4
 (+110 for the breadboard build), 18/18 ngspice checks, both ESP-IDF builds clean, netlist/KiCad
 netlist/BOMs/schematic generated. The Pico 2 v1 design is in `archive/pico-v1-firmware/` and git history.
 
+## Budget variant: Raspberry Pi Pico 2, 4 in / 4 out (~£39)
+
+The first design is kept as a cheap, simpler option in [`variants/pico2-4x4/`](variants/pico2-4x4/): a Pico 2 (RP2350, TinyUSB UAC2) with a 16-bit DAC8568 and a 24-bit ADS131M04, 4 DC-coupled outputs (±10 V) and 4 inputs at 48 kHz, Eurorack ±12 V for the op-amps. Its own README, BOM, netlist, SVG schematic, ngspice checks and firmware are there (README-v1.md). Same safety checklist applies.
+
 ## SAFETY: a person reviews the board before it touches rack power or a battery
 
 Nothing has been built or measured. Before the first power-up, someone who can read the schematic

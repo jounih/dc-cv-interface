@@ -1,0 +1,67 @@
+* input DC
+
+.include models.lib
+Vin jack 0 DC 0 AC 1
+R1 jack m 49900
+R2 m adc 49900
+Rsh adc 0 9090
+Csh adc 0 3.3e-10
+Vavdd avdd 0 3.3
+X1 adc avdd ADCIN
+.control
+alter Vin dc=-24
+op
+let a = v(adc)
+echo RES vadc_0 = $&a
+let ii = -i(vin)
+echo RES iin_0 = $&ii
+alter Vin dc=-15
+op
+let a = v(adc)
+echo RES vadc_1 = $&a
+let ii = -i(vin)
+echo RES iin_1 = $&ii
+alter Vin dc=-12
+op
+let a = v(adc)
+echo RES vadc_2 = $&a
+let ii = -i(vin)
+echo RES iin_2 = $&ii
+alter Vin dc=-10
+op
+let a = v(adc)
+echo RES vadc_3 = $&a
+let ii = -i(vin)
+echo RES iin_3 = $&ii
+alter Vin dc=0
+op
+let a = v(adc)
+echo RES vadc_4 = $&a
+let ii = -i(vin)
+echo RES iin_4 = $&ii
+alter Vin dc=10
+op
+let a = v(adc)
+echo RES vadc_5 = $&a
+let ii = -i(vin)
+echo RES iin_5 = $&ii
+alter Vin dc=12
+op
+let a = v(adc)
+echo RES vadc_6 = $&a
+let ii = -i(vin)
+echo RES iin_6 = $&ii
+alter Vin dc=15
+op
+let a = v(adc)
+echo RES vadc_7 = $&a
+let ii = -i(vin)
+echo RES iin_7 = $&ii
+alter Vin dc=24
+op
+let a = v(adc)
+echo RES vadc_8 = $&a
+let ii = -i(vin)
+echo RES iin_8 = $&ii
+.endc
+.end

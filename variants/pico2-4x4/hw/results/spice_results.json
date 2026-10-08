@@ -1,0 +1,135 @@
+{
+  "out_dc": {
+    "jack_at_code0_V": 10.2182,
+    "jack_at_code61440_V": -8.92613,
+    "volts_per_code": -0.00031159376051958875,
+    "zero_code_sim": 32793.29462461873,
+    "zero_code_model": 32793,
+    "max_nonlinearity_mV": 0.014008088234263028,
+    "max_dev_from_firmware_model_mV": 0.08730611931717647
+  },
+  "out_faults": {
+    "hard_+15V_while_-10V": {
+      "opamp_out_current_mA": -25.0999,
+      "series_R_current_mA": -25.0999,
+      "series_R_power_W": 0.6300049800100002,
+      "clamp_diode_current_mA": 0.0,
+      "opamp_out_V": -10.0999
+    },
+    "hard_-15V_while_+10V": {
+      "opamp_out_current_mA": 25.0997,
+      "series_R_current_mA": 25.0997,
+      "series_R_power_W": 0.6299949400899999,
+      "clamp_diode_current_mA": 0.0,
+      "opamp_out_V": 10.0997
+    },
+    "module_+12V_1k_while_-10V": {
+      "opamp_out_current_mA": -11.0499,
+      "series_R_current_mA": -11.0499,
+      "series_R_power_W": 0.12210029001,
+      "clamp_diode_current_mA": 0.0,
+      "opamp_out_V": -10.0999
+    },
+    "hard_+15V_rails_off": {
+      "opamp_out_current_mA": 0.00992839,
+      "series_R_current_mA": -14.6678,
+      "series_R_power_W": 0.21514435684,
+      "clamp_diode_current_mA": 14.67772839,
+      "opamp_out_V": 0.332192
+    },
+    "hard_-15V_rails_off": {
+      "opamp_out_current_mA": 0.0171181,
+      "series_R_current_mA": 14.6679,
+      "series_R_power_W": 0.21514729040999997,
+      "clamp_diode_current_mA": -14.6507819,
+      "opamp_out_V": -0.332086
+    }
+  },
+  "out_noise": {
+    "at_0V_uVrms": 115.08,
+    "at_+10V_uVrms": 113.477,
+    "note": "assumes 100 nV/rtHz DAC output noise and 50 nV/rtHz reference noise; 1 cent at 1 V/oct = 833 uV"
+  },
+  "out_ac": {
+    "f_minus3dB_kHz": 39.6974
+  },
+  "out_ref_turn_on": {
+    "CB_10nF_peak_mV": 5849.8099999999995,
+    "CB_0.1nF_peak_mV": 5.4874600000000004
+  },
+  "in_dc": {
+    "-24V": {
+      "adc_pin_V": -1.57623,
+      "input_current_uA": -224.687,
+      "esd_current_uA": -46.50790519051904
+    },
+    "-15V": {
+      "adc_pin_V": -1.22135,
+      "input_current_uA": -138.06300000000002,
+      "esd_current_uA": -3.200320062160067e-06
+    },
+    "-12V": {
+      "adc_pin_V": -0.977078,
+      "input_current_uA": -110.45,
+      "esd_current_uA": 0.00017135713571604587
+    },
+    "-10V": {
+      "adc_pin_V": -0.814231,
+      "input_current_uA": -92.0418,
+      "esd_current_uA": -6.589658965368994e-05
+    },
+    "+0V": {
+      "adc_pin_V": 1.86899e-08,
+      "input_current_uA": -1.87273e-07,
+      "esd_current_uA": -2.3000036700670066e-06
+    },
+    "+10V": {
+      "adc_pin_V": 0.814231,
+      "input_current_uA": 92.0418,
+      "esd_current_uA": 6.589658965368994e-05
+    },
+    "+12V": {
+      "adc_pin_V": 0.977078,
+      "input_current_uA": 110.45,
+      "esd_current_uA": -0.00017135713571604587
+    },
+    "+15V": {
+      "adc_pin_V": 1.22135,
+      "input_current_uA": 138.06300000000002,
+      "esd_current_uA": 3.200320062160067e-06
+    },
+    "+24V": {
+      "adc_pin_V": 1.95416,
+      "input_current_uA": 220.9,
+      "esd_current_uA": -0.0007948794879348241
+    }
+  },
+  "in_summary": {
+    "input_impedance_kOhm": 108.6462889687077,
+    "adc_full_scale_at_jack_V": 14.73783238417599,
+    "within_recommended_-1.3V_at_-15V": true
+  },
+  "in_ac_noise": {
+    "f_minus3dB_kHz": 59.3589,
+    "divider_noise_referred_to_jack_uVrms": 19.786890943724817,
+    "adc_noise_referred_to_jack_uVrms_full_band": 925.2902431865158,
+    "total_referred_to_jack_uVrms": 925.5017856219297,
+    "note": "ADC noise at OSR 64 is shaped toward Nyquist; a 1 kHz software low-pass cuts it several-fold"
+  },
+  "power": {
+    "forward_rail_V_at_40mA": 11.7279,
+    "reversed_header_current_uA": 3.00001
+  },
+  "checks": {
+    "output reaches beyond +-10 V into 100 k": true,
+    "sim matches firmware cal model within 5 mV": true,
+    "hard +-15 V fault: series R < 0.66 W (ERJ-P08 1206)": true,
+    "hard +-15 V fault: op-amp current < 40 mA": true,
+    "rails-off fault: Schottky clamp carries > 80 % of the fault current": true,
+    "ref turn-on transient < 200 mV with CB = 100 pF (50 us ref ramp)": true,
+    "input impedance ~100 k": true,
+    "ADC pin inside abs max (-1.6 V) at -15 V": true,
+    "ADC ESD current < 1 mA at +-24 V": true,
+    "reversed rail header blocks (< 10 uA)": true
+  }
+}
