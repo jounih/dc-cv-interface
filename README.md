@@ -1,3 +1,5 @@
+> **Status: parked (2026-10-08).** Design v2 (ESP32-S3 + PCM3168A audio group at 32 kHz + DAC8568/ADS131M08 CV group over USB-MIDI SysEx) is complete on paper: firmware builds, `./check.sh` passes (host tests + ngspice), netlist/BOM/JLC steps in `hw/`. Nothing has been built or powered. Before resuming: verify the T-Display-S3 socket pin order and the A0515S DC-DC pinout, and do the human safety checklist below. For 48 kHz on all channels, see the ESP32-P4 note in the bandwidth section.
+
 # DIY DC-coupled USB interface for Circuit Studio (v2, ESP32-S3)
 
 An ESP32-S3 display board (LilyGO T-Display-S3) on a factory-assembled carrier PCB. The
