@@ -1,222 +1,845 @@
-ref,value,footprint,pin,net
-J1,Eurorack 2x5 shrouded header,IDC 2x5 2.54 mm,1,-12V_IN
-J1,Eurorack 2x5 shrouded header,IDC 2x5 2.54 mm,2,-12V_IN
-J1,Eurorack 2x5 shrouded header,IDC 2x5 2.54 mm,3,GND
-J1,Eurorack 2x5 shrouded header,IDC 2x5 2.54 mm,4,GND
-J1,Eurorack 2x5 shrouded header,IDC 2x5 2.54 mm,5,GND
-J1,Eurorack 2x5 shrouded header,IDC 2x5 2.54 mm,6,GND
-J1,Eurorack 2x5 shrouded header,IDC 2x5 2.54 mm,7,GND
-J1,Eurorack 2x5 shrouded header,IDC 2x5 2.54 mm,8,GND
-J1,Eurorack 2x5 shrouded header,IDC 2x5 2.54 mm,9,+12V_IN
-J1,Eurorack 2x5 shrouded header,IDC 2x5 2.54 mm,10,+12V_IN
-D1,SS14,SMA / DO-214AC,A,+12V_IN
-D1,SS14,SMA / DO-214AC,K,+12V
-D2,SS14,SMA / DO-214AC,A,-12V
-D2,SS14,SMA / DO-214AC,K,-12V_IN
-C1,10uF 25V,0805 X5R / radial,1,+12V
-C1,10uF 25V,0805 X5R / radial,2,GND
-C2,10uF 25V,0805 X5R / radial,1,GND
-C2,10uF 25V,0805 X5R / radial,2,-12V
-U1,Raspberry Pi Pico 2 (RP2350),Pico module,4,DAC_SCLK
-U1,Raspberry Pi Pico 2 (RP2350),Pico module,5,DAC_SYNC
-U1,Raspberry Pi Pico 2 (RP2350),Pico module,6,DAC_DIN
-U1,Raspberry Pi Pico 2 (RP2350),Pico module,14,ADC_SCLK
-U1,Raspberry Pi Pico 2 (RP2350),Pico module,15,ADC_CS
-U1,Raspberry Pi Pico 2 (RP2350),Pico module,16,ADC_DOUT
-U1,Raspberry Pi Pico 2 (RP2350),Pico module,17,ADC_DRDY
-U1,Raspberry Pi Pico 2 (RP2350),Pico module,19,ADC_DIN
-U1,Raspberry Pi Pico 2 (RP2350),Pico module,20,ADC_RESET
-U1,Raspberry Pi Pico 2 (RP2350),Pico module,27,ADC_CLKIN
-U1,Raspberry Pi Pico 2 (RP2350),Pico module,36,+3V3_D
-U1,Raspberry Pi Pico 2 (RP2350),Pico module,40,VBUS
-U1,Raspberry Pi Pico 2 (RP2350),Pico module,3,GND
-U1,Raspberry Pi Pico 2 (RP2350),Pico module,8,GND
-U1,Raspberry Pi Pico 2 (RP2350),Pico module,13,GND
-U1,Raspberry Pi Pico 2 (RP2350),Pico module,18,GND
-U1,Raspberry Pi Pico 2 (RP2350),Pico module,23,GND
-U1,Raspberry Pi Pico 2 (RP2350),Pico module,28,GND
-U1,Raspberry Pi Pico 2 (RP2350),Pico module,33,GND
-U1,Raspberry Pi Pico 2 (RP2350),Pico module,38,GND
-U5,MCP1700-3302E (LDO 3.3 V),TO-92 (breadboard) / SOT-23,IN,VBUS
-U5,MCP1700-3302E (LDO 3.3 V),TO-92 (breadboard) / SOT-23,GND,GND
-U5,MCP1700-3302E (LDO 3.3 V),TO-92 (breadboard) / SOT-23,OUT,+3V3_A
-C3,1uF,0805,1,VBUS
-C3,1uF,0805,2,GND
-C4,1uF,0805,1,+3V3_A
-C4,1uF,0805,2,GND
-U2,DAC8568BIPW,TSSOP-16,1,+3V3_A
-U2,DAC8568BIPW,TSSOP-16,2,DAC_SYNC
-U2,DAC8568BIPW,TSSOP-16,3,+3V3_A
-U2,DAC8568BIPW,TSSOP-16,4,DAC_OUT1
-U2,DAC8568BIPW,TSSOP-16,5,DAC_OUT3
-U2,DAC8568BIPW,TSSOP-16,6,DAC_OUT5
-U2,DAC8568BIPW,TSSOP-16,7,DAC_OUT7
-U2,DAC8568BIPW,TSSOP-16,8,VREF
-U2,DAC8568BIPW,TSSOP-16,9,+3V3_A
-U2,DAC8568BIPW,TSSOP-16,10,DAC_OUT8
-U2,DAC8568BIPW,TSSOP-16,11,DAC_OUT6
-U2,DAC8568BIPW,TSSOP-16,12,DAC_OUT4
-U2,DAC8568BIPW,TSSOP-16,13,DAC_OUT2
-U2,DAC8568BIPW,TSSOP-16,14,GND
-U2,DAC8568BIPW,TSSOP-16,15,DAC_DIN
-U2,DAC8568BIPW,TSSOP-16,16,DAC_SCLK
-C5,100nF,0805,1,+3V3_A
-C5,100nF,0805,2,GND
-C6,1uF,0805,1,+3V3_A
-C6,1uF,0805,2,GND
-C7,150nF C0G/X7R,0805,1,VREF
-C7,150nF C0G/X7R,0805,2,GND
-R1,10k,0805,1,DAC_SYNC
-R1,10k,0805,2,+3V3_D
-R2,10k 0.1%,0805,1,VREF
-R2,10k 0.1%,0805,2,VB
-R3,8.06k 0.1%,0805,1,VB
-R3,8.06k 0.1%,0805,2,GND
-C8,100pF C0G,0805,1,VB
-C8,100pF C0G,0805,2,GND
-U4,OPA4172ID,SOIC-14,4,+12V
-U4,OPA4172ID,SOIC-14,11,-12V
-U4,OPA4172ID,SOIC-14,1,OPO1
-U4,OPA4172ID,SOIC-14,2,SUM1
-U4,OPA4172ID,SOIC-14,3,VB
-U4,OPA4172ID,SOIC-14,7,OPO2
-U4,OPA4172ID,SOIC-14,6,SUM2
-U4,OPA4172ID,SOIC-14,5,VB
-U4,OPA4172ID,SOIC-14,8,OPO3
-U4,OPA4172ID,SOIC-14,9,SUM3
-U4,OPA4172ID,SOIC-14,10,VB
-U4,OPA4172ID,SOIC-14,14,OPO4
-U4,OPA4172ID,SOIC-14,13,SUM4
-U4,OPA4172ID,SOIC-14,12,VB
-C9,100nF,0805,1,+12V
-C9,100nF,0805,2,GND
-C10,100nF,0805,1,GND
-C10,100nF,0805,2,-12V
-R11,10k 0.1%,0805,1,DAC_OUT1
-R11,10k 0.1%,0805,2,SUM1
-RF1,82.5k 0.1%,0805,1,SUM1
-RF1,82.5k 0.1%,0805,2,OPO1
-CF1,47pF C0G,0805,1,SUM1
-CF1,47pF C0G,0805,2,OPO1
-DC1,BAT54S,SOT-23,1,-12V
-DC1,BAT54S,SOT-23,2,+12V
-DC1,BAT54S,SOT-23,3,OPO1
-RS1,1k 0.66 W anti-surge,1206,1,OPO1
-RS1,1k 0.66 W anti-surge,1206,2,OUT1
-JO1,Thonkiconn PJ398SM,3.5 mm jack,T,OUT1
-JO1,Thonkiconn PJ398SM,3.5 mm jack,S,GND
-JO1,Thonkiconn PJ398SM,3.5 mm jack,TN,NC
-R12,10k 0.1%,0805,1,DAC_OUT2
-R12,10k 0.1%,0805,2,SUM2
-RF2,82.5k 0.1%,0805,1,SUM2
-RF2,82.5k 0.1%,0805,2,OPO2
-CF2,47pF C0G,0805,1,SUM2
-CF2,47pF C0G,0805,2,OPO2
-DC2,BAT54S,SOT-23,1,-12V
-DC2,BAT54S,SOT-23,2,+12V
-DC2,BAT54S,SOT-23,3,OPO2
-RS2,1k 0.66 W anti-surge,1206,1,OPO2
-RS2,1k 0.66 W anti-surge,1206,2,OUT2
-JO2,Thonkiconn PJ398SM,3.5 mm jack,T,OUT2
-JO2,Thonkiconn PJ398SM,3.5 mm jack,S,GND
-JO2,Thonkiconn PJ398SM,3.5 mm jack,TN,NC
-R13,10k 0.1%,0805,1,DAC_OUT3
-R13,10k 0.1%,0805,2,SUM3
-RF3,82.5k 0.1%,0805,1,SUM3
-RF3,82.5k 0.1%,0805,2,OPO3
-CF3,47pF C0G,0805,1,SUM3
-CF3,47pF C0G,0805,2,OPO3
-DC3,BAT54S,SOT-23,1,-12V
-DC3,BAT54S,SOT-23,2,+12V
-DC3,BAT54S,SOT-23,3,OPO3
-RS3,1k 0.66 W anti-surge,1206,1,OPO3
-RS3,1k 0.66 W anti-surge,1206,2,OUT3
-JO3,Thonkiconn PJ398SM,3.5 mm jack,T,OUT3
-JO3,Thonkiconn PJ398SM,3.5 mm jack,S,GND
-JO3,Thonkiconn PJ398SM,3.5 mm jack,TN,NC
-R14,10k 0.1%,0805,1,DAC_OUT4
-R14,10k 0.1%,0805,2,SUM4
-RF4,82.5k 0.1%,0805,1,SUM4
-RF4,82.5k 0.1%,0805,2,OPO4
-CF4,47pF C0G,0805,1,SUM4
-CF4,47pF C0G,0805,2,OPO4
-DC4,BAT54S,SOT-23,1,-12V
-DC4,BAT54S,SOT-23,2,+12V
-DC4,BAT54S,SOT-23,3,OPO4
-RS4,1k 0.66 W anti-surge,1206,1,OPO4
-RS4,1k 0.66 W anti-surge,1206,2,OUT4
-JO4,Thonkiconn PJ398SM,3.5 mm jack,T,OUT4
-JO4,Thonkiconn PJ398SM,3.5 mm jack,S,GND
-JO4,Thonkiconn PJ398SM,3.5 mm jack,TN,NC
-U3,ADS131M04IPW,TSSOP-20,1,+3V3_A
-U3,ADS131M04IPW,TSSOP-20,2,GND
-U3,ADS131M04IPW,TSSOP-20,3,AIN1
-U3,ADS131M04IPW,TSSOP-20,4,GND
-U3,ADS131M04IPW,TSSOP-20,5,GND
-U3,ADS131M04IPW,TSSOP-20,6,AIN2
-U3,ADS131M04IPW,TSSOP-20,7,AIN3
-U3,ADS131M04IPW,TSSOP-20,8,GND
-U3,ADS131M04IPW,TSSOP-20,9,GND
-U3,ADS131M04IPW,TSSOP-20,10,AIN4
-U3,ADS131M04IPW,TSSOP-20,11,ADC_RESET
-U3,ADS131M04IPW,TSSOP-20,12,ADC_CS
-U3,ADS131M04IPW,TSSOP-20,13,ADC_DRDY
-U3,ADS131M04IPW,TSSOP-20,14,ADC_SCLK
-U3,ADS131M04IPW,TSSOP-20,15,ADC_DOUT
-U3,ADS131M04IPW,TSSOP-20,16,ADC_DIN
-U3,ADS131M04IPW,TSSOP-20,17,ADC_CLKIN
-U3,ADS131M04IPW,TSSOP-20,18,ADC_CAP
-U3,ADS131M04IPW,TSSOP-20,19,GND
-U3,ADS131M04IPW,TSSOP-20,20,+3V3_D
-C11,1uF,0805,1,+3V3_A
-C11,1uF,0805,2,GND
-C12,1uF,0805,1,+3V3_D
-C12,1uF,0805,2,GND
-C13,220nF,0805,1,ADC_CAP
-C13,220nF,0805,2,GND
-R4,10k,0805,1,ADC_CS
-R4,10k,0805,2,+3V3_D
-JI1,Thonkiconn PJ398SM,3.5 mm jack,T,IN1
-JI1,Thonkiconn PJ398SM,3.5 mm jack,S,GND
-JI1,Thonkiconn PJ398SM,3.5 mm jack,TN,GND
-RA1,49.9k 1%,0805,1,IN1
-RA1,49.9k 1%,0805,2,INM1
-RB1,49.9k 1%,0805,1,INM1
-RB1,49.9k 1%,0805,2,AIN1
-RC1,9.09k 1%,0805,1,AIN1
-RC1,9.09k 1%,0805,2,GND
-CA1,330pF C0G,0805,1,AIN1
-CA1,330pF C0G,0805,2,GND
-JI2,Thonkiconn PJ398SM,3.5 mm jack,T,IN2
-JI2,Thonkiconn PJ398SM,3.5 mm jack,S,GND
-JI2,Thonkiconn PJ398SM,3.5 mm jack,TN,GND
-RA2,49.9k 1%,0805,1,IN2
-RA2,49.9k 1%,0805,2,INM2
-RB2,49.9k 1%,0805,1,INM2
-RB2,49.9k 1%,0805,2,AIN2
-RC2,9.09k 1%,0805,1,AIN2
-RC2,9.09k 1%,0805,2,GND
-CA2,330pF C0G,0805,1,AIN2
-CA2,330pF C0G,0805,2,GND
-JI3,Thonkiconn PJ398SM,3.5 mm jack,T,IN3
-JI3,Thonkiconn PJ398SM,3.5 mm jack,S,GND
-JI3,Thonkiconn PJ398SM,3.5 mm jack,TN,GND
-RA3,49.9k 1%,0805,1,IN3
-RA3,49.9k 1%,0805,2,INM3
-RB3,49.9k 1%,0805,1,INM3
-RB3,49.9k 1%,0805,2,AIN3
-RC3,9.09k 1%,0805,1,AIN3
-RC3,9.09k 1%,0805,2,GND
-CA3,330pF C0G,0805,1,AIN3
-CA3,330pF C0G,0805,2,GND
-JI4,Thonkiconn PJ398SM,3.5 mm jack,T,IN4
-JI4,Thonkiconn PJ398SM,3.5 mm jack,S,GND
-JI4,Thonkiconn PJ398SM,3.5 mm jack,TN,GND
-RA4,49.9k 1%,0805,1,IN4
-RA4,49.9k 1%,0805,2,INM4
-RB4,49.9k 1%,0805,1,INM4
-RB4,49.9k 1%,0805,2,AIN4
-RC4,9.09k 1%,0805,1,AIN4
-RC4,9.09k 1%,0805,2,GND
-CA4,330pF C0G,0805,1,AIN4
-CA4,330pF C0G,0805,2,GND
+ref,value,footprint,pin,net,group,assembly,mpn
+J2,T-Display-S3 header A,Connector_PinSocket_2.54mm:PinSocket_1x12_P2.54mm_Vertical,1,GND,core,hand,female header 1x12 2.54 mm
+J2,T-Display-S3 header A,Connector_PinSocket_2.54mm:PinSocket_1x12_P2.54mm_Vertical,2,GND,core,hand,female header 1x12 2.54 mm
+J2,T-Display-S3 header A,Connector_PinSocket_2.54mm:PinSocket_1x12_P2.54mm_Vertical,3,+5V_USB,core,hand,female header 1x12 2.54 mm
+J2,T-Display-S3 header A,Connector_PinSocket_2.54mm:PinSocket_1x12_P2.54mm_Vertical,4,NC_S3_3V3,core,hand,female header 1x12 2.54 mm
+J2,T-Display-S3 header A,Connector_PinSocket_2.54mm:PinSocket_1x12_P2.54mm_Vertical,5,RAIL_SENSE,core,hand,female header 1x12 2.54 mm
+J2,T-Display-S3 header A,Connector_PinSocket_2.54mm:PinSocket_1x12_P2.54mm_Vertical,6,RACK_SENSE,core,hand,female header 1x12 2.54 mm
+J2,T-Display-S3 header A,Connector_PinSocket_2.54mm:PinSocket_1x12_P2.54mm_Vertical,7,CS_CODEC,core,hand,female header 1x12 2.54 mm
+J2,T-Display-S3 header A,Connector_PinSocket_2.54mm:PinSocket_1x12_P2.54mm_Vertical,8,CS_ADC,core,hand,female header 1x12 2.54 mm
+J2,T-Display-S3 header A,Connector_PinSocket_2.54mm:PinSocket_1x12_P2.54mm_Vertical,9,SPI_MOSI,core,hand,female header 1x12 2.54 mm
+J2,T-Display-S3 header A,Connector_PinSocket_2.54mm:PinSocket_1x12_P2.54mm_Vertical,10,SPI_SCLK,core,hand,female header 1x12 2.54 mm
+J2,T-Display-S3 header A,Connector_PinSocket_2.54mm:PinSocket_1x12_P2.54mm_Vertical,11,SPI_MISO,core,hand,female header 1x12 2.54 mm
+J2,T-Display-S3 header A,Connector_PinSocket_2.54mm:PinSocket_1x12_P2.54mm_Vertical,12,NC_A12,core,hand,female header 1x12 2.54 mm
+J3,T-Display-S3 header B,Connector_PinSocket_2.54mm:PinSocket_1x12_P2.54mm_Vertical,1,S3_VBAT,core,hand,female header 1x12 2.54 mm
+J3,T-Display-S3 header B,Connector_PinSocket_2.54mm:PinSocket_1x12_P2.54mm_Vertical,2,GND,core,hand,female header 1x12 2.54 mm
+J3,T-Display-S3 header B,Connector_PinSocket_2.54mm:PinSocket_1x12_P2.54mm_Vertical,3,I2S_DIN,core,hand,female header 1x12 2.54 mm
+J3,T-Display-S3 header B,Connector_PinSocket_2.54mm:PinSocket_1x12_P2.54mm_Vertical,4,CS_DAC,core,hand,female header 1x12 2.54 mm
+J3,T-Display-S3 header B,Connector_PinSocket_2.54mm:PinSocket_1x12_P2.54mm_Vertical,5,I2S_MCLK,core,hand,female header 1x12 2.54 mm
+J3,T-Display-S3 header B,Connector_PinSocket_2.54mm:PinSocket_1x12_P2.54mm_Vertical,6,I2S_BCLK,core,hand,female header 1x12 2.54 mm
+J3,T-Display-S3 header B,Connector_PinSocket_2.54mm:PinSocket_1x12_P2.54mm_Vertical,7,I2S_WS,core,hand,female header 1x12 2.54 mm
+J3,T-Display-S3 header B,Connector_PinSocket_2.54mm:PinSocket_1x12_P2.54mm_Vertical,8,I2S_DOUT,core,hand,female header 1x12 2.54 mm
+J3,T-Display-S3 header B,Connector_PinSocket_2.54mm:PinSocket_1x12_P2.54mm_Vertical,9,NC_B9,core,hand,female header 1x12 2.54 mm
+J3,T-Display-S3 header B,Connector_PinSocket_2.54mm:PinSocket_1x12_P2.54mm_Vertical,10,NC_B10,core,hand,female header 1x12 2.54 mm
+J3,T-Display-S3 header B,Connector_PinSocket_2.54mm:PinSocket_1x12_P2.54mm_Vertical,11,NC_B11,core,hand,female header 1x12 2.54 mm
+J3,T-Display-S3 header B,Connector_PinSocket_2.54mm:PinSocket_1x12_P2.54mm_Vertical,12,NC_B12,core,hand,female header 1x12 2.54 mm
+U20,LM66100 (USB path),Package_TO_SOT_SMD:SOT-363_SC-70-6,1,+5V_USB,core,smt,LM66100DCKR
+U20,LM66100 (USB path),Package_TO_SOT_SMD:SOT-363_SC-70-6,2,GND,core,smt,LM66100DCKR
+U20,LM66100 (USB path),Package_TO_SOT_SMD:SOT-363_SC-70-6,3,GND,core,smt,LM66100DCKR
+U20,LM66100 (USB path),Package_TO_SOT_SMD:SOT-363_SC-70-6,4,NC_U20,core,smt,LM66100DCKR
+U20,LM66100 (USB path),Package_TO_SOT_SMD:SOT-363_SC-70-6,5,NC_U20B,core,smt,LM66100DCKR
+U20,LM66100 (USB path),Package_TO_SOT_SMD:SOT-363_SC-70-6,6,+5V_SYS,core,smt,LM66100DCKR
+U21,LM66100 (battery boost path),Package_TO_SOT_SMD:SOT-363_SC-70-6,1,+5V_BOOST,core,smt,LM66100DCKR
+U21,LM66100 (battery boost path),Package_TO_SOT_SMD:SOT-363_SC-70-6,2,GND,core,smt,LM66100DCKR
+U21,LM66100 (battery boost path),Package_TO_SOT_SMD:SOT-363_SC-70-6,3,GND,core,smt,LM66100DCKR
+U21,LM66100 (battery boost path),Package_TO_SOT_SMD:SOT-363_SC-70-6,4,NC_U21,core,smt,LM66100DCKR
+U21,LM66100 (battery boost path),Package_TO_SOT_SMD:SOT-363_SC-70-6,5,NC_U21B,core,smt,LM66100DCKR
+U21,LM66100 (battery boost path),Package_TO_SOT_SMD:SOT-363_SC-70-6,6,+5V_SYS,core,smt,LM66100DCKR
+J4,"LiPo boost module (optional, 3.7 V -> 5 V)",Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical,1,S3_VBAT,core,hand,e.g. Pololu U3V16F5 or MT3608 module set to 5.1 V
+J4,"LiPo boost module (optional, 3.7 V -> 5 V)",Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical,2,GND,core,hand,e.g. Pololu U3V16F5 or MT3608 module set to 5.1 V
+J4,"LiPo boost module (optional, 3.7 V -> 5 V)",Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical,3,+5V_BOOST,core,hand,e.g. Pololu U3V16F5 or MT3608 module set to 5.1 V
+C20,22uF,Capacitor_SMD:C_0805_2012Metric,1,+5V_SYS,core,smt,CL21A226MAQNNNE
+C20,22uF,Capacitor_SMD:C_0805_2012Metric,2,GND,core,smt,CL21A226MAQNNNE
+L20,10uH,Inductor_SMD:L_Taiyo-Yuden_NR-40xx,1,+5V_SYS,core,smt,SWPA4030S100MT
+L20,10uH,Inductor_SMD:L_Taiyo-Yuden_NR-40xx,2,DCDC_VIN,core,smt,SWPA4030S100MT
+C21,10uF,Capacitor_SMD:C_0805_2012Metric,1,DCDC_VIN,core,smt,
+C21,10uF,Capacitor_SMD:C_0805_2012Metric,2,GND,core,smt,
+U22,"A0515S-2WR3 (5 V -> +-15 V, 2 W)",Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical,1,DCDC_VIN,core,hand,A0515S-2WR3
+U22,"A0515S-2WR3 (5 V -> +-15 V, 2 W)",Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical,2,GND,core,hand,A0515S-2WR3
+U22,"A0515S-2WR3 (5 V -> +-15 V, 2 W)",Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical,3,DCDC_P,core,hand,A0515S-2WR3
+U22,"A0515S-2WR3 (5 V -> +-15 V, 2 W)",Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical,4,GND,core,hand,A0515S-2WR3
+U22,"A0515S-2WR3 (5 V -> +-15 V, 2 W)",Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical,5,DCDC_N,core,hand,A0515S-2WR3
+C22,22uF,Capacitor_SMD:C_0805_2012Metric,1,DCDC_P,core,smt,
+C22,22uF,Capacitor_SMD:C_0805_2012Metric,2,GND,core,smt,
+C23,22uF,Capacitor_SMD:C_0805_2012Metric,1,GND,core,smt,
+C23,22uF,Capacitor_SMD:C_0805_2012Metric,2,DCDC_N,core,smt,
+L21,10uH,Inductor_SMD:L_Taiyo-Yuden_NR-40xx,1,DCDC_P,core,smt,SWPA4030S100MT
+L21,10uH,Inductor_SMD:L_Taiyo-Yuden_NR-40xx,2,DCDC_PF,core,smt,SWPA4030S100MT
+L22,10uH,Inductor_SMD:L_Taiyo-Yuden_NR-40xx,1,DCDC_NF,core,smt,SWPA4030S100MT
+L22,10uH,Inductor_SMD:L_Taiyo-Yuden_NR-40xx,2,DCDC_N,core,smt,SWPA4030S100MT
+C24,22uF,Capacitor_SMD:C_0805_2012Metric,1,DCDC_PF,core,smt,
+C24,22uF,Capacitor_SMD:C_0805_2012Metric,2,GND,core,smt,
+C25,22uF,Capacitor_SMD:C_0805_2012Metric,1,GND,core,smt,
+C25,22uF,Capacitor_SMD:C_0805_2012Metric,2,DCDC_NF,core,smt,
+D20,SS14,Diode_SMD:D_SMA,2,DCDC_PF,core,smt,SS14
+D20,SS14,Diode_SMD:D_SMA,1,VPOS_RAW,core,smt,SS14
+D21,SS14,Diode_SMD:D_SMA,2,VNEG_RAW,core,smt,SS14
+D21,SS14,Diode_SMD:D_SMA,1,DCDC_NF,core,smt,SS14
+J1,Eurorack 2x5 shrouded header,Connector_IDC:IDC-Header_2x05_P2.54mm_Vertical,1,RACK_M12,core,hand,2x5 box header 2.54 mm
+J1,Eurorack 2x5 shrouded header,Connector_IDC:IDC-Header_2x05_P2.54mm_Vertical,2,RACK_M12,core,hand,2x5 box header 2.54 mm
+J1,Eurorack 2x5 shrouded header,Connector_IDC:IDC-Header_2x05_P2.54mm_Vertical,3,GND,core,hand,2x5 box header 2.54 mm
+J1,Eurorack 2x5 shrouded header,Connector_IDC:IDC-Header_2x05_P2.54mm_Vertical,4,GND,core,hand,2x5 box header 2.54 mm
+J1,Eurorack 2x5 shrouded header,Connector_IDC:IDC-Header_2x05_P2.54mm_Vertical,5,GND,core,hand,2x5 box header 2.54 mm
+J1,Eurorack 2x5 shrouded header,Connector_IDC:IDC-Header_2x05_P2.54mm_Vertical,6,GND,core,hand,2x5 box header 2.54 mm
+J1,Eurorack 2x5 shrouded header,Connector_IDC:IDC-Header_2x05_P2.54mm_Vertical,7,GND,core,hand,2x5 box header 2.54 mm
+J1,Eurorack 2x5 shrouded header,Connector_IDC:IDC-Header_2x05_P2.54mm_Vertical,8,GND,core,hand,2x5 box header 2.54 mm
+J1,Eurorack 2x5 shrouded header,Connector_IDC:IDC-Header_2x05_P2.54mm_Vertical,9,RACK_P12,core,hand,2x5 box header 2.54 mm
+J1,Eurorack 2x5 shrouded header,Connector_IDC:IDC-Header_2x05_P2.54mm_Vertical,10,RACK_P12,core,hand,2x5 box header 2.54 mm
+D22,SS14,Diode_SMD:D_SMA,2,RACK_P12,core,smt,SS14
+D22,SS14,Diode_SMD:D_SMA,1,VPOS_RAW,core,smt,SS14
+D23,SS14,Diode_SMD:D_SMA,2,VNEG_RAW,core,smt,SS14
+D23,SS14,Diode_SMD:D_SMA,1,RACK_M12,core,smt,SS14
+R20,33k,Resistor_SMD:R_0805_2012Metric,1,RACK_P12,core,smt,
+R20,33k,Resistor_SMD:R_0805_2012Metric,2,RACK_SENSE,core,smt,
+R21,10k,Resistor_SMD:R_0805_2012Metric,1,RACK_SENSE,core,smt,
+R21,10k,Resistor_SMD:R_0805_2012Metric,2,GND,core,smt,
+C26,22uF,Capacitor_SMD:C_0805_2012Metric,1,VPOS_RAW,core,smt,
+C26,22uF,Capacitor_SMD:C_0805_2012Metric,2,GND,core,smt,
+C27,22uF,Capacitor_SMD:C_0805_2012Metric,1,GND,core,smt,
+C27,22uF,Capacitor_SMD:C_0805_2012Metric,2,VNEG_RAW,core,smt,
+U23,TPS7A4901 (+11 V),Package_SO:MSOP-8-1EP_3x3mm_P0.65mm_EP1.68x1.88mm,1,+11V,core,smt,TPS7A4901DGNR
+U23,TPS7A4901 (+11 V),Package_SO:MSOP-8-1EP_3x3mm_P0.65mm_EP1.68x1.88mm,2,FB_P,core,smt,TPS7A4901DGNR
+U23,TPS7A4901 (+11 V),Package_SO:MSOP-8-1EP_3x3mm_P0.65mm_EP1.68x1.88mm,3,NC_U23,core,smt,TPS7A4901DGNR
+U23,TPS7A4901 (+11 V),Package_SO:MSOP-8-1EP_3x3mm_P0.65mm_EP1.68x1.88mm,4,GND,core,smt,TPS7A4901DGNR
+U23,TPS7A4901 (+11 V),Package_SO:MSOP-8-1EP_3x3mm_P0.65mm_EP1.68x1.88mm,5,VPOS_RAW,core,smt,TPS7A4901DGNR
+U23,TPS7A4901 (+11 V),Package_SO:MSOP-8-1EP_3x3mm_P0.65mm_EP1.68x1.88mm,6,NR_P,core,smt,TPS7A4901DGNR
+U23,TPS7A4901 (+11 V),Package_SO:MSOP-8-1EP_3x3mm_P0.65mm_EP1.68x1.88mm,7,NC_U23B,core,smt,TPS7A4901DGNR
+U23,TPS7A4901 (+11 V),Package_SO:MSOP-8-1EP_3x3mm_P0.65mm_EP1.68x1.88mm,8,VPOS_RAW,core,smt,TPS7A4901DGNR
+U23,TPS7A4901 (+11 V),Package_SO:MSOP-8-1EP_3x3mm_P0.65mm_EP1.68x1.88mm,9,GND,core,smt,TPS7A4901DGNR
+R22,82.5k,Resistor_SMD:R_0805_2012Metric,1,+11V,core,smt,
+R22,82.5k,Resistor_SMD:R_0805_2012Metric,2,FB_P,core,smt,
+R23,10k,Resistor_SMD:R_0805_2012Metric,1,FB_P,core,smt,
+R23,10k,Resistor_SMD:R_0805_2012Metric,2,GND,core,smt,
+C28,10nF,Capacitor_SMD:C_0805_2012Metric,1,NR_P,core,smt,
+C28,10nF,Capacitor_SMD:C_0805_2012Metric,2,GND,core,smt,
+C29,10uF,Capacitor_SMD:C_0805_2012Metric,1,+11V,core,smt,
+C29,10uF,Capacitor_SMD:C_0805_2012Metric,2,GND,core,smt,
+U24,TPS7A3001 (-11 V),Package_SO:MSOP-8-1EP_3x3mm_P0.65mm_EP1.68x1.88mm,1,-11V,core,smt,TPS7A3001DGNR
+U24,TPS7A3001 (-11 V),Package_SO:MSOP-8-1EP_3x3mm_P0.65mm_EP1.68x1.88mm,2,FB_N,core,smt,TPS7A3001DGNR
+U24,TPS7A3001 (-11 V),Package_SO:MSOP-8-1EP_3x3mm_P0.65mm_EP1.68x1.88mm,3,NC_U24,core,smt,TPS7A3001DGNR
+U24,TPS7A3001 (-11 V),Package_SO:MSOP-8-1EP_3x3mm_P0.65mm_EP1.68x1.88mm,4,GND,core,smt,TPS7A3001DGNR
+U24,TPS7A3001 (-11 V),Package_SO:MSOP-8-1EP_3x3mm_P0.65mm_EP1.68x1.88mm,5,VNEG_RAW,core,smt,TPS7A3001DGNR
+U24,TPS7A3001 (-11 V),Package_SO:MSOP-8-1EP_3x3mm_P0.65mm_EP1.68x1.88mm,6,NR_N,core,smt,TPS7A3001DGNR
+U24,TPS7A3001 (-11 V),Package_SO:MSOP-8-1EP_3x3mm_P0.65mm_EP1.68x1.88mm,7,NC_U24B,core,smt,TPS7A3001DGNR
+U24,TPS7A3001 (-11 V),Package_SO:MSOP-8-1EP_3x3mm_P0.65mm_EP1.68x1.88mm,8,VNEG_RAW,core,smt,TPS7A3001DGNR
+U24,TPS7A3001 (-11 V),Package_SO:MSOP-8-1EP_3x3mm_P0.65mm_EP1.68x1.88mm,9,GND,core,smt,TPS7A3001DGNR
+R24,82.5k,Resistor_SMD:R_0805_2012Metric,1,-11V,core,smt,
+R24,82.5k,Resistor_SMD:R_0805_2012Metric,2,FB_N,core,smt,
+R25,10k,Resistor_SMD:R_0805_2012Metric,1,FB_N,core,smt,
+R25,10k,Resistor_SMD:R_0805_2012Metric,2,GND,core,smt,
+C30,10nF,Capacitor_SMD:C_0805_2012Metric,1,NR_N,core,smt,
+C30,10nF,Capacitor_SMD:C_0805_2012Metric,2,GND,core,smt,
+C31,10uF,Capacitor_SMD:C_0805_2012Metric,1,GND,core,smt,
+C31,10uF,Capacitor_SMD:C_0805_2012Metric,2,-11V,core,smt,
+R26,100k,Resistor_SMD:R_0805_2012Metric,1,+11V,core,smt,
+R26,100k,Resistor_SMD:R_0805_2012Metric,2,RAIL_SENSE,core,smt,
+R27,10k,Resistor_SMD:R_0805_2012Metric,1,RAIL_SENSE,core,smt,
+R27,10k,Resistor_SMD:R_0805_2012Metric,2,GND,core,smt,
+U25,AMS1117-3.3,Package_TO_SOT_SMD:SOT-223-3_TabPin2,1,GND,core,smt,AMS1117-3.3
+U25,AMS1117-3.3,Package_TO_SOT_SMD:SOT-223-3_TabPin2,2,+3V3_D,core,smt,AMS1117-3.3
+U25,AMS1117-3.3,Package_TO_SOT_SMD:SOT-223-3_TabPin2,3,+5V_SYS,core,smt,AMS1117-3.3
+C32,22uF,Capacitor_SMD:C_0805_2012Metric,1,+3V3_D,core,smt,
+C32,22uF,Capacitor_SMD:C_0805_2012Metric,2,GND,core,smt,
+U26,LP5907-3.3,Package_TO_SOT_SMD:SOT-23-5,1,+5V_SYS,P,smt,TPLP5907MFX-3.3
+U26,LP5907-3.3,Package_TO_SOT_SMD:SOT-23-5,2,GND,P,smt,TPLP5907MFX-3.3
+U26,LP5907-3.3,Package_TO_SOT_SMD:SOT-23-5,3,+5V_SYS,P,smt,TPLP5907MFX-3.3
+U26,LP5907-3.3,Package_TO_SOT_SMD:SOT-23-5,4,NC_U26,P,smt,TPLP5907MFX-3.3
+U26,LP5907-3.3,Package_TO_SOT_SMD:SOT-23-5,5,+3V3_A,P,smt,TPLP5907MFX-3.3
+C33,1uF,Capacitor_SMD:C_0805_2012Metric,1,+3V3_A,P,smt,
+C33,1uF,Capacitor_SMD:C_0805_2012Metric,2,GND,P,smt,
+U27,LP5907-4.5,Package_TO_SOT_SMD:SOT-23-5,1,+5V_SYS,A,smt,LP5907MFX-4.5/NOPB
+U27,LP5907-4.5,Package_TO_SOT_SMD:SOT-23-5,2,GND,A,smt,LP5907MFX-4.5/NOPB
+U27,LP5907-4.5,Package_TO_SOT_SMD:SOT-23-5,3,+5V_SYS,A,smt,LP5907MFX-4.5/NOPB
+U27,LP5907-4.5,Package_TO_SOT_SMD:SOT-23-5,4,NC_U27,A,smt,LP5907MFX-4.5/NOPB
+U27,LP5907-4.5,Package_TO_SOT_SMD:SOT-23-5,5,+4V5_A,A,smt,LP5907MFX-4.5/NOPB
+C34,10uF,Capacitor_SMD:C_0805_2012Metric,1,+4V5_A,A,smt,
+C34,10uF,Capacitor_SMD:C_0805_2012Metric,2,GND,A,smt,
+U2,DAC8568BIPW,Package_SO:TSSOP-16_4.4x5mm_P0.65mm,1,+3V3_A,P,smt,DAC8568BIPW (JLC global sourcing)
+U2,DAC8568BIPW,Package_SO:TSSOP-16_4.4x5mm_P0.65mm,2,CS_DAC,P,smt,DAC8568BIPW (JLC global sourcing)
+U2,DAC8568BIPW,Package_SO:TSSOP-16_4.4x5mm_P0.65mm,3,+3V3_A,P,smt,DAC8568BIPW (JLC global sourcing)
+U2,DAC8568BIPW,Package_SO:TSSOP-16_4.4x5mm_P0.65mm,4,DAC_OUT1,P,smt,DAC8568BIPW (JLC global sourcing)
+U2,DAC8568BIPW,Package_SO:TSSOP-16_4.4x5mm_P0.65mm,5,DAC_OUT3,P,smt,DAC8568BIPW (JLC global sourcing)
+U2,DAC8568BIPW,Package_SO:TSSOP-16_4.4x5mm_P0.65mm,6,DAC_OUT5,P,smt,DAC8568BIPW (JLC global sourcing)
+U2,DAC8568BIPW,Package_SO:TSSOP-16_4.4x5mm_P0.65mm,7,DAC_OUT7,P,smt,DAC8568BIPW (JLC global sourcing)
+U2,DAC8568BIPW,Package_SO:TSSOP-16_4.4x5mm_P0.65mm,8,VREF,P,smt,DAC8568BIPW (JLC global sourcing)
+U2,DAC8568BIPW,Package_SO:TSSOP-16_4.4x5mm_P0.65mm,9,+3V3_A,P,smt,DAC8568BIPW (JLC global sourcing)
+U2,DAC8568BIPW,Package_SO:TSSOP-16_4.4x5mm_P0.65mm,10,DAC_OUT8,P,smt,DAC8568BIPW (JLC global sourcing)
+U2,DAC8568BIPW,Package_SO:TSSOP-16_4.4x5mm_P0.65mm,11,DAC_OUT6,P,smt,DAC8568BIPW (JLC global sourcing)
+U2,DAC8568BIPW,Package_SO:TSSOP-16_4.4x5mm_P0.65mm,12,DAC_OUT4,P,smt,DAC8568BIPW (JLC global sourcing)
+U2,DAC8568BIPW,Package_SO:TSSOP-16_4.4x5mm_P0.65mm,13,DAC_OUT2,P,smt,DAC8568BIPW (JLC global sourcing)
+U2,DAC8568BIPW,Package_SO:TSSOP-16_4.4x5mm_P0.65mm,14,GND,P,smt,DAC8568BIPW (JLC global sourcing)
+U2,DAC8568BIPW,Package_SO:TSSOP-16_4.4x5mm_P0.65mm,15,SPI_MOSI,P,smt,DAC8568BIPW (JLC global sourcing)
+U2,DAC8568BIPW,Package_SO:TSSOP-16_4.4x5mm_P0.65mm,16,SPI_SCLK,P,smt,DAC8568BIPW (JLC global sourcing)
+C1,100nF,Capacitor_SMD:C_0805_2012Metric,1,+3V3_A,P,smt,
+C1,100nF,Capacitor_SMD:C_0805_2012Metric,2,GND,P,smt,
+C2,220nF,Capacitor_SMD:C_0805_2012Metric,1,VREF,P,smt,
+C2,220nF,Capacitor_SMD:C_0805_2012Metric,2,GND,P,smt,
+R1,10k,Resistor_SMD:R_0805_2012Metric,1,CS_DAC,core,smt,
+R1,10k,Resistor_SMD:R_0805_2012Metric,2,+3V3_D,core,smt,
+R2,10k 0.1%,Resistor_SMD:R_0805_2012Metric,1,VREF,P,smt,RT0805BRD0710KL
+R2,10k 0.1%,Resistor_SMD:R_0805_2012Metric,2,VB,P,smt,RT0805BRD0710KL
+R3,8.06k 0.1%,Resistor_SMD:R_0805_2012Metric,1,VB,P,smt,RT0805BRD078K06L
+R3,8.06k 0.1%,Resistor_SMD:R_0805_2012Metric,2,GND,P,smt,RT0805BRD078K06L
+C3,100pF C0G,Capacitor_SMD:C_0805_2012Metric,1,VB,P,smt,
+C3,100pF C0G,Capacitor_SMD:C_0805_2012Metric,2,GND,P,smt,
+U4,OPA4172,Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,4,+11V,P,smt,OPA4172IDR
+U4,OPA4172,Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,11,-11V,P,smt,OPA4172IDR
+U4,OPA4172,Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,1,OPO1,P,smt,OPA4172IDR
+U4,OPA4172,Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,2,SUM1,P,smt,OPA4172IDR
+U4,OPA4172,Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,3,VB,P,smt,OPA4172IDR
+U4,OPA4172,Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,7,OPO2,P,smt,OPA4172IDR
+U4,OPA4172,Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,6,SUM2,P,smt,OPA4172IDR
+U4,OPA4172,Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,5,VB,P,smt,OPA4172IDR
+U4,OPA4172,Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,8,OPO3,P,smt,OPA4172IDR
+U4,OPA4172,Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,9,SUM3,P,smt,OPA4172IDR
+U4,OPA4172,Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,10,VB,P,smt,OPA4172IDR
+U4,OPA4172,Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,14,OPO4,P,smt,OPA4172IDR
+U4,OPA4172,Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,13,SUM4,P,smt,OPA4172IDR
+U4,OPA4172,Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,12,VB,P,smt,OPA4172IDR
+C4P,100nF,Capacitor_SMD:C_0805_2012Metric,1,+11V,P,smt,
+C4P,100nF,Capacitor_SMD:C_0805_2012Metric,2,GND,P,smt,
+C4N,100nF,Capacitor_SMD:C_0805_2012Metric,1,GND,P,smt,
+C4N,100nF,Capacitor_SMD:C_0805_2012Metric,2,-11V,P,smt,
+U5,OPA4172,Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,4,+11V,P,smt,OPA4172IDR
+U5,OPA4172,Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,11,-11V,P,smt,OPA4172IDR
+U5,OPA4172,Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,1,OPO5,P,smt,OPA4172IDR
+U5,OPA4172,Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,2,SUM5,P,smt,OPA4172IDR
+U5,OPA4172,Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,3,VB,P,smt,OPA4172IDR
+U5,OPA4172,Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,7,OPO6,P,smt,OPA4172IDR
+U5,OPA4172,Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,6,SUM6,P,smt,OPA4172IDR
+U5,OPA4172,Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,5,VB,P,smt,OPA4172IDR
+U5,OPA4172,Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,8,OPO7,P,smt,OPA4172IDR
+U5,OPA4172,Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,9,SUM7,P,smt,OPA4172IDR
+U5,OPA4172,Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,10,VB,P,smt,OPA4172IDR
+U5,OPA4172,Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,14,OPO8,P,smt,OPA4172IDR
+U5,OPA4172,Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,13,SUM8,P,smt,OPA4172IDR
+U5,OPA4172,Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,12,VB,P,smt,OPA4172IDR
+C5P,100nF,Capacitor_SMD:C_0805_2012Metric,1,+11V,P,smt,
+C5P,100nF,Capacitor_SMD:C_0805_2012Metric,2,GND,P,smt,
+C5N,100nF,Capacitor_SMD:C_0805_2012Metric,1,GND,P,smt,
+C5N,100nF,Capacitor_SMD:C_0805_2012Metric,2,-11V,P,smt,
+R11,10k 0.1%,Resistor_SMD:R_0805_2012Metric,1,DAC_OUT1,P,smt,RT0805BRD0710KL
+R11,10k 0.1%,Resistor_SMD:R_0805_2012Metric,2,SUM1,P,smt,RT0805BRD0710KL
+RF1,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,1,SUM1,P,smt,RT0805BRD0782K5L
+RF1,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,2,OPO1,P,smt,RT0805BRD0782K5L
+CF1,47pF C0G,Capacitor_SMD:C_0805_2012Metric,1,SUM1,P,smt,
+CF1,47pF C0G,Capacitor_SMD:C_0805_2012Metric,2,OPO1,P,smt,
+DC1,BAT54S,Package_TO_SOT_SMD:SOT-23,1,-11V,P,smt,"BAT54S,215"
+DC1,BAT54S,Package_TO_SOT_SMD:SOT-23,2,+11V,P,smt,"BAT54S,215"
+DC1,BAT54S,Package_TO_SOT_SMD:SOT-23,3,OPO1,P,smt,"BAT54S,215"
+RS1,1k 0.66W,Resistor_SMD:R_1206_3216Metric,1,OPO1,P,smt,ERJ-P08J102V
+RS1,1k 0.66W,Resistor_SMD:R_1206_3216Metric,2,CVOUT1,P,smt,ERJ-P08J102V
+JPO1,CV Out P1,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,T,CVOUT1,P,hand,Thonkiconn PJ398SM
+JPO1,CV Out P1,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,S,GND,P,hand,Thonkiconn PJ398SM
+JPO1,CV Out P1,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,TN,NC_JPO1,P,hand,Thonkiconn PJ398SM
+R12,10k 0.1%,Resistor_SMD:R_0805_2012Metric,1,DAC_OUT2,P,smt,RT0805BRD0710KL
+R12,10k 0.1%,Resistor_SMD:R_0805_2012Metric,2,SUM2,P,smt,RT0805BRD0710KL
+RF2,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,1,SUM2,P,smt,RT0805BRD0782K5L
+RF2,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,2,OPO2,P,smt,RT0805BRD0782K5L
+CF2,47pF C0G,Capacitor_SMD:C_0805_2012Metric,1,SUM2,P,smt,
+CF2,47pF C0G,Capacitor_SMD:C_0805_2012Metric,2,OPO2,P,smt,
+DC2,BAT54S,Package_TO_SOT_SMD:SOT-23,1,-11V,P,smt,"BAT54S,215"
+DC2,BAT54S,Package_TO_SOT_SMD:SOT-23,2,+11V,P,smt,"BAT54S,215"
+DC2,BAT54S,Package_TO_SOT_SMD:SOT-23,3,OPO2,P,smt,"BAT54S,215"
+RS2,1k 0.66W,Resistor_SMD:R_1206_3216Metric,1,OPO2,P,smt,ERJ-P08J102V
+RS2,1k 0.66W,Resistor_SMD:R_1206_3216Metric,2,CVOUT2,P,smt,ERJ-P08J102V
+JPO2,CV Out P2,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,T,CVOUT2,P,hand,Thonkiconn PJ398SM
+JPO2,CV Out P2,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,S,GND,P,hand,Thonkiconn PJ398SM
+JPO2,CV Out P2,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,TN,NC_JPO2,P,hand,Thonkiconn PJ398SM
+R13,10k 0.1%,Resistor_SMD:R_0805_2012Metric,1,DAC_OUT3,P,smt,RT0805BRD0710KL
+R13,10k 0.1%,Resistor_SMD:R_0805_2012Metric,2,SUM3,P,smt,RT0805BRD0710KL
+RF3,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,1,SUM3,P,smt,RT0805BRD0782K5L
+RF3,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,2,OPO3,P,smt,RT0805BRD0782K5L
+CF3,47pF C0G,Capacitor_SMD:C_0805_2012Metric,1,SUM3,P,smt,
+CF3,47pF C0G,Capacitor_SMD:C_0805_2012Metric,2,OPO3,P,smt,
+DC3,BAT54S,Package_TO_SOT_SMD:SOT-23,1,-11V,P,smt,"BAT54S,215"
+DC3,BAT54S,Package_TO_SOT_SMD:SOT-23,2,+11V,P,smt,"BAT54S,215"
+DC3,BAT54S,Package_TO_SOT_SMD:SOT-23,3,OPO3,P,smt,"BAT54S,215"
+RS3,1k 0.66W,Resistor_SMD:R_1206_3216Metric,1,OPO3,P,smt,ERJ-P08J102V
+RS3,1k 0.66W,Resistor_SMD:R_1206_3216Metric,2,CVOUT3,P,smt,ERJ-P08J102V
+JPO3,CV Out P3,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,T,CVOUT3,P,hand,Thonkiconn PJ398SM
+JPO3,CV Out P3,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,S,GND,P,hand,Thonkiconn PJ398SM
+JPO3,CV Out P3,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,TN,NC_JPO3,P,hand,Thonkiconn PJ398SM
+R14,10k 0.1%,Resistor_SMD:R_0805_2012Metric,1,DAC_OUT4,P,smt,RT0805BRD0710KL
+R14,10k 0.1%,Resistor_SMD:R_0805_2012Metric,2,SUM4,P,smt,RT0805BRD0710KL
+RF4,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,1,SUM4,P,smt,RT0805BRD0782K5L
+RF4,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,2,OPO4,P,smt,RT0805BRD0782K5L
+CF4,47pF C0G,Capacitor_SMD:C_0805_2012Metric,1,SUM4,P,smt,
+CF4,47pF C0G,Capacitor_SMD:C_0805_2012Metric,2,OPO4,P,smt,
+DC4,BAT54S,Package_TO_SOT_SMD:SOT-23,1,-11V,P,smt,"BAT54S,215"
+DC4,BAT54S,Package_TO_SOT_SMD:SOT-23,2,+11V,P,smt,"BAT54S,215"
+DC4,BAT54S,Package_TO_SOT_SMD:SOT-23,3,OPO4,P,smt,"BAT54S,215"
+RS4,1k 0.66W,Resistor_SMD:R_1206_3216Metric,1,OPO4,P,smt,ERJ-P08J102V
+RS4,1k 0.66W,Resistor_SMD:R_1206_3216Metric,2,CVOUT4,P,smt,ERJ-P08J102V
+JPO4,CV Out P4,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,T,CVOUT4,P,hand,Thonkiconn PJ398SM
+JPO4,CV Out P4,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,S,GND,P,hand,Thonkiconn PJ398SM
+JPO4,CV Out P4,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,TN,NC_JPO4,P,hand,Thonkiconn PJ398SM
+R15,10k 0.1%,Resistor_SMD:R_0805_2012Metric,1,DAC_OUT5,P,smt,RT0805BRD0710KL
+R15,10k 0.1%,Resistor_SMD:R_0805_2012Metric,2,SUM5,P,smt,RT0805BRD0710KL
+RF5,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,1,SUM5,P,smt,RT0805BRD0782K5L
+RF5,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,2,OPO5,P,smt,RT0805BRD0782K5L
+CF5,47pF C0G,Capacitor_SMD:C_0805_2012Metric,1,SUM5,P,smt,
+CF5,47pF C0G,Capacitor_SMD:C_0805_2012Metric,2,OPO5,P,smt,
+DC5,BAT54S,Package_TO_SOT_SMD:SOT-23,1,-11V,P,smt,"BAT54S,215"
+DC5,BAT54S,Package_TO_SOT_SMD:SOT-23,2,+11V,P,smt,"BAT54S,215"
+DC5,BAT54S,Package_TO_SOT_SMD:SOT-23,3,OPO5,P,smt,"BAT54S,215"
+RS5,1k 0.66W,Resistor_SMD:R_1206_3216Metric,1,OPO5,P,smt,ERJ-P08J102V
+RS5,1k 0.66W,Resistor_SMD:R_1206_3216Metric,2,CVOUT5,P,smt,ERJ-P08J102V
+JPO5,CV Out P5,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,T,CVOUT5,P,hand,Thonkiconn PJ398SM
+JPO5,CV Out P5,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,S,GND,P,hand,Thonkiconn PJ398SM
+JPO5,CV Out P5,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,TN,NC_JPO5,P,hand,Thonkiconn PJ398SM
+R16,10k 0.1%,Resistor_SMD:R_0805_2012Metric,1,DAC_OUT6,P,smt,RT0805BRD0710KL
+R16,10k 0.1%,Resistor_SMD:R_0805_2012Metric,2,SUM6,P,smt,RT0805BRD0710KL
+RF6,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,1,SUM6,P,smt,RT0805BRD0782K5L
+RF6,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,2,OPO6,P,smt,RT0805BRD0782K5L
+CF6,47pF C0G,Capacitor_SMD:C_0805_2012Metric,1,SUM6,P,smt,
+CF6,47pF C0G,Capacitor_SMD:C_0805_2012Metric,2,OPO6,P,smt,
+DC6,BAT54S,Package_TO_SOT_SMD:SOT-23,1,-11V,P,smt,"BAT54S,215"
+DC6,BAT54S,Package_TO_SOT_SMD:SOT-23,2,+11V,P,smt,"BAT54S,215"
+DC6,BAT54S,Package_TO_SOT_SMD:SOT-23,3,OPO6,P,smt,"BAT54S,215"
+RS6,1k 0.66W,Resistor_SMD:R_1206_3216Metric,1,OPO6,P,smt,ERJ-P08J102V
+RS6,1k 0.66W,Resistor_SMD:R_1206_3216Metric,2,CVOUT6,P,smt,ERJ-P08J102V
+JPO6,CV Out P6,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,T,CVOUT6,P,hand,Thonkiconn PJ398SM
+JPO6,CV Out P6,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,S,GND,P,hand,Thonkiconn PJ398SM
+JPO6,CV Out P6,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,TN,NC_JPO6,P,hand,Thonkiconn PJ398SM
+R17,10k 0.1%,Resistor_SMD:R_0805_2012Metric,1,DAC_OUT7,P,smt,RT0805BRD0710KL
+R17,10k 0.1%,Resistor_SMD:R_0805_2012Metric,2,SUM7,P,smt,RT0805BRD0710KL
+RF7,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,1,SUM7,P,smt,RT0805BRD0782K5L
+RF7,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,2,OPO7,P,smt,RT0805BRD0782K5L
+CF7,47pF C0G,Capacitor_SMD:C_0805_2012Metric,1,SUM7,P,smt,
+CF7,47pF C0G,Capacitor_SMD:C_0805_2012Metric,2,OPO7,P,smt,
+DC7,BAT54S,Package_TO_SOT_SMD:SOT-23,1,-11V,P,smt,"BAT54S,215"
+DC7,BAT54S,Package_TO_SOT_SMD:SOT-23,2,+11V,P,smt,"BAT54S,215"
+DC7,BAT54S,Package_TO_SOT_SMD:SOT-23,3,OPO7,P,smt,"BAT54S,215"
+RS7,1k 0.66W,Resistor_SMD:R_1206_3216Metric,1,OPO7,P,smt,ERJ-P08J102V
+RS7,1k 0.66W,Resistor_SMD:R_1206_3216Metric,2,CVOUT7,P,smt,ERJ-P08J102V
+JPO7,CV Out P7,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,T,CVOUT7,P,hand,Thonkiconn PJ398SM
+JPO7,CV Out P7,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,S,GND,P,hand,Thonkiconn PJ398SM
+JPO7,CV Out P7,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,TN,NC_JPO7,P,hand,Thonkiconn PJ398SM
+R18,10k 0.1%,Resistor_SMD:R_0805_2012Metric,1,DAC_OUT8,P,smt,RT0805BRD0710KL
+R18,10k 0.1%,Resistor_SMD:R_0805_2012Metric,2,SUM8,P,smt,RT0805BRD0710KL
+RF8,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,1,SUM8,P,smt,RT0805BRD0782K5L
+RF8,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,2,OPO8,P,smt,RT0805BRD0782K5L
+CF8,47pF C0G,Capacitor_SMD:C_0805_2012Metric,1,SUM8,P,smt,
+CF8,47pF C0G,Capacitor_SMD:C_0805_2012Metric,2,OPO8,P,smt,
+DC8,BAT54S,Package_TO_SOT_SMD:SOT-23,1,-11V,P,smt,"BAT54S,215"
+DC8,BAT54S,Package_TO_SOT_SMD:SOT-23,2,+11V,P,smt,"BAT54S,215"
+DC8,BAT54S,Package_TO_SOT_SMD:SOT-23,3,OPO8,P,smt,"BAT54S,215"
+RS8,1k 0.66W,Resistor_SMD:R_1206_3216Metric,1,OPO8,P,smt,ERJ-P08J102V
+RS8,1k 0.66W,Resistor_SMD:R_1206_3216Metric,2,CVOUT8,P,smt,ERJ-P08J102V
+JPO8,CV Out P8,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,T,CVOUT8,P,hand,Thonkiconn PJ398SM
+JPO8,CV Out P8,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,S,GND,P,hand,Thonkiconn PJ398SM
+JPO8,CV Out P8,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,TN,NC_JPO8,P,hand,Thonkiconn PJ398SM
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,29,AIN1,P,smt,ADS131M08IPBSR
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,30,GND,P,smt,ADS131M08IPBSR
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,32,AIN2,P,smt,ADS131M08IPBSR
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,31,GND,P,smt,ADS131M08IPBSR
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,1,AIN3,P,smt,ADS131M08IPBSR
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,2,GND,P,smt,ADS131M08IPBSR
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,4,AIN4,P,smt,ADS131M08IPBSR
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,3,GND,P,smt,ADS131M08IPBSR
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,5,AIN5,P,smt,ADS131M08IPBSR
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,6,GND,P,smt,ADS131M08IPBSR
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,8,AIN6,P,smt,ADS131M08IPBSR
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,7,GND,P,smt,ADS131M08IPBSR
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,9,AIN7,P,smt,ADS131M08IPBSR
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,10,GND,P,smt,ADS131M08IPBSR
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,12,AIN8,P,smt,ADS131M08IPBSR
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,11,GND,P,smt,ADS131M08IPBSR
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,13,GND,P,smt,ADS131M08IPBSR
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,28,GND,P,smt,ADS131M08IPBSR
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,14,NC_REFIN,P,smt,ADS131M08IPBSR
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,15,+3V3_A,P,smt,ADS131M08IPBSR
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,16,+3V3_D,P,smt,ADS131M08IPBSR
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,17,CS_ADC,P,smt,ADS131M08IPBSR
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,18,NC_DRDY,P,smt,ADS131M08IPBSR
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,19,SPI_SCLK,P,smt,ADS131M08IPBSR
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,20,SPI_MISO,P,smt,ADS131M08IPBSR
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,21,SPI_MOSI,P,smt,ADS131M08IPBSR
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,22,XTAL2,P,smt,ADS131M08IPBSR
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,23,XTAL1,P,smt,ADS131M08IPBSR
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,24,ADC_CAP,P,smt,ADS131M08IPBSR
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,25,GND,P,smt,ADS131M08IPBSR
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,26,+3V3_D,P,smt,ADS131M08IPBSR
+U3,ADS131M08IPBS,Package_QFP:TQFP-32_5x5mm_P0.5mm,27,GND,P,smt,ADS131M08IPBSR
+C4,1uF,Capacitor_SMD:C_0805_2012Metric,1,+3V3_A,P,smt,
+C4,1uF,Capacitor_SMD:C_0805_2012Metric,2,GND,P,smt,
+C5,1uF,Capacitor_SMD:C_0805_2012Metric,1,+3V3_D,P,smt,
+C5,1uF,Capacitor_SMD:C_0805_2012Metric,2,GND,P,smt,
+C6,220nF,Capacitor_SMD:C_0805_2012Metric,1,ADC_CAP,P,smt,
+C6,220nF,Capacitor_SMD:C_0805_2012Metric,2,GND,P,smt,
+R4,10k,Resistor_SMD:R_0805_2012Metric,1,CS_ADC,core,smt,
+R4,10k,Resistor_SMD:R_0805_2012Metric,2,+3V3_D,core,smt,
+Y1,8.192MHz,Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm,1,XTAL1,P,smt,0132M4-8.192F20DTNJL
+Y1,8.192MHz,Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm,2,GND,P,smt,0132M4-8.192F20DTNJL
+Y1,8.192MHz,Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm,3,XTAL2,P,smt,0132M4-8.192F20DTNJL
+Y1,8.192MHz,Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm,4,GND,P,smt,0132M4-8.192F20DTNJL
+C7,12pF C0G,Capacitor_SMD:C_0805_2012Metric,1,XTAL1,P,smt,
+C7,12pF C0G,Capacitor_SMD:C_0805_2012Metric,2,GND,P,smt,
+C8,12pF C0G,Capacitor_SMD:C_0805_2012Metric,1,XTAL2,P,smt,
+C8,12pF C0G,Capacitor_SMD:C_0805_2012Metric,2,GND,P,smt,
+JPI1,CV In P1,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,T,CVIN1,P,hand,Thonkiconn PJ398SM
+JPI1,CV In P1,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,S,GND,P,hand,Thonkiconn PJ398SM
+JPI1,CV In P1,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,TN,GND,P,hand,Thonkiconn PJ398SM
+RA1,49.9k 1%,Resistor_SMD:R_0805_2012Metric,1,CVIN1,P,smt,RC0805FR-0749K9L
+RA1,49.9k 1%,Resistor_SMD:R_0805_2012Metric,2,CVINM1,P,smt,RC0805FR-0749K9L
+RB1,49.9k 1%,Resistor_SMD:R_0805_2012Metric,1,CVINM1,P,smt,RC0805FR-0749K9L
+RB1,49.9k 1%,Resistor_SMD:R_0805_2012Metric,2,AIN1,P,smt,RC0805FR-0749K9L
+RC1,9.09k 1%,Resistor_SMD:R_0805_2012Metric,1,AIN1,P,smt,RC0805FR-079K09L
+RC1,9.09k 1%,Resistor_SMD:R_0805_2012Metric,2,GND,P,smt,RC0805FR-079K09L
+CA1,330pF C0G,Capacitor_SMD:C_0805_2012Metric,1,AIN1,P,smt,
+CA1,330pF C0G,Capacitor_SMD:C_0805_2012Metric,2,GND,P,smt,
+JPI2,CV In P2,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,T,CVIN2,P,hand,Thonkiconn PJ398SM
+JPI2,CV In P2,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,S,GND,P,hand,Thonkiconn PJ398SM
+JPI2,CV In P2,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,TN,GND,P,hand,Thonkiconn PJ398SM
+RA2,49.9k 1%,Resistor_SMD:R_0805_2012Metric,1,CVIN2,P,smt,RC0805FR-0749K9L
+RA2,49.9k 1%,Resistor_SMD:R_0805_2012Metric,2,CVINM2,P,smt,RC0805FR-0749K9L
+RB2,49.9k 1%,Resistor_SMD:R_0805_2012Metric,1,CVINM2,P,smt,RC0805FR-0749K9L
+RB2,49.9k 1%,Resistor_SMD:R_0805_2012Metric,2,AIN2,P,smt,RC0805FR-0749K9L
+RC2,9.09k 1%,Resistor_SMD:R_0805_2012Metric,1,AIN2,P,smt,RC0805FR-079K09L
+RC2,9.09k 1%,Resistor_SMD:R_0805_2012Metric,2,GND,P,smt,RC0805FR-079K09L
+CA2,330pF C0G,Capacitor_SMD:C_0805_2012Metric,1,AIN2,P,smt,
+CA2,330pF C0G,Capacitor_SMD:C_0805_2012Metric,2,GND,P,smt,
+JPI3,CV In P3,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,T,CVIN3,P,hand,Thonkiconn PJ398SM
+JPI3,CV In P3,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,S,GND,P,hand,Thonkiconn PJ398SM
+JPI3,CV In P3,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,TN,GND,P,hand,Thonkiconn PJ398SM
+RA3,49.9k 1%,Resistor_SMD:R_0805_2012Metric,1,CVIN3,P,smt,RC0805FR-0749K9L
+RA3,49.9k 1%,Resistor_SMD:R_0805_2012Metric,2,CVINM3,P,smt,RC0805FR-0749K9L
+RB3,49.9k 1%,Resistor_SMD:R_0805_2012Metric,1,CVINM3,P,smt,RC0805FR-0749K9L
+RB3,49.9k 1%,Resistor_SMD:R_0805_2012Metric,2,AIN3,P,smt,RC0805FR-0749K9L
+RC3,9.09k 1%,Resistor_SMD:R_0805_2012Metric,1,AIN3,P,smt,RC0805FR-079K09L
+RC3,9.09k 1%,Resistor_SMD:R_0805_2012Metric,2,GND,P,smt,RC0805FR-079K09L
+CA3,330pF C0G,Capacitor_SMD:C_0805_2012Metric,1,AIN3,P,smt,
+CA3,330pF C0G,Capacitor_SMD:C_0805_2012Metric,2,GND,P,smt,
+JPI4,CV In P4,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,T,CVIN4,P,hand,Thonkiconn PJ398SM
+JPI4,CV In P4,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,S,GND,P,hand,Thonkiconn PJ398SM
+JPI4,CV In P4,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,TN,GND,P,hand,Thonkiconn PJ398SM
+RA4,49.9k 1%,Resistor_SMD:R_0805_2012Metric,1,CVIN4,P,smt,RC0805FR-0749K9L
+RA4,49.9k 1%,Resistor_SMD:R_0805_2012Metric,2,CVINM4,P,smt,RC0805FR-0749K9L
+RB4,49.9k 1%,Resistor_SMD:R_0805_2012Metric,1,CVINM4,P,smt,RC0805FR-0749K9L
+RB4,49.9k 1%,Resistor_SMD:R_0805_2012Metric,2,AIN4,P,smt,RC0805FR-0749K9L
+RC4,9.09k 1%,Resistor_SMD:R_0805_2012Metric,1,AIN4,P,smt,RC0805FR-079K09L
+RC4,9.09k 1%,Resistor_SMD:R_0805_2012Metric,2,GND,P,smt,RC0805FR-079K09L
+CA4,330pF C0G,Capacitor_SMD:C_0805_2012Metric,1,AIN4,P,smt,
+CA4,330pF C0G,Capacitor_SMD:C_0805_2012Metric,2,GND,P,smt,
+JPI5,CV In P5,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,T,CVIN5,P,hand,Thonkiconn PJ398SM
+JPI5,CV In P5,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,S,GND,P,hand,Thonkiconn PJ398SM
+JPI5,CV In P5,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,TN,GND,P,hand,Thonkiconn PJ398SM
+RA5,49.9k 1%,Resistor_SMD:R_0805_2012Metric,1,CVIN5,P,smt,RC0805FR-0749K9L
+RA5,49.9k 1%,Resistor_SMD:R_0805_2012Metric,2,CVINM5,P,smt,RC0805FR-0749K9L
+RB5,49.9k 1%,Resistor_SMD:R_0805_2012Metric,1,CVINM5,P,smt,RC0805FR-0749K9L
+RB5,49.9k 1%,Resistor_SMD:R_0805_2012Metric,2,AIN5,P,smt,RC0805FR-0749K9L
+RC5,9.09k 1%,Resistor_SMD:R_0805_2012Metric,1,AIN5,P,smt,RC0805FR-079K09L
+RC5,9.09k 1%,Resistor_SMD:R_0805_2012Metric,2,GND,P,smt,RC0805FR-079K09L
+CA5,330pF C0G,Capacitor_SMD:C_0805_2012Metric,1,AIN5,P,smt,
+CA5,330pF C0G,Capacitor_SMD:C_0805_2012Metric,2,GND,P,smt,
+JPI6,CV In P6,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,T,CVIN6,P,hand,Thonkiconn PJ398SM
+JPI6,CV In P6,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,S,GND,P,hand,Thonkiconn PJ398SM
+JPI6,CV In P6,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,TN,GND,P,hand,Thonkiconn PJ398SM
+RA6,49.9k 1%,Resistor_SMD:R_0805_2012Metric,1,CVIN6,P,smt,RC0805FR-0749K9L
+RA6,49.9k 1%,Resistor_SMD:R_0805_2012Metric,2,CVINM6,P,smt,RC0805FR-0749K9L
+RB6,49.9k 1%,Resistor_SMD:R_0805_2012Metric,1,CVINM6,P,smt,RC0805FR-0749K9L
+RB6,49.9k 1%,Resistor_SMD:R_0805_2012Metric,2,AIN6,P,smt,RC0805FR-0749K9L
+RC6,9.09k 1%,Resistor_SMD:R_0805_2012Metric,1,AIN6,P,smt,RC0805FR-079K09L
+RC6,9.09k 1%,Resistor_SMD:R_0805_2012Metric,2,GND,P,smt,RC0805FR-079K09L
+CA6,330pF C0G,Capacitor_SMD:C_0805_2012Metric,1,AIN6,P,smt,
+CA6,330pF C0G,Capacitor_SMD:C_0805_2012Metric,2,GND,P,smt,
+JPI7,CV In P7,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,T,CVIN7,P,hand,Thonkiconn PJ398SM
+JPI7,CV In P7,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,S,GND,P,hand,Thonkiconn PJ398SM
+JPI7,CV In P7,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,TN,GND,P,hand,Thonkiconn PJ398SM
+RA7,49.9k 1%,Resistor_SMD:R_0805_2012Metric,1,CVIN7,P,smt,RC0805FR-0749K9L
+RA7,49.9k 1%,Resistor_SMD:R_0805_2012Metric,2,CVINM7,P,smt,RC0805FR-0749K9L
+RB7,49.9k 1%,Resistor_SMD:R_0805_2012Metric,1,CVINM7,P,smt,RC0805FR-0749K9L
+RB7,49.9k 1%,Resistor_SMD:R_0805_2012Metric,2,AIN7,P,smt,RC0805FR-0749K9L
+RC7,9.09k 1%,Resistor_SMD:R_0805_2012Metric,1,AIN7,P,smt,RC0805FR-079K09L
+RC7,9.09k 1%,Resistor_SMD:R_0805_2012Metric,2,GND,P,smt,RC0805FR-079K09L
+CA7,330pF C0G,Capacitor_SMD:C_0805_2012Metric,1,AIN7,P,smt,
+CA7,330pF C0G,Capacitor_SMD:C_0805_2012Metric,2,GND,P,smt,
+JPI8,CV In P8,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,T,CVIN8,P,hand,Thonkiconn PJ398SM
+JPI8,CV In P8,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,S,GND,P,hand,Thonkiconn PJ398SM
+JPI8,CV In P8,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,TN,GND,P,hand,Thonkiconn PJ398SM
+RA8,49.9k 1%,Resistor_SMD:R_0805_2012Metric,1,CVIN8,P,smt,RC0805FR-0749K9L
+RA8,49.9k 1%,Resistor_SMD:R_0805_2012Metric,2,CVINM8,P,smt,RC0805FR-0749K9L
+RB8,49.9k 1%,Resistor_SMD:R_0805_2012Metric,1,CVINM8,P,smt,RC0805FR-0749K9L
+RB8,49.9k 1%,Resistor_SMD:R_0805_2012Metric,2,AIN8,P,smt,RC0805FR-0749K9L
+RC8,9.09k 1%,Resistor_SMD:R_0805_2012Metric,1,AIN8,P,smt,RC0805FR-079K09L
+RC8,9.09k 1%,Resistor_SMD:R_0805_2012Metric,2,GND,P,smt,RC0805FR-079K09L
+CA8,330pF C0G,Capacitor_SMD:C_0805_2012Metric,1,AIN8,P,smt,
+CA8,330pF C0G,Capacitor_SMD:C_0805_2012Metric,2,GND,P,smt,
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,1,VCOMAD,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,2,GND,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,3,+4V5_A,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,4,CODEC_RST,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,5,NC_OVF,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,6,I2S_WS,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,7,I2S_BCLK,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,8,I2S_DIN,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,9,NC_DOUT2,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,10,NC_DOUT3,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,11,GND,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,12,+3V3_D,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,13,NC_ZERO,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,14,+4V5_A,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,15,VCOMDA,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,16,GND,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,33,GND,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,34,+4V5_A,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,35,I2S_WS,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,36,I2S_BCLK,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,37,I2S_DOUT,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,38,GND,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,39,GND,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,40,GND,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,41,I2S_MCLK,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,42,SPI_SCLK,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,43,SPI_MOSI,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,44,SPI_MISO,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,45,CS_CODEC,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,46,+3V3_D,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,47,GND,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,48,+3V3_D,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,49,+4V5_A,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,50,GND,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,59,VREFAD1,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,60,VREFAD2,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,65,GND,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,17,AOP8,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,18,AOM8,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,19,AOP7,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,20,AOM7,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,21,AOP6,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,22,AOM6,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,23,AOP5,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,24,AOM5,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,25,AOP4,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,26,AOM4,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,27,AOP3,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,28,AOM3,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,29,AOP2,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,30,AOM2,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,31,AOP1,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,32,AOM1,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,52,AIN_A1,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,51,VCOMAD,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,54,AIN_A2,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,53,VCOMAD,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,56,AIN_A3,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,55,VCOMAD,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,58,AIN_A4,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,57,VCOMAD,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,62,AIN_A5,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,61,VCOMAD,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,64,AIN_A6,A,smt,PCM3168APAPR
+U6,PCM3168APAP,Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm,63,VCOMAD,A,smt,PCM3168APAPR
+C40,10uF,Capacitor_SMD:C_0805_2012Metric,1,VCOMAD,A,smt,
+C40,10uF,Capacitor_SMD:C_0805_2012Metric,2,GND,A,smt,
+C41,10uF,Capacitor_SMD:C_0805_2012Metric,1,VCOMDA,A,smt,
+C41,10uF,Capacitor_SMD:C_0805_2012Metric,2,GND,A,smt,
+C42,10uF,Capacitor_SMD:C_0805_2012Metric,1,VREFAD1,A,smt,
+C42,10uF,Capacitor_SMD:C_0805_2012Metric,2,GND,A,smt,
+C43,10uF,Capacitor_SMD:C_0805_2012Metric,1,VREFAD2,A,smt,
+C43,10uF,Capacitor_SMD:C_0805_2012Metric,2,GND,A,smt,
+C44,10uF,Capacitor_SMD:C_0805_2012Metric,1,+4V5_A,A,smt,
+C44,10uF,Capacitor_SMD:C_0805_2012Metric,2,GND,A,smt,
+C45,10uF,Capacitor_SMD:C_0805_2012Metric,1,+4V5_A,A,smt,
+C45,10uF,Capacitor_SMD:C_0805_2012Metric,2,GND,A,smt,
+C46,10uF,Capacitor_SMD:C_0805_2012Metric,1,+4V5_A,A,smt,
+C46,10uF,Capacitor_SMD:C_0805_2012Metric,2,GND,A,smt,
+C47,100nF,Capacitor_SMD:C_0805_2012Metric,1,+3V3_D,A,smt,
+C47,100nF,Capacitor_SMD:C_0805_2012Metric,2,GND,A,smt,
+R5,10k,Resistor_SMD:R_0805_2012Metric,1,CS_CODEC,core,smt,
+R5,10k,Resistor_SMD:R_0805_2012Metric,2,+3V3_D,core,smt,
+R6,10k,Resistor_SMD:R_0805_2012Metric,1,CODEC_RST,A,smt,
+R6,10k,Resistor_SMD:R_0805_2012Metric,2,+3V3_D,A,smt,
+C48,1uF,Capacitor_SMD:C_0805_2012Metric,1,CODEC_RST,A,smt,
+C48,1uF,Capacitor_SMD:C_0805_2012Metric,2,GND,A,smt,
+U7,OPA1679,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,4,+11V,A,smt,OPA1679IPWR
+U7,OPA1679,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,11,-11V,A,smt,OPA1679IPWR
+U7,OPA1679,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,1,AOPO1,A,smt,OPA1679IPWR
+U7,OPA1679,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,2,AOSUM1,A,smt,OPA1679IPWR
+U7,OPA1679,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,3,AOREF1,A,smt,OPA1679IPWR
+U7,OPA1679,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,7,AOPO2,A,smt,OPA1679IPWR
+U7,OPA1679,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,6,AOSUM2,A,smt,OPA1679IPWR
+U7,OPA1679,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,5,AOREF2,A,smt,OPA1679IPWR
+U7,OPA1679,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,8,AOPO3,A,smt,OPA1679IPWR
+U7,OPA1679,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,9,AOSUM3,A,smt,OPA1679IPWR
+U7,OPA1679,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,10,AOREF3,A,smt,OPA1679IPWR
+U7,OPA1679,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,14,AOPO4,A,smt,OPA1679IPWR
+U7,OPA1679,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,13,AOSUM4,A,smt,OPA1679IPWR
+U7,OPA1679,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,12,AOREF4,A,smt,OPA1679IPWR
+C7P,100nF,Capacitor_SMD:C_0805_2012Metric,1,+11V,A,smt,
+C7P,100nF,Capacitor_SMD:C_0805_2012Metric,2,GND,A,smt,
+C7N,100nF,Capacitor_SMD:C_0805_2012Metric,1,GND,A,smt,
+C7N,100nF,Capacitor_SMD:C_0805_2012Metric,2,-11V,A,smt,
+U8,OPA1679,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,4,+11V,A,smt,OPA1679IPWR
+U8,OPA1679,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,11,-11V,A,smt,OPA1679IPWR
+U8,OPA1679,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,1,AOPO5,A,smt,OPA1679IPWR
+U8,OPA1679,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,2,AOSUM5,A,smt,OPA1679IPWR
+U8,OPA1679,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,3,AOREF5,A,smt,OPA1679IPWR
+U8,OPA1679,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,7,AOPO6,A,smt,OPA1679IPWR
+U8,OPA1679,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,6,AOSUM6,A,smt,OPA1679IPWR
+U8,OPA1679,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,5,AOREF6,A,smt,OPA1679IPWR
+U8,OPA1679,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,8,AOPO7,A,smt,OPA1679IPWR
+U8,OPA1679,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,9,AOSUM7,A,smt,OPA1679IPWR
+U8,OPA1679,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,10,AOREF7,A,smt,OPA1679IPWR
+U8,OPA1679,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,14,AOPO8,A,smt,OPA1679IPWR
+U8,OPA1679,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,13,AOSUM8,A,smt,OPA1679IPWR
+U8,OPA1679,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,12,AOREF8,A,smt,OPA1679IPWR
+C8P,100nF,Capacitor_SMD:C_0805_2012Metric,1,+11V,A,smt,
+C8P,100nF,Capacitor_SMD:C_0805_2012Metric,2,GND,A,smt,
+C8N,100nF,Capacitor_SMD:C_0805_2012Metric,1,GND,A,smt,
+C8N,100nF,Capacitor_SMD:C_0805_2012Metric,2,-11V,A,smt,
+RAM1,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOM1,A,smt,RT0805BRD0728K7L
+RAM1,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,2,AOSUM1,A,smt,RT0805BRD0728K7L
+RAF1,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOSUM1,A,smt,RT0805BRD0782K5L
+RAF1,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,2,AOPO1,A,smt,RT0805BRD0782K5L
+RAP1,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOP1,A,smt,RT0805BRD0728K7L
+RAP1,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,2,AOREF1,A,smt,RT0805BRD0728K7L
+RAG1,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOREF1,A,smt,RT0805BRD0782K5L
+RAG1,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,2,GND,A,smt,RT0805BRD0782K5L
+CAF1,47pF C0G,Capacitor_SMD:C_0805_2012Metric,1,AOSUM1,A,smt,
+CAF1,47pF C0G,Capacitor_SMD:C_0805_2012Metric,2,AOPO1,A,smt,
+CAG1,47pF C0G,Capacitor_SMD:C_0805_2012Metric,1,AOREF1,A,smt,
+CAG1,47pF C0G,Capacitor_SMD:C_0805_2012Metric,2,GND,A,smt,
+DA1,BAT54S,Package_TO_SOT_SMD:SOT-23,1,-11V,A,smt,"BAT54S,215"
+DA1,BAT54S,Package_TO_SOT_SMD:SOT-23,2,+11V,A,smt,"BAT54S,215"
+DA1,BAT54S,Package_TO_SOT_SMD:SOT-23,3,AOPO1,A,smt,"BAT54S,215"
+RSA1,1k 0.66W,Resistor_SMD:R_1206_3216Metric,1,AOPO1,A,smt,ERJ-P08J102V
+RSA1,1k 0.66W,Resistor_SMD:R_1206_3216Metric,2,AUOUT1,A,smt,ERJ-P08J102V
+JAO1,Audio Out A1,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,T,AUOUT1,A,hand,Thonkiconn PJ398SM
+JAO1,Audio Out A1,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,S,GND,A,hand,Thonkiconn PJ398SM
+JAO1,Audio Out A1,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,TN,NC_JAO1,A,hand,Thonkiconn PJ398SM
+RAM2,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOM2,A,smt,RT0805BRD0728K7L
+RAM2,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,2,AOSUM2,A,smt,RT0805BRD0728K7L
+RAF2,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOSUM2,A,smt,RT0805BRD0782K5L
+RAF2,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,2,AOPO2,A,smt,RT0805BRD0782K5L
+RAP2,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOP2,A,smt,RT0805BRD0728K7L
+RAP2,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,2,AOREF2,A,smt,RT0805BRD0728K7L
+RAG2,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOREF2,A,smt,RT0805BRD0782K5L
+RAG2,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,2,GND,A,smt,RT0805BRD0782K5L
+CAF2,47pF C0G,Capacitor_SMD:C_0805_2012Metric,1,AOSUM2,A,smt,
+CAF2,47pF C0G,Capacitor_SMD:C_0805_2012Metric,2,AOPO2,A,smt,
+CAG2,47pF C0G,Capacitor_SMD:C_0805_2012Metric,1,AOREF2,A,smt,
+CAG2,47pF C0G,Capacitor_SMD:C_0805_2012Metric,2,GND,A,smt,
+DA2,BAT54S,Package_TO_SOT_SMD:SOT-23,1,-11V,A,smt,"BAT54S,215"
+DA2,BAT54S,Package_TO_SOT_SMD:SOT-23,2,+11V,A,smt,"BAT54S,215"
+DA2,BAT54S,Package_TO_SOT_SMD:SOT-23,3,AOPO2,A,smt,"BAT54S,215"
+RSA2,1k 0.66W,Resistor_SMD:R_1206_3216Metric,1,AOPO2,A,smt,ERJ-P08J102V
+RSA2,1k 0.66W,Resistor_SMD:R_1206_3216Metric,2,AUOUT2,A,smt,ERJ-P08J102V
+JAO2,Audio Out A2,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,T,AUOUT2,A,hand,Thonkiconn PJ398SM
+JAO2,Audio Out A2,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,S,GND,A,hand,Thonkiconn PJ398SM
+JAO2,Audio Out A2,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,TN,NC_JAO2,A,hand,Thonkiconn PJ398SM
+RAM3,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOM3,A,smt,RT0805BRD0728K7L
+RAM3,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,2,AOSUM3,A,smt,RT0805BRD0728K7L
+RAF3,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOSUM3,A,smt,RT0805BRD0782K5L
+RAF3,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,2,AOPO3,A,smt,RT0805BRD0782K5L
+RAP3,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOP3,A,smt,RT0805BRD0728K7L
+RAP3,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,2,AOREF3,A,smt,RT0805BRD0728K7L
+RAG3,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOREF3,A,smt,RT0805BRD0782K5L
+RAG3,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,2,GND,A,smt,RT0805BRD0782K5L
+CAF3,47pF C0G,Capacitor_SMD:C_0805_2012Metric,1,AOSUM3,A,smt,
+CAF3,47pF C0G,Capacitor_SMD:C_0805_2012Metric,2,AOPO3,A,smt,
+CAG3,47pF C0G,Capacitor_SMD:C_0805_2012Metric,1,AOREF3,A,smt,
+CAG3,47pF C0G,Capacitor_SMD:C_0805_2012Metric,2,GND,A,smt,
+DA3,BAT54S,Package_TO_SOT_SMD:SOT-23,1,-11V,A,smt,"BAT54S,215"
+DA3,BAT54S,Package_TO_SOT_SMD:SOT-23,2,+11V,A,smt,"BAT54S,215"
+DA3,BAT54S,Package_TO_SOT_SMD:SOT-23,3,AOPO3,A,smt,"BAT54S,215"
+RSA3,1k 0.66W,Resistor_SMD:R_1206_3216Metric,1,AOPO3,A,smt,ERJ-P08J102V
+RSA3,1k 0.66W,Resistor_SMD:R_1206_3216Metric,2,AUOUT3,A,smt,ERJ-P08J102V
+JAO3,Audio Out A3,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,T,AUOUT3,A,hand,Thonkiconn PJ398SM
+JAO3,Audio Out A3,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,S,GND,A,hand,Thonkiconn PJ398SM
+JAO3,Audio Out A3,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,TN,NC_JAO3,A,hand,Thonkiconn PJ398SM
+RAM4,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOM4,A,smt,RT0805BRD0728K7L
+RAM4,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,2,AOSUM4,A,smt,RT0805BRD0728K7L
+RAF4,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOSUM4,A,smt,RT0805BRD0782K5L
+RAF4,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,2,AOPO4,A,smt,RT0805BRD0782K5L
+RAP4,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOP4,A,smt,RT0805BRD0728K7L
+RAP4,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,2,AOREF4,A,smt,RT0805BRD0728K7L
+RAG4,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOREF4,A,smt,RT0805BRD0782K5L
+RAG4,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,2,GND,A,smt,RT0805BRD0782K5L
+CAF4,47pF C0G,Capacitor_SMD:C_0805_2012Metric,1,AOSUM4,A,smt,
+CAF4,47pF C0G,Capacitor_SMD:C_0805_2012Metric,2,AOPO4,A,smt,
+CAG4,47pF C0G,Capacitor_SMD:C_0805_2012Metric,1,AOREF4,A,smt,
+CAG4,47pF C0G,Capacitor_SMD:C_0805_2012Metric,2,GND,A,smt,
+DA4,BAT54S,Package_TO_SOT_SMD:SOT-23,1,-11V,A,smt,"BAT54S,215"
+DA4,BAT54S,Package_TO_SOT_SMD:SOT-23,2,+11V,A,smt,"BAT54S,215"
+DA4,BAT54S,Package_TO_SOT_SMD:SOT-23,3,AOPO4,A,smt,"BAT54S,215"
+RSA4,1k 0.66W,Resistor_SMD:R_1206_3216Metric,1,AOPO4,A,smt,ERJ-P08J102V
+RSA4,1k 0.66W,Resistor_SMD:R_1206_3216Metric,2,AUOUT4,A,smt,ERJ-P08J102V
+JAO4,Audio Out A4,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,T,AUOUT4,A,hand,Thonkiconn PJ398SM
+JAO4,Audio Out A4,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,S,GND,A,hand,Thonkiconn PJ398SM
+JAO4,Audio Out A4,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,TN,NC_JAO4,A,hand,Thonkiconn PJ398SM
+RAM5,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOM5,A,smt,RT0805BRD0728K7L
+RAM5,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,2,AOSUM5,A,smt,RT0805BRD0728K7L
+RAF5,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOSUM5,A,smt,RT0805BRD0782K5L
+RAF5,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,2,AOPO5,A,smt,RT0805BRD0782K5L
+RAP5,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOP5,A,smt,RT0805BRD0728K7L
+RAP5,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,2,AOREF5,A,smt,RT0805BRD0728K7L
+RAG5,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOREF5,A,smt,RT0805BRD0782K5L
+RAG5,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,2,GND,A,smt,RT0805BRD0782K5L
+CAF5,47pF C0G,Capacitor_SMD:C_0805_2012Metric,1,AOSUM5,A,smt,
+CAF5,47pF C0G,Capacitor_SMD:C_0805_2012Metric,2,AOPO5,A,smt,
+CAG5,47pF C0G,Capacitor_SMD:C_0805_2012Metric,1,AOREF5,A,smt,
+CAG5,47pF C0G,Capacitor_SMD:C_0805_2012Metric,2,GND,A,smt,
+DA5,BAT54S,Package_TO_SOT_SMD:SOT-23,1,-11V,A,smt,"BAT54S,215"
+DA5,BAT54S,Package_TO_SOT_SMD:SOT-23,2,+11V,A,smt,"BAT54S,215"
+DA5,BAT54S,Package_TO_SOT_SMD:SOT-23,3,AOPO5,A,smt,"BAT54S,215"
+RSA5,1k 0.66W,Resistor_SMD:R_1206_3216Metric,1,AOPO5,A,smt,ERJ-P08J102V
+RSA5,1k 0.66W,Resistor_SMD:R_1206_3216Metric,2,AUOUT5,A,smt,ERJ-P08J102V
+JAO5,Audio Out A5,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,T,AUOUT5,A,hand,Thonkiconn PJ398SM
+JAO5,Audio Out A5,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,S,GND,A,hand,Thonkiconn PJ398SM
+JAO5,Audio Out A5,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,TN,NC_JAO5,A,hand,Thonkiconn PJ398SM
+RAM6,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOM6,A,smt,RT0805BRD0728K7L
+RAM6,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,2,AOSUM6,A,smt,RT0805BRD0728K7L
+RAF6,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOSUM6,A,smt,RT0805BRD0782K5L
+RAF6,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,2,AOPO6,A,smt,RT0805BRD0782K5L
+RAP6,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOP6,A,smt,RT0805BRD0728K7L
+RAP6,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,2,AOREF6,A,smt,RT0805BRD0728K7L
+RAG6,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOREF6,A,smt,RT0805BRD0782K5L
+RAG6,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,2,GND,A,smt,RT0805BRD0782K5L
+CAF6,47pF C0G,Capacitor_SMD:C_0805_2012Metric,1,AOSUM6,A,smt,
+CAF6,47pF C0G,Capacitor_SMD:C_0805_2012Metric,2,AOPO6,A,smt,
+CAG6,47pF C0G,Capacitor_SMD:C_0805_2012Metric,1,AOREF6,A,smt,
+CAG6,47pF C0G,Capacitor_SMD:C_0805_2012Metric,2,GND,A,smt,
+DA6,BAT54S,Package_TO_SOT_SMD:SOT-23,1,-11V,A,smt,"BAT54S,215"
+DA6,BAT54S,Package_TO_SOT_SMD:SOT-23,2,+11V,A,smt,"BAT54S,215"
+DA6,BAT54S,Package_TO_SOT_SMD:SOT-23,3,AOPO6,A,smt,"BAT54S,215"
+RSA6,1k 0.66W,Resistor_SMD:R_1206_3216Metric,1,AOPO6,A,smt,ERJ-P08J102V
+RSA6,1k 0.66W,Resistor_SMD:R_1206_3216Metric,2,AUOUT6,A,smt,ERJ-P08J102V
+JAO6,Audio Out A6,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,T,AUOUT6,A,hand,Thonkiconn PJ398SM
+JAO6,Audio Out A6,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,S,GND,A,hand,Thonkiconn PJ398SM
+JAO6,Audio Out A6,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,TN,NC_JAO6,A,hand,Thonkiconn PJ398SM
+RAM7,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOM7,A,smt,RT0805BRD0728K7L
+RAM7,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,2,AOSUM7,A,smt,RT0805BRD0728K7L
+RAF7,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOSUM7,A,smt,RT0805BRD0782K5L
+RAF7,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,2,AOPO7,A,smt,RT0805BRD0782K5L
+RAP7,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOP7,A,smt,RT0805BRD0728K7L
+RAP7,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,2,AOREF7,A,smt,RT0805BRD0728K7L
+RAG7,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOREF7,A,smt,RT0805BRD0782K5L
+RAG7,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,2,GND,A,smt,RT0805BRD0782K5L
+CAF7,47pF C0G,Capacitor_SMD:C_0805_2012Metric,1,AOSUM7,A,smt,
+CAF7,47pF C0G,Capacitor_SMD:C_0805_2012Metric,2,AOPO7,A,smt,
+CAG7,47pF C0G,Capacitor_SMD:C_0805_2012Metric,1,AOREF7,A,smt,
+CAG7,47pF C0G,Capacitor_SMD:C_0805_2012Metric,2,GND,A,smt,
+DA7,BAT54S,Package_TO_SOT_SMD:SOT-23,1,-11V,A,smt,"BAT54S,215"
+DA7,BAT54S,Package_TO_SOT_SMD:SOT-23,2,+11V,A,smt,"BAT54S,215"
+DA7,BAT54S,Package_TO_SOT_SMD:SOT-23,3,AOPO7,A,smt,"BAT54S,215"
+RSA7,1k 0.66W,Resistor_SMD:R_1206_3216Metric,1,AOPO7,A,smt,ERJ-P08J102V
+RSA7,1k 0.66W,Resistor_SMD:R_1206_3216Metric,2,AUOUT7,A,smt,ERJ-P08J102V
+JAO7,Audio Out A7,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,T,AUOUT7,A,hand,Thonkiconn PJ398SM
+JAO7,Audio Out A7,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,S,GND,A,hand,Thonkiconn PJ398SM
+JAO7,Audio Out A7,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,TN,NC_JAO7,A,hand,Thonkiconn PJ398SM
+RAM8,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOM8,A,smt,RT0805BRD0728K7L
+RAM8,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,2,AOSUM8,A,smt,RT0805BRD0728K7L
+RAF8,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOSUM8,A,smt,RT0805BRD0782K5L
+RAF8,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,2,AOPO8,A,smt,RT0805BRD0782K5L
+RAP8,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOP8,A,smt,RT0805BRD0728K7L
+RAP8,28.7k 0.1%,Resistor_SMD:R_0805_2012Metric,2,AOREF8,A,smt,RT0805BRD0728K7L
+RAG8,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,1,AOREF8,A,smt,RT0805BRD0782K5L
+RAG8,82.5k 0.1%,Resistor_SMD:R_0805_2012Metric,2,GND,A,smt,RT0805BRD0782K5L
+CAF8,47pF C0G,Capacitor_SMD:C_0805_2012Metric,1,AOSUM8,A,smt,
+CAF8,47pF C0G,Capacitor_SMD:C_0805_2012Metric,2,AOPO8,A,smt,
+CAG8,47pF C0G,Capacitor_SMD:C_0805_2012Metric,1,AOREF8,A,smt,
+CAG8,47pF C0G,Capacitor_SMD:C_0805_2012Metric,2,GND,A,smt,
+DA8,BAT54S,Package_TO_SOT_SMD:SOT-23,1,-11V,A,smt,"BAT54S,215"
+DA8,BAT54S,Package_TO_SOT_SMD:SOT-23,2,+11V,A,smt,"BAT54S,215"
+DA8,BAT54S,Package_TO_SOT_SMD:SOT-23,3,AOPO8,A,smt,"BAT54S,215"
+RSA8,1k 0.66W,Resistor_SMD:R_1206_3216Metric,1,AOPO8,A,smt,ERJ-P08J102V
+RSA8,1k 0.66W,Resistor_SMD:R_1206_3216Metric,2,AUOUT8,A,smt,ERJ-P08J102V
+JAO8,Audio Out A8,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,T,AUOUT8,A,hand,Thonkiconn PJ398SM
+JAO8,Audio Out A8,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,S,GND,A,hand,Thonkiconn PJ398SM
+JAO8,Audio Out A8,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,TN,NC_JAO8,A,hand,Thonkiconn PJ398SM
+RV1,10k 1%,Resistor_SMD:R_0805_2012Metric,1,+4V5_A,A,smt,
+RV1,10k 1%,Resistor_SMD:R_0805_2012Metric,2,AI_VPLUS,A,smt,
+RV2,8.2k 1%,Resistor_SMD:R_0805_2012Metric,1,AI_VPLUS,A,smt,RC0805FR-078K2L
+RV2,8.2k 1%,Resistor_SMD:R_0805_2012Metric,2,GND,A,smt,RC0805FR-078K2L
+CV1,1uF,Capacitor_SMD:C_0805_2012Metric,1,AI_VPLUS,A,smt,
+CV1,1uF,Capacitor_SMD:C_0805_2012Metric,2,GND,A,smt,
+U9,TLV9064,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,4,+4V5_A,A,smt,TLV9064IPWR
+U9,TLV9064,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,11,GND,A,smt,TLV9064IPWR
+U9,TLV9064,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,1,AIPO1,A,smt,TLV9064IPWR
+U9,TLV9064,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,2,AISUM1,A,smt,TLV9064IPWR
+U9,TLV9064,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,3,AI_VPLUS,A,smt,TLV9064IPWR
+U9,TLV9064,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,7,AIPO2,A,smt,TLV9064IPWR
+U9,TLV9064,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,6,AISUM2,A,smt,TLV9064IPWR
+U9,TLV9064,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,5,AI_VPLUS,A,smt,TLV9064IPWR
+U9,TLV9064,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,8,AIPO3,A,smt,TLV9064IPWR
+U9,TLV9064,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,9,AISUM3,A,smt,TLV9064IPWR
+U9,TLV9064,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,10,AI_VPLUS,A,smt,TLV9064IPWR
+U9,TLV9064,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,14,AIPO4,A,smt,TLV9064IPWR
+U9,TLV9064,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,13,AISUM4,A,smt,TLV9064IPWR
+U9,TLV9064,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,12,AI_VPLUS,A,smt,TLV9064IPWR
+C9A,100nF,Capacitor_SMD:C_0805_2012Metric,1,+4V5_A,A,smt,
+C9A,100nF,Capacitor_SMD:C_0805_2012Metric,2,GND,A,smt,
+U10,TLV9064,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,4,+4V5_A,A,smt,TLV9064IPWR
+U10,TLV9064,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,11,GND,A,smt,TLV9064IPWR
+U10,TLV9064,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,1,AIPO5,A,smt,TLV9064IPWR
+U10,TLV9064,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,2,AISUM5,A,smt,TLV9064IPWR
+U10,TLV9064,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,3,AI_VPLUS,A,smt,TLV9064IPWR
+U10,TLV9064,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,7,AIPO6,A,smt,TLV9064IPWR
+U10,TLV9064,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,6,AISUM6,A,smt,TLV9064IPWR
+U10,TLV9064,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,5,AI_VPLUS,A,smt,TLV9064IPWR
+U10,TLV9064,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,8,AISPARE7,A,smt,TLV9064IPWR
+U10,TLV9064,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,9,AISPARE7,A,smt,TLV9064IPWR
+U10,TLV9064,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,10,AI_VPLUS,A,smt,TLV9064IPWR
+U10,TLV9064,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,14,AISPARE8,A,smt,TLV9064IPWR
+U10,TLV9064,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,13,AISPARE8,A,smt,TLV9064IPWR
+U10,TLV9064,Package_SO:TSSOP-14_4.4x5mm_P0.65mm,12,AI_VPLUS,A,smt,TLV9064IPWR
+C10A,100nF,Capacitor_SMD:C_0805_2012Metric,1,+4V5_A,A,smt,
+C10A,100nF,Capacitor_SMD:C_0805_2012Metric,2,GND,A,smt,
+JAI1,Audio In A1,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,T,AUIN1,A,hand,Thonkiconn PJ398SM
+JAI1,Audio In A1,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,S,GND,A,hand,Thonkiconn PJ398SM
+JAI1,Audio In A1,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,TN,GND,A,hand,Thonkiconn PJ398SM
+RAI1,100k 1%,Resistor_SMD:R_0805_2012Metric,1,AUIN1,A,smt,
+RAI1,100k 1%,Resistor_SMD:R_0805_2012Metric,2,AISUM1,A,smt,
+RAIF1,11k 1%,Resistor_SMD:R_0805_2012Metric,1,AISUM1,A,smt,RC0805FR-0711KL
+RAIF1,11k 1%,Resistor_SMD:R_0805_2012Metric,2,AIPO1,A,smt,RC0805FR-0711KL
+CAI1,100pF C0G,Capacitor_SMD:C_0805_2012Metric,1,AISUM1,A,smt,
+CAI1,100pF C0G,Capacitor_SMD:C_0805_2012Metric,2,AIPO1,A,smt,
+RAO1,100,Resistor_SMD:R_0805_2012Metric,1,AIPO1,A,smt,
+RAO1,100,Resistor_SMD:R_0805_2012Metric,2,AIN_A1,A,smt,
+JAI2,Audio In A2,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,T,AUIN2,A,hand,Thonkiconn PJ398SM
+JAI2,Audio In A2,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,S,GND,A,hand,Thonkiconn PJ398SM
+JAI2,Audio In A2,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,TN,GND,A,hand,Thonkiconn PJ398SM
+RAI2,100k 1%,Resistor_SMD:R_0805_2012Metric,1,AUIN2,A,smt,
+RAI2,100k 1%,Resistor_SMD:R_0805_2012Metric,2,AISUM2,A,smt,
+RAIF2,11k 1%,Resistor_SMD:R_0805_2012Metric,1,AISUM2,A,smt,RC0805FR-0711KL
+RAIF2,11k 1%,Resistor_SMD:R_0805_2012Metric,2,AIPO2,A,smt,RC0805FR-0711KL
+CAI2,100pF C0G,Capacitor_SMD:C_0805_2012Metric,1,AISUM2,A,smt,
+CAI2,100pF C0G,Capacitor_SMD:C_0805_2012Metric,2,AIPO2,A,smt,
+RAO2,100,Resistor_SMD:R_0805_2012Metric,1,AIPO2,A,smt,
+RAO2,100,Resistor_SMD:R_0805_2012Metric,2,AIN_A2,A,smt,
+JAI3,Audio In A3,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,T,AUIN3,A,hand,Thonkiconn PJ398SM
+JAI3,Audio In A3,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,S,GND,A,hand,Thonkiconn PJ398SM
+JAI3,Audio In A3,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,TN,GND,A,hand,Thonkiconn PJ398SM
+RAI3,100k 1%,Resistor_SMD:R_0805_2012Metric,1,AUIN3,A,smt,
+RAI3,100k 1%,Resistor_SMD:R_0805_2012Metric,2,AISUM3,A,smt,
+RAIF3,11k 1%,Resistor_SMD:R_0805_2012Metric,1,AISUM3,A,smt,RC0805FR-0711KL
+RAIF3,11k 1%,Resistor_SMD:R_0805_2012Metric,2,AIPO3,A,smt,RC0805FR-0711KL
+CAI3,100pF C0G,Capacitor_SMD:C_0805_2012Metric,1,AISUM3,A,smt,
+CAI3,100pF C0G,Capacitor_SMD:C_0805_2012Metric,2,AIPO3,A,smt,
+RAO3,100,Resistor_SMD:R_0805_2012Metric,1,AIPO3,A,smt,
+RAO3,100,Resistor_SMD:R_0805_2012Metric,2,AIN_A3,A,smt,
+JAI4,Audio In A4,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,T,AUIN4,A,hand,Thonkiconn PJ398SM
+JAI4,Audio In A4,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,S,GND,A,hand,Thonkiconn PJ398SM
+JAI4,Audio In A4,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,TN,GND,A,hand,Thonkiconn PJ398SM
+RAI4,100k 1%,Resistor_SMD:R_0805_2012Metric,1,AUIN4,A,smt,
+RAI4,100k 1%,Resistor_SMD:R_0805_2012Metric,2,AISUM4,A,smt,
+RAIF4,11k 1%,Resistor_SMD:R_0805_2012Metric,1,AISUM4,A,smt,RC0805FR-0711KL
+RAIF4,11k 1%,Resistor_SMD:R_0805_2012Metric,2,AIPO4,A,smt,RC0805FR-0711KL
+CAI4,100pF C0G,Capacitor_SMD:C_0805_2012Metric,1,AISUM4,A,smt,
+CAI4,100pF C0G,Capacitor_SMD:C_0805_2012Metric,2,AIPO4,A,smt,
+RAO4,100,Resistor_SMD:R_0805_2012Metric,1,AIPO4,A,smt,
+RAO4,100,Resistor_SMD:R_0805_2012Metric,2,AIN_A4,A,smt,
+JAI5,Audio In A5,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,T,AUIN5,A,hand,Thonkiconn PJ398SM
+JAI5,Audio In A5,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,S,GND,A,hand,Thonkiconn PJ398SM
+JAI5,Audio In A5,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,TN,GND,A,hand,Thonkiconn PJ398SM
+RAI5,100k 1%,Resistor_SMD:R_0805_2012Metric,1,AUIN5,A,smt,
+RAI5,100k 1%,Resistor_SMD:R_0805_2012Metric,2,AISUM5,A,smt,
+RAIF5,11k 1%,Resistor_SMD:R_0805_2012Metric,1,AISUM5,A,smt,RC0805FR-0711KL
+RAIF5,11k 1%,Resistor_SMD:R_0805_2012Metric,2,AIPO5,A,smt,RC0805FR-0711KL
+CAI5,100pF C0G,Capacitor_SMD:C_0805_2012Metric,1,AISUM5,A,smt,
+CAI5,100pF C0G,Capacitor_SMD:C_0805_2012Metric,2,AIPO5,A,smt,
+RAO5,100,Resistor_SMD:R_0805_2012Metric,1,AIPO5,A,smt,
+RAO5,100,Resistor_SMD:R_0805_2012Metric,2,AIN_A5,A,smt,
+JAI6,Audio In A6,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,T,AUIN6,A,hand,Thonkiconn PJ398SM
+JAI6,Audio In A6,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,S,GND,A,hand,Thonkiconn PJ398SM
+JAI6,Audio In A6,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,TN,GND,A,hand,Thonkiconn PJ398SM
+RAI6,100k 1%,Resistor_SMD:R_0805_2012Metric,1,AUIN6,A,smt,
+RAI6,100k 1%,Resistor_SMD:R_0805_2012Metric,2,AISUM6,A,smt,
+RAIF6,11k 1%,Resistor_SMD:R_0805_2012Metric,1,AISUM6,A,smt,RC0805FR-0711KL
+RAIF6,11k 1%,Resistor_SMD:R_0805_2012Metric,2,AIPO6,A,smt,RC0805FR-0711KL
+CAI6,100pF C0G,Capacitor_SMD:C_0805_2012Metric,1,AISUM6,A,smt,
+CAI6,100pF C0G,Capacitor_SMD:C_0805_2012Metric,2,AIPO6,A,smt,
+RAO6,100,Resistor_SMD:R_0805_2012Metric,1,AIPO6,A,smt,
+RAO6,100,Resistor_SMD:R_0805_2012Metric,2,AIN_A6,A,smt,

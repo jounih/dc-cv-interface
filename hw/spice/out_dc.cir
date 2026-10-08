@@ -1,14 +1,14 @@
 * output DC transfer
 .include models.lib
 .param VREFV=2.5 CBV=1e-08
-Vcc vcc 0 12.0
-Vee vee 0 -12.0
+Vcc vcc 0 11.0
+Vee vee 0 -11.0
 Vcode code 0 DC 32768 AC 1
 
 Bref vref 0 V={VREFV}+V(rn)
 Rrn rn 0 150820
 Bdac dac 0 V=V(vref)*V(code)/65536+V(dn)
-Rdn dn 0 603279
+Rdn dn 0 488656
 RT vref vb 10000
 RB vb 0 8060
 CB vb 0 {CBV}

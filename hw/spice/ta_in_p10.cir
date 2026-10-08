@@ -1,0 +1,13 @@
+* tier A in
+.include models.lib
+Vin jack 0 10
+Vdd vdd 0 3.3
+R1 jack n 100k
+R2 vdd n 22k
+R3 n 0 22k
+.control
+op
+let a = v(n)
+echo RES vadc = $&a
+.endc
+.end

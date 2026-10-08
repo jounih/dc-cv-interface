@@ -1,0 +1,56 @@
+qty,value,designators,footprint,mpn,lcsc,jlc_library,assembly,usd_each,usd_line
+5,100nF,C1 C4P C4N C5P C5N,C_0805_2012Metric,,C49678,base,smt,0.014,0.07
+2,220nF,C2 C6,C_0805_2012Metric,,C5378,base,smt,0.014,0.03
+1,22uF,C20,C_0805_2012Metric,CL21A226MAQNNNE,C45783,base,smt,0.164,0.16
+3,10uF,C21 C29 C31,C_0805_2012Metric,,C15850,base,smt,0.051,0.15
+7,22uF,C22 C23 C24 C25 C26 C27 C32,C_0805_2012Metric,,C45783,base,smt,0.164,1.15
+2,10nF,C28 C30,C_0805_2012Metric,,C1710,base,smt,0.009,0.02
+1,100pF C0G,C3,C_0805_2012Metric,,C1790,base,smt,0.008,0.01
+3,1uF,C33 C4 C5,C_0805_2012Metric,,C28323,base,smt,0.031,0.09
+2,12pF C0G,C7 C8,C_0805_2012Metric,,C107108,expand,smt,0.006,0.01
+8,330pF C0G,CA1 CA2 CA3 CA4 CA5 CA6 CA7 CA8,C_0805_2012Metric,,C107116,expand,smt,0.008,0.06
+8,47pF C0G,CF1 CF2 CF3 CF4 CF5 CF6 CF7 CF8,C_0805_2012Metric,,C14857,base,smt,0.009,0.07
+4,SS14,D20 D21 D22 D23,D_SMA,SS14,C2480,base,smt,0.015,0.06
+8,BAT54S,DC1 DC2 DC3 DC4 DC5 DC6 DC7 DC8,SOT-23,"BAT54S,215",C47546,expand,smt,0.023,0.18
+1,Eurorack 2x5 shrouded header,J1,IDC-Header_2x05_P2.54mm_Vertical,2x5 box header 2.54 mm,,hand,hand,0.350,0.35
+1,T-Display-S3 header A,J2,PinSocket_1x12_P2.54mm_Vertical,female header 1x12 2.54 mm,,hand,hand,0.400,0.40
+1,T-Display-S3 header B,J3,PinSocket_1x12_P2.54mm_Vertical,female header 1x12 2.54 mm,,hand,hand,0.400,0.40
+1,"LiPo boost module (optional, 3.7 V -> 5 V)",J4,PinHeader_1x03_P2.54mm_Vertical,e.g. Pololu U3V16F5 or MT3608 module set to 5.1 V,,hand,hand,0.050,0.05
+1,CV In P1,JPI1,Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,Thonkiconn PJ398SM,,hand,hand,0.400,0.40
+1,CV In P2,JPI2,Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,Thonkiconn PJ398SM,,hand,hand,0.400,0.40
+1,CV In P3,JPI3,Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,Thonkiconn PJ398SM,,hand,hand,0.400,0.40
+1,CV In P4,JPI4,Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,Thonkiconn PJ398SM,,hand,hand,0.400,0.40
+1,CV In P5,JPI5,Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,Thonkiconn PJ398SM,,hand,hand,0.400,0.40
+1,CV In P6,JPI6,Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,Thonkiconn PJ398SM,,hand,hand,0.400,0.40
+1,CV In P7,JPI7,Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,Thonkiconn PJ398SM,,hand,hand,0.400,0.40
+1,CV In P8,JPI8,Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,Thonkiconn PJ398SM,,hand,hand,0.400,0.40
+1,CV Out P1,JPO1,Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,Thonkiconn PJ398SM,,hand,hand,0.400,0.40
+1,CV Out P2,JPO2,Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,Thonkiconn PJ398SM,,hand,hand,0.400,0.40
+1,CV Out P3,JPO3,Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,Thonkiconn PJ398SM,,hand,hand,0.400,0.40
+1,CV Out P4,JPO4,Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,Thonkiconn PJ398SM,,hand,hand,0.400,0.40
+1,CV Out P5,JPO5,Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,Thonkiconn PJ398SM,,hand,hand,0.400,0.40
+1,CV Out P6,JPO6,Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,Thonkiconn PJ398SM,,hand,hand,0.400,0.40
+1,CV Out P7,JPO7,Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,Thonkiconn PJ398SM,,hand,hand,0.400,0.40
+1,CV Out P8,JPO8,Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,Thonkiconn PJ398SM,,hand,hand,0.400,0.40
+3,10uH,L20 L21 L22,L_Taiyo-Yuden_NR-40xx,SWPA4030S100MT,C38117,expand,smt,0.049,0.15
+9,10k 0.1%,R2 R11 R12 R13 R14 R15 R16 R17 R18,R_0805_2012Metric,RT0805BRD0710KL,,expand,smt,0.250,2.25
+1,33k,R20,R_0805_2012Metric,,C17633,base,smt,0.003,0.00
+7,10k,R21 R23 R25 R27 R1 R4 R5,R_0805_2012Metric,,C17414,base,smt,0.003,0.02
+2,82.5k,R22 R24,R_0805_2012Metric,,C2684597,expand,smt,0.026,0.05
+1,100k,R26,R_0805_2012Metric,,C149504,base,smt,0.005,0.00
+1,8.06k 0.1%,R3,R_0805_2012Metric,RT0805BRD078K06L,C865685,expand,smt,0.045,0.04
+16,49.9k 1%,RA1 RB1 RA2 RB2 RA3 RB3 RA4 RB4 RA5 RB5 RA6 RB6 RA7 RB7 RA8 RB8,R_0805_2012Metric,RC0805FR-0749K9L,C114540,expand,smt,0.005,0.09
+8,9.09k 1%,RC1 RC2 RC3 RC4 RC5 RC6 RC7 RC8,R_0805_2012Metric,RC0805FR-079K09L,C273842,expand,smt,0.004,0.04
+8,82.5k 0.1%,RF1 RF2 RF3 RF4 RF5 RF6 RF7 RF8,R_0805_2012Metric,RT0805BRD0782K5L,C865667,expand,smt,0.039,0.32
+8,1k 0.66W,RS1 RS2 RS3 RS4 RS5 RS6 RS7 RS8,R_1206_3216Metric,ERJ-P08J102V,C2088070,expand,smt,0.033,0.26
+1,DAC8568BIPW,U2,TSSOP-16_4.4x5mm_P0.65mm,DAC8568BIPW (JLC global sourcing),,expand,smt,17.000,17.00
+1,LM66100 (USB path),U20,SOT-363_SC-70-6,LM66100DCKR,C2869734,expand,smt,0.184,0.18
+1,LM66100 (battery boost path),U21,SOT-363_SC-70-6,LM66100DCKR,C2869734,expand,smt,0.184,0.18
+1,"A0515S-2WR3 (5 V -> +-15 V, 2 W)",U22,PinHeader_1x05_P2.54mm_Vertical,A0515S-2WR3,C7465204,expand,hand,1.348,1.35
+1,TPS7A4901 (+11 V),U23,MSOP-8-1EP_3x3mm_P0.65mm_EP1.68x1.88mm,TPS7A4901DGNR,C16430,expand,smt,1.260,1.26
+1,TPS7A3001 (-11 V),U24,MSOP-8-1EP_3x3mm_P0.65mm_EP1.68x1.88mm,TPS7A3001DGNR,C33835,expand,smt,1.809,1.81
+1,AMS1117-3.3,U25,SOT-223-3_TabPin2,AMS1117-3.3,C6186,base,smt,0.162,0.16
+1,LP5907-3.3,U26,SOT-23-5,TPLP5907MFX-3.3,C5370990,expand,smt,0.086,0.09
+1,ADS131M08IPBS,U3,TQFP-32_5x5mm_P0.5mm,ADS131M08IPBSR,C2862610,expand,smt,3.811,3.81
+2,OPA4172,U4 U5,SOIC-14_3.9x8.7mm_P1.27mm,OPA4172IDR,C2057383,expand,smt,1.302,2.60
+1,8.192MHz,Y1,Crystal_SMD_3225-4Pin_3.2x2.5mm,0132M4-8.192F20DTNJL,C19674294,expand,smt,0.153,0.15

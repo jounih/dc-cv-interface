@@ -1,0 +1,23 @@
+* codec input -24
+.include models.lib
+Vcc vcc 0 4.5
+Vee vee 0 0
+Vcm vcm 0 2.25
+Vin jack 0 -24
+RT vcc vplus 10k
+RB vplus 0 8.2k
+CB vplus 0 1u
+RI jack inn 100000
+RF inn opo 11000
+CF inn opo 100p
+XU vplus inn opo vcc vee OPA
+RO opo adc 100
+RADC adc vcm 45k
+.control
+op
+let a = v(adc)
+echo RES vadc = $&a
+let ii = -i(vin)
+echo RES iin = $&ii
+.endc
+.end

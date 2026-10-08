@@ -12,7 +12,7 @@ R1 n1 0 1G
 C1 n1 0 15.9p
 Bclamp n2 0 V=min(max(V(n1), V(vee)+0.35), V(vcc)-0.35)
 * output stage only works with rails present; internal ESD diodes to the rails
-Bout 0 out I=65m*tanh((V(n2)-V(out))/(65m*50))*((V(vcc)-V(vee)) > 5 ? 1 : 0)
+Bout 0 out I=65m*tanh((V(n2)-V(out))/(65m*50))*((V(vcc)-V(vee)) > 3 ? 1 : 0)
 Desdp out vcc DSI
 Desdn vee out DSI
 Iq vcc vee 1.6m

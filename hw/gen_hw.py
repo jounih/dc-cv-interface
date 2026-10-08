@@ -1,309 +1,336 @@
 #!/usr/bin/env python3
-"""Single source of truth for the CV interface hardware.
+"""Single source of truth for the v2 carrier board (ESP32-S3 T-Display-S3 + PCM3168A + DAC8568 + ADS131M08).
 
-Generates from the tables below:
-  hw/netlist.csv            every component pin -> net (4-out board; 8-out adds U4b + channels 5-8)
-  hw/bom.csv                parts, part numbers, approximate GBP prices, suppliers
-  hw/schematic/*.svg        schematic sheets (needs `pip install schemdraw`; optional)
+Generates:
+  hw/netlist.csv                 every component pin -> net, with population group and assembly side
+  hw/kicad/cv_interface.net      KiCad netlist (pcbnew: File > Import > Netlist) with footprints + LCSC fields
+  hw/jlc/bom_<population>.csv    JLCPCB BOM upload format (Comment, Designator, Footprint, LCSC Part #)
+  hw/bom_<population>.csv        full BOM with hand-soldered parts, prices and suppliers
+  hw/results/bom_summary.json    cost summary per population
+  hw/schematic/*.svg             schematic sheets (needs schemdraw)
 
-    python3 hw/gen_hw.py            # tables + SVG (if schemdraw is importable)
+Populations: full (8 audio out + 6 audio in + 8 CV out + 8 CV in), precision (CV group only),
+audio (codec group only). The PCB is the same; unpopulated groups are simply not placed.
+
+    python3 hw/gen_hw.py
 """
-import csv, os, sys
+import csv, json, os, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-N_OUT, N_IN = 4, 4
+STOCK = os.path.join(HERE, "results", "jlc_stock.json")
 
-# ------------------------------------------------------------------ netlist
-# (ref, value, footprint, {pin: net})
+# ------------------------------------------------------------------ footprints (KiCad standard libraries)
+FP = {
+    "R0805": "Resistor_SMD:R_0805_2012Metric", "R1206": "Resistor_SMD:R_1206_3216Metric",
+    "C0805": "Capacitor_SMD:C_0805_2012Metric", "C1206": "Capacitor_SMD:C_1206_3216Metric",
+    "SOIC14": "Package_SO:SOIC-14_3.9x8.7mm_P1.27mm", "TSSOP14": "Package_SO:TSSOP-14_4.4x5mm_P0.65mm",
+    "TSSOP16": "Package_SO:TSSOP-16_4.4x5mm_P0.65mm", "TQFP32": "Package_QFP:TQFP-32_5x5mm_P0.5mm",
+    "HTQFP64": "Package_QFP:HTQFP-64-1EP_10x10mm_P0.5mm_EP8x8mm",
+    "MSOP8EP": "Package_SO:MSOP-8-1EP_3x3mm_P0.65mm_EP1.68x1.88mm",
+    "SOT23": "Package_TO_SOT_SMD:SOT-23", "SOT23-5": "Package_TO_SOT_SMD:SOT-23-5",
+    "SOT223": "Package_TO_SOT_SMD:SOT-223-3_TabPin2", "SC70-6": "Package_TO_SOT_SMD:SOT-363_SC-70-6",
+    "SMA": "Diode_SMD:D_SMA", "L4030": "Inductor_SMD:L_Taiyo-Yuden_NR-40xx",
+    "XTAL3225": "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm",
+    "JACK": "Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles",
+    "IDC2x5": "Connector_IDC:IDC-Header_2x05_P2.54mm_Vertical",
+    "SOCK1x12": "Connector_PinSocket_2.54mm:PinSocket_1x12_P2.54mm_Vertical",
+    "SIP5": "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical",
+    "HDR1x3": "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical",
+}
+
+# ------------------------------------------------------------------ parts
+# part(ref, value, fp_key, pins{pad: net}, group, mpn, assembly)  assembly: "smt" (JLC) or "hand" (through-hole)
 parts = []
-def part(ref, value, fp, pins):
-    parts.append((ref, value, fp, pins))
+def part(ref, value, fp, pins, group="core", mpn="", assembly="smt"):
+    parts.append(dict(ref=ref, value=value, fp=fp, pins=pins, group=group, mpn=mpn, assembly=assembly))
 
-# Power entry: Eurorack 10-pin (2x5) header, red stripe = -12 V (pins 1-2).
-part("J1", "Eurorack 2x5 shrouded header", "IDC 2x5 2.54 mm",
-     {"1": "-12V_IN", "2": "-12V_IN", "3": "GND", "4": "GND", "5": "GND", "6": "GND",
-      "7": "GND", "8": "GND", "9": "+12V_IN", "10": "+12V_IN"})
-part("D1", "SS14", "SMA / DO-214AC", {"A": "+12V_IN", "K": "+12V"})       # reverse-polarity block
-part("D2", "SS14", "SMA / DO-214AC", {"A": "-12V", "K": "-12V_IN"})
-part("C1", "10uF 25V", "0805 X5R / radial", {"1": "+12V", "2": "GND"})
-part("C2", "10uF 25V", "0805 X5R / radial", {"1": "GND", "2": "-12V"})
+R = lambda ref, val, a, b, group="core", mpn="": part(ref, val, "R0805", {"1": a, "2": b}, group, mpn)
+C = lambda ref, val, a, b, group="core", mpn="": part(ref, val, "C0805", {"1": a, "2": b}, group, mpn)
 
-# Pico 2: USB powered. Only the pins used are listed.
-part("U1", "Raspberry Pi Pico 2 (RP2350)", "Pico module",
-     {"4": "DAC_SCLK", "5": "DAC_SYNC", "6": "DAC_DIN",
-      "14": "ADC_SCLK", "15": "ADC_CS", "16": "ADC_DOUT", "17": "ADC_DRDY",
-      "19": "ADC_DIN", "20": "ADC_RESET", "27": "ADC_CLKIN",
-      "36": "+3V3_D", "40": "VBUS",
-      "3": "GND", "8": "GND", "13": "GND", "18": "GND", "23": "GND", "28": "GND", "33": "GND", "38": "GND"})
+# ---- controller: LilyGO T-Display-S3 on two 1x12 sockets (pin order: check the LilyGO pinmap before layout)
+part("J2", "T-Display-S3 header A", "SOCK1x12",
+     {"1": "GND", "2": "GND", "3": "+5V_USB", "4": "NC_S3_3V3", "5": "RAIL_SENSE", "6": "RACK_SENSE", "7": "CS_CODEC",
+      "8": "CS_ADC", "9": "SPI_MOSI", "10": "SPI_SCLK", "11": "SPI_MISO", "12": "NC_A12"}, assembly="hand",
+     mpn="female header 1x12 2.54 mm")
+part("J3", "T-Display-S3 header B", "SOCK1x12",
+     {"1": "S3_VBAT", "2": "GND", "3": "I2S_DIN", "4": "CS_DAC", "5": "I2S_MCLK", "6": "I2S_BCLK", "7": "I2S_WS",
+      "8": "I2S_DOUT", "9": "NC_B9", "10": "NC_B10", "11": "NC_B11", "12": "NC_B12"}, assembly="hand",
+     mpn="female header 1x12 2.54 mm")
 
-# Analog 3.3 V for the converters, from USB VBUS (same power domain as the Pico).
-part("U5", "MCP1700-3302E (LDO 3.3 V)", "TO-92 (breadboard) / SOT-23",
-     {"IN": "VBUS", "GND": "GND", "OUT": "+3V3_A"})
-part("C3", "1uF", "0805", {"1": "VBUS", "2": "GND"})
-part("C4", "1uF", "0805", {"1": "+3V3_A", "2": "GND"})
+# ---- power: USB 5 V (primary) and optional LiPo boost, ideal-diode OR -> +5V_SYS
+part("U20", "LM66100 (USB path)", "SC70-6", {"1": "+5V_USB", "2": "GND", "3": "GND", "4": "NC_U20", "5": "NC_U20B", "6": "+5V_SYS"}, mpn="LM66100DCKR")
+part("U21", "LM66100 (battery boost path)", "SC70-6", {"1": "+5V_BOOST", "2": "GND", "3": "GND", "4": "NC_U21", "5": "NC_U21B", "6": "+5V_SYS"}, mpn="LM66100DCKR")
+part("J4", "LiPo boost module (optional, 3.7 V -> 5 V)", "HDR1x3", {"1": "S3_VBAT", "2": "GND", "3": "+5V_BOOST"}, assembly="hand",
+     mpn="e.g. Pololu U3V16F5 or MT3608 module set to 5.1 V")
+C("C20", "22uF", "+5V_SYS", "GND", mpn="CL21A226MAQNNNE")
+# Isolated DC-DC 5 V -> +-15 V (2 W), input LC, output pi filters, diode-OR with the rack
+part("L20", "10uH", "L4030", {"1": "+5V_SYS", "2": "DCDC_VIN"}, mpn="SWPA4030S100MT")
+C("C21", "10uF", "DCDC_VIN", "GND")
+part("U22", "A0515S-2WR3 (5 V -> +-15 V, 2 W)", "SIP5", {"1": "DCDC_VIN", "2": "GND", "3": "DCDC_P", "4": "GND", "5": "DCDC_N"},
+     assembly="hand", mpn="A0515S-2WR3")
+C("C22", "22uF", "DCDC_P", "GND"); C("C23", "22uF", "GND", "DCDC_N")
+part("L21", "10uH", "L4030", {"1": "DCDC_P", "2": "DCDC_PF"}, mpn="SWPA4030S100MT")
+part("L22", "10uH", "L4030", {"1": "DCDC_NF", "2": "DCDC_N"}, mpn="SWPA4030S100MT")
+C("C24", "22uF", "DCDC_PF", "GND"); C("C25", "22uF", "GND", "DCDC_NF")
+part("D20", "SS14", "SMA", {"2": "DCDC_PF", "1": "VPOS_RAW"}, mpn="SS14")     # pad 1 = cathode
+part("D21", "SS14", "SMA", {"2": "VNEG_RAW", "1": "DCDC_NF"}, mpn="SS14")
+# Eurorack 10-pin (optional supply): red stripe = pin 1 = -12 V
+part("J1", "Eurorack 2x5 shrouded header", "IDC2x5",
+     {"1": "RACK_M12", "2": "RACK_M12", "3": "GND", "4": "GND", "5": "GND", "6": "GND", "7": "GND", "8": "GND",
+      "9": "RACK_P12", "10": "RACK_P12"}, assembly="hand", mpn="2x5 box header 2.54 mm")
+part("D22", "SS14", "SMA", {"2": "RACK_P12", "1": "VPOS_RAW"}, mpn="SS14")
+part("D23", "SS14", "SMA", {"2": "VNEG_RAW", "1": "RACK_M12"}, mpn="SS14")
+R("R20", "33k", "RACK_P12", "RACK_SENSE"); R("R21", "10k", "RACK_SENSE", "GND")
+C("C26", "22uF", "VPOS_RAW", "GND"); C("C27", "22uF", "GND", "VNEG_RAW")
+# Low-noise LDOs to +-11 V (FB divider 82.5 k / 10 k)
+part("U23", "TPS7A4901 (+11 V)", "MSOP8EP", {"1": "+11V", "2": "FB_P", "3": "NC_U23", "4": "GND", "5": "VPOS_RAW",
+     "6": "NR_P", "7": "NC_U23B", "8": "VPOS_RAW", "9": "GND"}, mpn="TPS7A4901DGNR")
+R("R22", "82.5k", "+11V", "FB_P"); R("R23", "10k", "FB_P", "GND")
+C("C28", "10nF", "NR_P", "GND"); C("C29", "10uF", "+11V", "GND")
+part("U24", "TPS7A3001 (-11 V)", "MSOP8EP", {"1": "-11V", "2": "FB_N", "3": "NC_U24", "4": "GND", "5": "VNEG_RAW",
+     "6": "NR_N", "7": "NC_U24B", "8": "VNEG_RAW", "9": "GND"}, mpn="TPS7A3001DGNR")
+R("R24", "82.5k", "-11V", "FB_N"); R("R25", "10k", "FB_N", "GND")
+C("C30", "10nF", "NR_N", "GND"); C("C31", "10uF", "GND", "-11V")
+R("R26", "100k", "+11V", "RAIL_SENSE"); R("R27", "10k", "RAIL_SENSE", "GND")
+# 3.3 V digital (codec VDD, ADC DVDD, pull-ups) and 3.3 V analog (DAC/ADC AVDD), 4.5 V codec analog
+part("U25", "AMS1117-3.3", "SOT223", {"1": "GND", "2": "+3V3_D", "3": "+5V_SYS"}, mpn="AMS1117-3.3")
+C("C32", "22uF", "+3V3_D", "GND")
+part("U26", "LP5907-3.3", "SOT23-5", {"1": "+5V_SYS", "2": "GND", "3": "+5V_SYS", "4": "NC_U26", "5": "+3V3_A"}, group="P", mpn="TPLP5907MFX-3.3")
+C("C33", "1uF", "+3V3_A", "GND", group="P")
+part("U27", "LP5907-4.5", "SOT23-5", {"1": "+5V_SYS", "2": "GND", "3": "+5V_SYS", "4": "NC_U27", "5": "+4V5_A"}, group="A", mpn="LP5907MFX-4.5/NOPB")
+C("C34", "10uF", "+4V5_A", "GND", group="A")
 
-# DAC8568BIPW: 8 x 16-bit, midscale power-on reset (B grade), internal 2.5 V ref off by default.
-part("U2", "DAC8568BIPW", "TSSOP-16",
-     {"1": "+3V3_A",        # LDAC tied high: outputs change only on software update
-      "2": "DAC_SYNC", "3": "+3V3_A", "4": "DAC_OUT1", "5": "DAC_OUT3", "6": "DAC_OUT5",
-      "7": "DAC_OUT7", "8": "VREF", "9": "+3V3_A",   # CLR tied high (a CLR edge would go to zero-scale = +10 V)
-      "10": "DAC_OUT8", "11": "DAC_OUT6", "12": "DAC_OUT4", "13": "DAC_OUT2",
-      "14": "GND", "15": "DAC_DIN", "16": "DAC_SCLK"})
-part("C5", "100nF", "0805", {"1": "+3V3_A", "2": "GND"})
-part("C6", "1uF", "0805", {"1": "+3V3_A", "2": "GND"})
-part("C7", "150nF C0G/X7R", "0805", {"1": "VREF", "2": "GND"})        # datasheet: >= 150 nF on VREFOUT
-part("R1", "10k", "0805", {"1": "DAC_SYNC", "2": "+3V3_D"})            # SYNC idle high during Pico reset
+# ---- group P: DAC8568 + 8 output stages (2x OPA4172) + ADS131M08 + 8 input dividers
+part("U2", "DAC8568BIPW", "TSSOP16",
+     {"1": "+3V3_A", "2": "CS_DAC", "3": "+3V3_A", "4": "DAC_OUT1", "5": "DAC_OUT3", "6": "DAC_OUT5", "7": "DAC_OUT7",
+      "8": "VREF", "9": "+3V3_A", "10": "DAC_OUT8", "11": "DAC_OUT6", "12": "DAC_OUT4", "13": "DAC_OUT2",
+      "14": "GND", "15": "SPI_MOSI", "16": "SPI_SCLK"}, group="P", mpn="DAC8568BIPW (JLC global sourcing)")
+C("C1", "100nF", "+3V3_A", "GND", group="P"); C("C2", "220nF", "VREF", "GND", group="P")
+R("R1", "10k", "CS_DAC", "+3V3_D")
+R("R2", "10k 0.1%", "VREF", "VB", group="P", mpn="RT0805BRD0710KL"); R("R3", "8.06k 0.1%", "VB", "GND", group="P", mpn="RT0805BRD078K06L")
+C("C3", "100pF C0G", "VB", "GND", group="P")
+quad = {1: ("1", "2", "3"), 2: ("7", "6", "5"), 3: ("8", "9", "10"), 4: ("14", "13", "12")}   # out, -in, +in
+for u, chans in (("U4", range(1, 5)), ("U5", range(5, 9))):
+    pins = {"4": "+11V", "11": "-11V"}
+    for k, ch in enumerate(chans, start=1):
+        o, m, p = quad[k]
+        pins.update({o: f"OPO{ch}", m: f"SUM{ch}", p: "VB"})
+    part(u, "OPA4172", "SOIC14", pins, group="P", mpn="OPA4172IDR")
+    C(f"C{u[1:]}P", "100nF", "+11V", "GND", group="P"); C(f"C{u[1:]}N", "100nF", "GND", "-11V", group="P")
+for ch in range(1, 9):
+    R(f"R1{ch}", "10k 0.1%", f"DAC_OUT{ch}", f"SUM{ch}", group="P", mpn="RT0805BRD0710KL")
+    R(f"RF{ch}", "82.5k 0.1%", f"SUM{ch}", f"OPO{ch}", group="P", mpn="RT0805BRD0782K5L")
+    C(f"CF{ch}", "47pF C0G", f"SUM{ch}", f"OPO{ch}", group="P")
+    part(f"DC{ch}", "BAT54S", "SOT23", {"1": "-11V", "2": "+11V", "3": f"OPO{ch}"}, group="P", mpn="BAT54S,215")
+    part(f"RS{ch}", "1k 0.66W", "R1206", {"1": f"OPO{ch}", "2": f"CVOUT{ch}"}, group="P", mpn="ERJ-P08J102V")
+    part(f"JPO{ch}", f"CV Out P{ch}", "JACK", {"T": f"CVOUT{ch}", "S": "GND", "TN": f"NC_JPO{ch}"}, group="P",
+         assembly="hand", mpn="Thonkiconn PJ398SM")
+part("U3", "ADS131M08IPBS", "TQFP32",
+     {"29": "AIN1", "30": "GND", "32": "AIN2", "31": "GND", "1": "AIN3", "2": "GND", "4": "AIN4", "3": "GND",
+      "5": "AIN5", "6": "GND", "8": "AIN6", "7": "GND", "9": "AIN7", "10": "GND", "12": "AIN8", "11": "GND",
+      "13": "GND", "28": "GND", "14": "NC_REFIN", "15": "+3V3_A", "16": "+3V3_D", "17": "CS_ADC", "18": "NC_DRDY",
+      "19": "SPI_SCLK", "20": "SPI_MISO", "21": "SPI_MOSI", "22": "XTAL2", "23": "XTAL1", "24": "ADC_CAP",
+      "25": "GND", "26": "+3V3_D", "27": "GND"}, group="P", mpn="ADS131M08IPBSR")
+C("C4", "1uF", "+3V3_A", "GND", group="P"); C("C5", "1uF", "+3V3_D", "GND", group="P"); C("C6", "220nF", "ADC_CAP", "GND", group="P")
+R("R4", "10k", "CS_ADC", "+3V3_D")
+part("Y1", "8.192MHz", "XTAL3225", {"1": "XTAL1", "2": "GND", "3": "XTAL2", "4": "GND"}, group="P", mpn="0132M4-8.192F20DTNJL")
+C("C7", "12pF C0G", "XTAL1", "GND", group="P"); C("C8", "12pF C0G", "XTAL2", "GND", group="P")
+for ch in range(1, 9):
+    part(f"JPI{ch}", f"CV In P{ch}", "JACK", {"T": f"CVIN{ch}", "S": "GND", "TN": "GND"}, group="P", assembly="hand", mpn="Thonkiconn PJ398SM")
+    R(f"RA{ch}", "49.9k 1%", f"CVIN{ch}", f"CVINM{ch}", group="P", mpn="RC0805FR-0749K9L"); R(f"RB{ch}", "49.9k 1%", f"CVINM{ch}", f"AIN{ch}", group="P", mpn="RC0805FR-0749K9L")
+    R(f"RC{ch}", "9.09k 1%", f"AIN{ch}", "GND", group="P", mpn="RC0805FR-079K09L"); C(f"CA{ch}", "330pF C0G", f"AIN{ch}", "GND", group="P")
 
-# Ratiometric offset node Vb = VREF * 8.06/(10+8.06) = 1.116 V. Keep CB small:
-# a big cap here makes Vb lag the DAC at reference turn-on (SPICE: 5.8 V blip at 10 nF).
-part("R2", "10k 0.1%", "0805", {"1": "VREF", "2": "VB"})
-part("R3", "8.06k 0.1%", "0805", {"1": "VB", "2": "GND"})
-part("C8", "100pF C0G", "0805", {"1": "VB", "2": "GND"})
+# ---- group A: PCM3168A + 8 difference-amp outputs (2x OPA1679) + 6 inverting inputs on 4.5 V (2x TLV9064)
+codec = {"1": "VCOMAD", "2": "GND", "3": "+4V5_A", "4": "CODEC_RST", "5": "NC_OVF", "6": "I2S_WS", "7": "I2S_BCLK",
+         "8": "I2S_DIN", "9": "NC_DOUT2", "10": "NC_DOUT3", "11": "GND", "12": "+3V3_D", "13": "NC_ZERO",
+         "14": "+4V5_A", "15": "VCOMDA", "16": "GND", "33": "GND", "34": "+4V5_A", "35": "I2S_WS", "36": "I2S_BCLK",
+         "37": "I2S_DOUT", "38": "GND", "39": "GND", "40": "GND", "41": "I2S_MCLK", "42": "SPI_SCLK", "43": "SPI_MOSI",
+         "44": "SPI_MISO", "45": "CS_CODEC", "46": "+3V3_D", "47": "GND", "48": "+3V3_D", "49": "+4V5_A", "50": "GND",
+         "59": "VREFAD1", "60": "VREFAD2", "65": "GND"}
+vout = {8: (17, 18), 7: (19, 20), 6: (21, 22), 5: (23, 24), 4: (25, 26), 3: (27, 28), 2: (29, 30), 1: (31, 32)}
+for ch, (pp, pm) in vout.items():
+    codec[str(pp)] = f"AOP{ch}"; codec[str(pm)] = f"AOM{ch}"
+vin = {1: (52, 51), 2: (54, 53), 3: (56, 55), 4: (58, 57), 5: (62, 61), 6: (64, 63)}   # (+, -)
+for ch, (pp, pm) in vin.items():
+    codec[str(pp)] = f"AIN_A{ch}"; codec[str(pm)] = "VCOMAD"
+part("U6", "PCM3168APAP", "HTQFP64", codec, group="A", mpn="PCM3168APAPR")
+for n, net in (("C40", "VCOMAD"), ("C41", "VCOMDA"), ("C42", "VREFAD1"), ("C43", "VREFAD2")):
+    C(n, "10uF", net, "GND", group="A")
+for n in ("C44", "C45", "C46"):
+    C(n, "10uF", "+4V5_A", "GND", group="A")
+C("C47", "100nF", "+3V3_D", "GND", group="A")
+R("R5", "10k", "CS_CODEC", "+3V3_D")
+R("R6", "10k", "CODEC_RST", "+3V3_D", group="A"); C("C48", "1uF", "CODEC_RST", "GND", group="A")
+for u, chans in (("U7", range(1, 5)), ("U8", range(5, 9))):
+    pins = {"4": "+11V", "11": "-11V"}
+    for k, ch in enumerate(chans, start=1):
+        o, m, p = quad[k]
+        pins.update({o: f"AOPO{ch}", m: f"AOSUM{ch}", p: f"AOREF{ch}"})
+    part(u, "OPA1679", "TSSOP14", pins, group="A", mpn="OPA1679IPWR")
+    C(f"C{u[1:]}P", "100nF", "+11V", "GND", group="A"); C(f"C{u[1:]}N", "100nF", "GND", "-11V", group="A")
+for ch in range(1, 9):
+    R(f"RAM{ch}", "28.7k 0.1%", f"AOM{ch}", f"AOSUM{ch}", group="A", mpn="RT0805BRD0728K7L")
+    R(f"RAF{ch}", "82.5k 0.1%", f"AOSUM{ch}", f"AOPO{ch}", group="A", mpn="RT0805BRD0782K5L")
+    R(f"RAP{ch}", "28.7k 0.1%", f"AOP{ch}", f"AOREF{ch}", group="A", mpn="RT0805BRD0728K7L")
+    R(f"RAG{ch}", "82.5k 0.1%", f"AOREF{ch}", "GND", group="A", mpn="RT0805BRD0782K5L")
+    C(f"CAF{ch}", "47pF C0G", f"AOSUM{ch}", f"AOPO{ch}", group="A"); C(f"CAG{ch}", "47pF C0G", f"AOREF{ch}", "GND", group="A")
+    part(f"DA{ch}", "BAT54S", "SOT23", {"1": "-11V", "2": "+11V", "3": f"AOPO{ch}"}, group="A", mpn="BAT54S,215")
+    part(f"RSA{ch}", "1k 0.66W", "R1206", {"1": f"AOPO{ch}", "2": f"AUOUT{ch}"}, group="A", mpn="ERJ-P08J102V")
+    part(f"JAO{ch}", f"Audio Out A{ch}", "JACK", {"T": f"AUOUT{ch}", "S": "GND", "TN": f"NC_JAO{ch}"}, group="A",
+         assembly="hand", mpn="Thonkiconn PJ398SM")
+R("RV1", "10k 1%", "+4V5_A", "AI_VPLUS", group="A"); R("RV2", "8.2k 1%", "AI_VPLUS", "GND", group="A", mpn="RC0805FR-078K2L")
+C("CV1", "1uF", "AI_VPLUS", "GND", group="A")
+for u, chans in (("U9", range(1, 5)), ("U10", range(5, 9))):
+    pins = {"4": "+4V5_A", "11": "GND"}
+    for k, ch in enumerate(chans, start=1):
+        o, m, p = quad[k]
+        if ch <= 6:
+            pins.update({o: f"AIPO{ch}", m: f"AISUM{ch}", p: "AI_VPLUS"})
+        else:                                  # spare sections: followers tied to the bias, outputs open
+            pins.update({o: f"AISPARE{ch}", m: f"AISPARE{ch}", p: "AI_VPLUS"})
+    part(u, "TLV9064", "TSSOP14", pins, group="A", mpn="TLV9064IPWR")
+    C(f"C{u[1:]}A", "100nF", "+4V5_A", "GND", group="A")
+for ch in range(1, 7):
+    part(f"JAI{ch}", f"Audio In A{ch}", "JACK", {"T": f"AUIN{ch}", "S": "GND", "TN": "GND"}, group="A", assembly="hand", mpn="Thonkiconn PJ398SM")
+    R(f"RAI{ch}", "100k 1%", f"AUIN{ch}", f"AISUM{ch}", group="A"); R(f"RAIF{ch}", "11k 1%", f"AISUM{ch}", f"AIPO{ch}", group="A", mpn="RC0805FR-0711KL")
+    C(f"CAI{ch}", "100pF C0G", f"AISUM{ch}", f"AIPO{ch}", group="A")
+    R(f"RAO{ch}", "100", f"AIPO{ch}", f"AIN_A{ch}", group="A")
 
-# OPA4172ID quad: output stages 1-4.
-amp_pins = {1: ("1", "2", "3"), 2: ("7", "6", "5"), 3: ("8", "9", "10"), 4: ("14", "13", "12")}  # out, -in, +in
-u4 = {"4": "+12V", "11": "-12V"}
-for ch, (o, m, p) in amp_pins.items():
-    u4.update({o: f"OPO{ch}", m: f"SUM{ch}", p: "VB"})
-part("U4", "OPA4172ID", "SOIC-14", u4)
-part("C9", "100nF", "0805", {"1": "+12V", "2": "GND"})
-part("C10", "100nF", "0805", {"1": "GND", "2": "-12V"})
-for ch in range(1, N_OUT + 1):
-    part(f"R1{ch}", "10k 0.1%", "0805", {"1": f"DAC_OUT{ch}", "2": f"SUM{ch}"})
-    part(f"RF{ch}", "82.5k 0.1%", "0805", {"1": f"SUM{ch}", "2": f"OPO{ch}"})
-    part(f"CF{ch}", "47pF C0G", "0805", {"1": f"SUM{ch}", "2": f"OPO{ch}"})
-    part(f"DC{ch}", "BAT54S", "SOT-23", {"1": "-12V", "2": "+12V", "3": f"OPO{ch}"})
-    part(f"RS{ch}", "1k 0.66 W anti-surge", "1206", {"1": f"OPO{ch}", "2": f"OUT{ch}"})
-    part(f"JO{ch}", "Thonkiconn PJ398SM", "3.5 mm jack", {"T": f"OUT{ch}", "S": "GND", "TN": "NC"})
+GROUPS = {"full": {"core", "A", "P"}, "precision": {"core", "P"}, "audio": {"core", "A"}}
 
-# ADS131M04IPW: 4 simultaneous 24-bit inputs, +-1.2 V around AGND from a single 3.3 V.
-part("U3", "ADS131M04IPW", "TSSOP-20",
-     {"1": "+3V3_A", "2": "GND", "3": "AIN1", "4": "GND", "5": "GND", "6": "AIN2",
-      "7": "AIN3", "8": "GND", "9": "GND", "10": "AIN4",
-      "11": "ADC_RESET", "12": "ADC_CS", "13": "ADC_DRDY", "14": "ADC_SCLK", "15": "ADC_DOUT",
-      "16": "ADC_DIN", "17": "ADC_CLKIN", "18": "ADC_CAP", "19": "GND", "20": "+3V3_D"})
-part("C11", "1uF", "0805", {"1": "+3V3_A", "2": "GND"})
-part("C12", "1uF", "0805", {"1": "+3V3_D", "2": "GND"})
-part("C13", "220nF", "0805", {"1": "ADC_CAP", "2": "GND"})
-part("R4", "10k", "0805", {"1": "ADC_CS", "2": "+3V3_D"})
-for ch in range(1, N_IN + 1):
-    part(f"JI{ch}", "Thonkiconn PJ398SM", "3.5 mm jack", {"T": f"IN{ch}", "S": "GND", "TN": "GND"})
-    part(f"RA{ch}", "49.9k 1%", "0805", {"1": f"IN{ch}", "2": f"INM{ch}"})
-    part(f"RB{ch}", "49.9k 1%", "0805", {"1": f"INM{ch}", "2": f"AIN{ch}"})
-    part(f"RC{ch}", "9.09k 1%", "0805", {"1": f"AIN{ch}", "2": "GND"})
-    part(f"CA{ch}", "330pF C0G", "0805", {"1": f"AIN{ch}", "2": "GND"})
+# ------------------------------------------------------------------ prices (JLC stock file + fallbacks)
+def stock_index():
+    try:
+        with open(STOCK) as f:
+            return {p.get("query", "") + "|" + p.get("mpn", ""): p for p in json.load(f)["parts"] if "mpn" in p}
+    except Exception:
+        return {}
 
-def write_netlist():
+FALLBACK_USD = {   # generic JLC basic parts and hand parts (approximate, USD each)
+    "0805_R": 0.002, "0805_C": 0.005, "0805_C_big": 0.02, "1206_R": 0.05, "0.1%": 0.25, "JACK": 0.40,
+    "IDC2x5": 0.35, "SOCK1x12": 0.40, "HDR1x3": 0.05, "XTAL": 0.15, "DAC8568BIPW (JLC global sourcing)": 17.0,
+    "A0515S-2WR3": 3.2, "LM66100DCKR": 0.45, "TLV9064IPWR": 0.75, "LP5907MFX-3.3/NOPB": 0.45, "AMS1117-3.3": 0.08,
+    "SWPA4030S100MT": 0.06,
+}
+
+GENERIC = {   # (value, footprint) -> query in tools/jlc_stock.py EXTRA (JLC basic parts preferred)
+    ("100nF", "C0805"): "100nF 0805 X7R 50V", ("1uF", "C0805"): "1uF 0805 X7R 25V", ("10nF", "C0805"): "10nF 0805 X7R",
+    ("220nF", "C0805"): "220nF 0805 X7R", ("100pF C0G", "C0805"): "100pF 0805 C0G", ("12pF C0G", "C0805"): "12pF 0805 C0G",
+    ("47pF C0G", "C0805"): "47pF 0805 C0G", ("56pF C0G", "C0805"): "56pF 0805 C0G", ("330pF C0G", "C0805"): "330pF 0805 C0G",
+    ("10uF", "C0805"): "10uF 0805 25V", ("22uF", "C0805"): "22uF 0805", ("33k", "R0805"): "33kΩ 0805 ±1%",
+    ("10k", "R0805"): "10kΩ 0805 ±1%", ("10k 1%", "R0805"): "10kΩ 0805 ±1%", ("100k", "R0805"): "100kΩ 0805 ±1%",
+    ("100k 1%", "R0805"): "100kΩ 0805 ±1%", ("100", "R0805"): "100Ω 0805 ±1%", ("82.5k", "R0805"): "82.5kΩ 0805 ±0.1%",
+}
+
+def unit_price(p, stock):
+    m = p["mpn"]
+    q = GENERIC.get((p["value"], p["fp"])) if not m else None
+    if q:
+        for v in stock.values():
+            if v.get("query") == q and v.get("usd_qty10"):
+                return float(v["usd_qty10"]), v.get("lcsc", ""), v.get("library", "")
+    for k, v in stock.items():
+        km = k.split("|", 1)[1]
+        if km and m and (m.split()[0] in km or km in m) and v.get("usd_qty10"):
+            return float(v["usd_qty10"]), v.get("lcsc", ""), v.get("library", "")
+    if p["fp"] == "JACK": return FALLBACK_USD["JACK"], "", "hand"
+    if p["fp"] in ("IDC2x5", "SOCK1x12", "HDR1x3"): return FALLBACK_USD[p["fp"]], "", "hand"
+    if p["fp"] == "XTAL3225": return FALLBACK_USD["XTAL"], "", "expand"
+    if "0.1%" in p["value"]: return FALLBACK_USD["0.1%"], "", "expand"
+    for k, v in FALLBACK_USD.items():
+        if k in m: return v, "", "expand"
+    if p["fp"] == "R1206": return FALLBACK_USD["1206_R"], "", "expand"
+    if p["fp"] == "R0805": return FALLBACK_USD["0805_R"], "", "base"
+    if p["fp"] == "C0805": return (FALLBACK_USD["0805_C_big"] if "u" in p["value"] else FALLBACK_USD["0805_C"]), "", "base"
+    return 0.5, "", "expand"
+
+def write_outputs():
+    os.makedirs(os.path.join(HERE, "kicad"), exist_ok=True)
+    os.makedirs(os.path.join(HERE, "jlc"), exist_ok=True)
+    os.makedirs(os.path.join(HERE, "results"), exist_ok=True)
     with open(os.path.join(HERE, "netlist.csv"), "w", newline="") as f:
         w = csv.writer(f)
-        w.writerow(["ref", "value", "footprint", "pin", "net"])
-        for ref, val, fp, pins in parts:
-            for pin, net in pins.items():
-                w.writerow([ref, val, fp, pin, net])
-    # sanity: every signal net has >= 2 pins
+        w.writerow(["ref", "value", "footprint", "pin", "net", "group", "assembly", "mpn"])
+        for p in parts:
+            for pin, net in p["pins"].items():
+                w.writerow([p["ref"], p["value"], FP[p["fp"]], pin, net, p["group"], p["assembly"], p["mpn"]])
     nets = {}
-    for ref, _, _, pins in parts:
-        for pin, net in pins.items():
-            nets.setdefault(net, []).append(f"{ref}.{pin}")
-    single = [n for n, p in nets.items() if len(p) < 2 and n != "NC" and not n.startswith("DAC_OUT")]
-    return nets, single
-
-# ------------------------------------------------------------------ BOM
-# (group, qty_4out, qty_extra_for_8out, description, manufacturer part, approx GBP each, where)
-BOM = [
-    ("core", 1, 0, "Raspberry Pi Pico 2 (RP2350, with headers for breadboard)", "Raspberry Pi SC1631 / SC1632 (H)", 4.80, "The Pi Hut, Pimoroni, Farnell"),
-    ("core", 1, 0, "16-bit 8-ch DAC, midscale reset, int. ref (U2)", "TI DAC8568BIPW", 14.50, "Mouser UK, DigiKey UK, Farnell"),
-    ("core", 1, 0, "24-bit 4-ch simultaneous delta-sigma ADC (U3)", "TI ADS131M04IPWR", 4.60, "Mouser UK, DigiKey UK, LCSC"),
-    ("core", 1, 1, "Quad RRO op-amp, 36 V (U4)", "TI OPA4172IDR", 3.20, "Mouser UK, DigiKey UK, LCSC"),
-    ("power", 1, 0, "3.3 V LDO, 250 mA (U5)", "Microchip MCP1700-3302E/TO", 0.40, "Mouser UK, Farnell, Rapid"),
-    ("power", 2, 0, "Schottky 1 A 40 V, rail reverse-polarity block", "SS14 (or 1N5819 through-hole)", 0.10, "LCSC, Tayda, Rapid"),
-    ("power", 1, 0, "Eurorack 10-pin shrouded header + 10-to-16 ribbon", "2x5 IDC box header; Thonk/Tayda ribbon", 1.20, "Thonk, Tayda"),
-    ("protect", 4, 4, "Dual Schottky clamp per output (to +-12 V)", "Nexperia BAT54S", 0.10, "LCSC, Mouser"),
-    ("protect", 4, 4, "1 k series output resistor, 0.66 W anti-surge 1206", "Panasonic ERJ-P08J102V", 0.15, "Mouser, DigiKey"),
-    ("analog", 5, 4, "10 k 0.1 % 25 ppm (R1x gain set + Vb top)", "Panasonic ERA-6AEB103V", 0.30, "Mouser, DigiKey"),
-    ("analog", 4, 4, "82.5 k 0.1 % 25 ppm (RFx)", "Panasonic ERA-6AEB8252V", 0.30, "Mouser, DigiKey"),
-    ("analog", 1, 0, "8.06 k 0.1 % (Vb bottom)", "Panasonic ERA-6AEB8061V", 0.30, "Mouser, DigiKey"),
-    ("analog", 8, 0, "49.9 k 1 % 50 ppm thin film (input series, 2 per input; calibrated)", "Yageo RT0805FRE0749K9L", 0.05, "Mouser, LCSC"),
-    ("analog", 4, 0, "9.09 k 1 % 50 ppm thin film (input shunt; calibrated)", "Yageo RT0805FRE079K09L", 0.05, "Mouser, LCSC"),
-    ("analog", 4, 4, "47 pF C0G (output filter, 41 kHz)", "0805 C0G 50 V", 0.05, "LCSC"),
-    ("analog", 4, 0, "330 pF C0G (input filter, 59 kHz)", "0805 C0G 50 V", 0.05, "LCSC"),
-    ("analog", 1, 0, "100 pF C0G (Vb)", "0805 C0G 50 V", 0.05, "LCSC"),
-    ("decoupling", 3, 1, "100 nF X7R", "0805 X7R 50 V", 0.03, "LCSC"),
-    ("decoupling", 1, 0, "150 nF X7R (VREF)", "0805 X7R 25 V", 0.05, "LCSC"),
-    ("decoupling", 1, 0, "220 nF X7R (ADC CAP)", "0805 X7R 25 V", 0.05, "LCSC"),
-    ("decoupling", 5, 0, "1 uF X7R", "0805 X7R 25 V", 0.05, "LCSC"),
-    ("decoupling", 2, 0, "10 uF 25 V (rails)", "0805 X5R 25 V or radial electrolytic", 0.10, "LCSC, Tayda"),
-    ("misc", 2, 0, "10 k pull-up (DAC SYNC, ADC CS)", "0805 1 %", 0.02, "LCSC"),
-    ("jacks", 8, 4, "3.5 mm Eurorack jack", "Thonkiconn PJ398SM", 0.30, "Thonk, Tayda"),
-    ("board", 1, 0, "Stripboard / prototype board (2-layer PCB later: 5 boards ~GBP 5 + post)", "-", 2.00, "JLCPCB, PCBWay, Rapid"),
-]
-BREADBOARD_EXTRAS = [
-    ("breadboard", 1, "TSSOP-16 to DIP adapter (DAC8568)", "SOIC/TSSOP-to-DIP adapter, 0.65 mm pitch", 0.80, "Amazon, eBay, Proto-PIC"),
-    ("breadboard", 1, "TSSOP-20 to DIP adapter (ADS131M04)", "TSSOP-20 adapter, 0.65 mm pitch", 0.80, "Amazon, eBay, Proto-PIC"),
-    ("breadboard", 1, "SOIC-14 to DIP adapter (OPA4172) - or TL074CN DIP (range ~+-9.5 V)", "SOIC-14 adapter", 0.60, "Amazon, eBay"),
-    ("breadboard", 1, "Bench supply +-12 V with current limit (or Eurorack PSU via ribbon)", "-", 0.0, "existing"),
-]
-
-def write_bom():
-    tot4 = tot8 = 0.0
-    with open(os.path.join(HERE, "bom.csv"), "w", newline="") as f:
-        w = csv.writer(f)
-        w.writerow(["group", "qty_4x4", "qty_8x4", "description", "part_number", "approx_gbp_each", "line_gbp_4x4", "where_to_buy"])
-        for g, q4, qx, d, pn, gbp, where in BOM:
-            q8 = q4 + qx
-            tot4 += q4 * gbp
-            tot8 += q8 * gbp
-            w.writerow([g, q4, q8, d, pn, f"{gbp:.2f}", f"{q4 * gbp:.2f}", where])
-        w.writerow([])
-        w.writerow(["TOTAL", "", "", "4 out / 4 in board", "", "", f"{tot4:.2f}", "approx, single quantity, ex. shipping"])
-        w.writerow(["TOTAL", "", "", "8 out / 4 in board", "", "", f"{tot8:.2f}", ""])
-        w.writerow([])
-        for g, q, d, pn, gbp, where in BREADBOARD_EXTRAS:
-            w.writerow([g, q, q, d, pn, f"{gbp:.2f}", f"{q * gbp:.2f}", where])
-    return tot4, tot8
-
-# ------------------------------------------------------------------ schematic SVGs
-def draw():
-    try:
-        import schemdraw
-        import schemdraw.elements as elm
-    except ImportError:
-        print("schemdraw not installed: skipping SVG sheets (pip install schemdraw)")
-        return False
-    schemdraw.use("svg")
-    out = os.path.join(HERE, "schematic")
-    os.makedirs(out, exist_ok=True)
-
-    def ic(name, pins_left, pins_right, label):
-        p = [elm.IcPin(name=n, pin=num, side="left") for num, n in pins_left]
-        p += [elm.IcPin(name=n, pin=num, side="right") for num, n in pins_right]
-        return elm.Ic(pins=p, edgepadW=1.2, pinspacing=0.75).label(label, "top")
-
-    # Sheet 1: power
-    with schemdraw.Drawing(file=os.path.join(out, "1_power.svg"), show=False) as d:
-        d.config(fontsize=11)
-        d += elm.Label().at((0, 4)).label("Sheet 1 - power. Rack +-12 V feeds ONLY the op-amps; converters run from USB VBUS.", loc="right")
-        # +12 rail
-        d += elm.Dot().at((0, 2)).label("J1 pins 9,10  +12V_IN", "left")
-        d += elm.Diode().right().label("D1 SS14")
-        d += (p12 := elm.Dot().label("+12V", "top"))
-        d += elm.Line().right().length(1.5)
-        d += elm.Capacitor().down().length(1.5).label("C1 10u", "bottom")
-        d += elm.Ground()
-        # -12 rail
-        d += elm.Dot().at((0, -3)).label("J1 pins 1,2  -12V_IN", "left")
-        d += elm.Diode().right().reverse().label("D2 SS14 (anode at rail)")
-        d += elm.Dot().label("-12V", "bottom")
-        d += elm.Line().right().length(1.5)
-        d += elm.Capacitor().up().length(1.5).label("C2 10u", "bottom")
-        d += elm.Ground().flip()
-        d += elm.Label().at((0, -4.5)).label("J1 pins 3-8 = GND. Red stripe = pin 1 = -12 V. D1/D2 block a reversed ribbon.", loc="right")
-        # LDO
-        d += elm.Dot().at((0, -6.5)).label("Pico VBUS (pin 40)", "left")
-        d += elm.Line().right().length(1)
-        d += (ldo := elm.Ic(pins=[elm.IcPin(name="IN", side="left"), elm.IcPin(name="OUT", side="right"),
-                                  elm.IcPin(name="GND", side="bottom")], edgepadW=1.0).right().anchor("IN").label("U5 MCP1700-3302", "top"))
-        d += elm.Line().right().at(ldo.OUT).length(1.5)
-        d += elm.Dot().label("+3V3_A  (DAC8568 AVDD, ADS131M04 AVDD)", "right")
-        d += elm.Ground().at(ldo.GND)
-        d += elm.Label().at((0, -10)).label("C3 1u on VBUS, C4 1u on +3V3_A. +3V3_D = Pico 3V3 (pin 36): ADC DVDD and pull-ups.", loc="right")
-        d += elm.Label().at((0, -11)).label("USB-only option: Mornsun B0512S-1WR3 (5 V -> +-12 V, 1 W) from VBUS feeds +12V/-12V instead of J1.", loc="right")
-
-    # Sheet 2: digital
-    with schemdraw.Drawing(file=os.path.join(out, "2_digital.svg"), show=False) as d:
-        d.config(fontsize=10)
-        pico = ic("Pico2", [("4", "GP2"), ("5", "GP3"), ("6", "GP4"), ("14", "GP10"), ("15", "GP11"),
-                            ("16", "GP12"), ("17", "GP13"), ("19", "GP14"), ("20", "GP15"), ("27", "GP21")],
-                  [("36", "3V3"), ("40", "VBUS"), ("38", "GND")], "U1 Raspberry Pi Pico 2")
-        d += pico
-        nets = ["DAC_SCLK", "DAC_SYNC", "DAC_DIN", "ADC_SCLK", "ADC_CS", "ADC_DOUT", "ADC_DRDY", "ADC_DIN", "ADC_RESET", "ADC_CLKIN"]
-        for pin, net in zip(["GP2", "GP3", "GP4", "GP10", "GP11", "GP12", "GP13", "GP14", "GP15", "GP21"], nets):
-            d += elm.Line().left().at(getattr(pico, pin)).length(0.8)
-            d += elm.Label().label(net, loc="left")
-        for pin, net in (("3V3", "+3V3_D"), ("VBUS", "VBUS"), ("GND", "GND")):
-            d += elm.Line().right().at(getattr(pico, pin)).length(0.8)
-            d += elm.Label().label(net, loc="right")
-        dac = ic("DAC8568", [("16", "SCLK"), ("2", "SYNC"), ("15", "DIN"), ("1", "LDAC"), ("9", "CLR"), ("3", "AVDD"), ("14", "GND")],
-                 [("4", "VOUTA"), ("13", "VOUTB"), ("5", "VOUTC"), ("12", "VOUTD"), ("6", "VOUTE"), ("11", "VOUTF"),
-                  ("7", "VOUTG"), ("10", "VOUTH"), ("8", "VREF")], "U2 DAC8568BIPW (TSSOP-16)").at((10, 3)).anchor("SCLK")
-        d += dac
-        for pin, net in (("SCLK", "DAC_SCLK"), ("SYNC", "DAC_SYNC (10k pull-up)"), ("DIN", "DAC_DIN"),
-                         ("LDAC", "+3V3_A"), ("CLR", "+3V3_A (never pulse!)"), ("AVDD", "+3V3_A, 100n+1u"), ("GND", "GND")):
-            d += elm.Line().left().at(getattr(dac, pin)).length(0.8)
-            d += elm.Label().label(net, loc="left")
-        for pin, net in (("VOUTA", "DAC_OUT1"), ("VOUTB", "DAC_OUT2"), ("VOUTC", "DAC_OUT3"), ("VOUTD", "DAC_OUT4"),
-                         ("VOUTE", "DAC_OUT5 (8-out)"), ("VOUTF", "DAC_OUT6 (8-out)"), ("VOUTG", "DAC_OUT7 (8-out)"),
-                         ("VOUTH", "DAC_OUT8 (8-out)"), ("VREF", "VREF, 150n to GND")):
-            d += elm.Line().right().at(getattr(dac, pin)).length(0.8)
-            d += elm.Label().label(net, loc="right")
-        adc = ic("ADS131M04", [("14", "SCLK"), ("12", "CS"), ("15", "DOUT"), ("13", "DRDY"), ("16", "DIN"), ("11", "SYNC/RST"),
-                               ("17", "CLKIN"), ("1", "AVDD"), ("20", "DVDD"), ("18", "CAP"), ("2", "AGND"), ("19", "DGND")],
-                 [("3", "AIN0P"), ("4", "AIN0N"), ("6", "AIN1P"), ("5", "AIN1N"), ("7", "AIN2P"), ("8", "AIN2N"),
-                  ("10", "AIN3P"), ("9", "AIN3N")], "U3 ADS131M04IPW (TSSOP-20)").at((10, -10)).anchor("SCLK")
-        d += adc
-        for pin, net in (("SCLK", "ADC_SCLK"), ("CS", "ADC_CS (10k pull-up)"), ("DOUT", "ADC_DOUT"), ("DRDY", "ADC_DRDY"),
-                         ("DIN", "ADC_DIN"), ("SYNC/RST", "ADC_RESET"), ("CLKIN", "ADC_CLKIN 6.144 MHz"),
-                         ("AVDD", "+3V3_A, 1u"), ("DVDD", "+3V3_D, 1u"), ("CAP", "220n to GND"), ("AGND", "GND"), ("DGND", "GND")):
-            d += elm.Line().left().at(getattr(adc, pin)).length(0.8)
-            d += elm.Label().label(net, loc="left")
-        for pin, net in (("AIN0P", "AIN1"), ("AIN0N", "GND"), ("AIN1P", "AIN2"), ("AIN1N", "GND"),
-                         ("AIN2P", "AIN3"), ("AIN2N", "GND"), ("AIN3P", "AIN4"), ("AIN3N", "GND")):
-            d += elm.Line().right().at(getattr(adc, pin)).length(0.8)
-            d += elm.Label().label(net, loc="right")
-
-    # Sheet 3: output channel (x4 / x8) + shared Vb divider
-    with schemdraw.Drawing(file=os.path.join(out, "3_output_stage.svg"), show=False) as d:
-        d.config(fontsize=11)
-        d += elm.Label().at((0, 4.5)).label("Sheet 3 - output channel n (x4; x8 with a second OPA4172). Vjack = 0.990 * (9.25*Vb - 8.25*Vdac)", loc="right")
-        d += (op := elm.Opamp(leads=True).at((6, 0)).label("U4 OPA4172 (1/4)", "bottom", ofst=(0, -0.3)))
-        d += elm.Line().left().at(op.in1).length(0.5)
-        d += (sumn := elm.Dot().label("SUMn", "bottom"))
-        d += elm.Resistor().left().label("R1n 10k 0.1%")
-        d += elm.Label().label("DAC_OUTn (0..2.5 V)", loc="left")
-        d += elm.Line().up().at(sumn.center).length(1.6)
-        d += (fb := elm.Resistor().right().length(4.2).label("RFn 82.5k 0.1%"))
-        d += elm.Line().down().toy(op.out)
-        d += (o := elm.Dot())
-        d += elm.Line().up().at(sumn.center).length(3.0)
-        d += elm.Capacitor().right().length(4.2).label("CFn 47p")
-        d += elm.Line().down().length(1.4)
-        d += elm.Line().right().at(op.out).length(0.3)
-        d += elm.Resistor().right().label("RSn 1k 0.66W")
-        d += (jk := elm.Dot().label("OUTn jack tip", "right"))
-        d += elm.Line().down().at(o.center).length(0.6)
-        d += (dc := elm.Dot().label("BAT54S DCn: to +12V and from -12V", "right"))
-        d += elm.Line().left().at(op.in2).length(0.5)
-        d += elm.Line().down().length(1.2)
-        d += elm.Label().label("VB (shared)", loc="bottom")
-        # Vb divider
-        d += elm.Label().at((0, -5)).label("VREF (DAC8568 pin 8, 150n) -- R2 10k 0.1% -- VB -- R3 8.06k 0.1% -- GND ; C8 100p VB-GND", loc="right")
-        d += elm.Label().at((0, -6)).label("Ratiometric: with the reference off (power-on / soft reset) Vdac = Vb = 0 -> 0 V at the jack.", loc="right")
-        d += elm.Label().at((0, -7)).label("Keep C8 small: Vb must track VREF as fast as the DAC does (SPICE: 10 nF -> 5.8 V blip, 100 pF -> 5 mV).", loc="right")
-
-    # Sheet 4: input channel
-    with schemdraw.Drawing(file=os.path.join(out, "4_input_stage.svg"), show=False) as d:
-        d.config(fontsize=11)
-        d += elm.Label().at((0, 3)).label("Sheet 4 - input channel n (x4). Zin 108.6 k, +-10 V -> +-0.814 V, ADC FS = +-14.7 V at the jack", loc="right")
-        d += elm.Dot().at((0, 0)).label("INn jack tip\n(switch -> GND)", "left")
-        d += elm.Resistor().right().label("RAn 49.9k")
-        d += elm.Resistor().right().label("RBn 49.9k")
-        d += (a := elm.Dot())
-        d += elm.Resistor().down().label("RCn 9.09k", "bottom")
-        d += elm.Ground()
-        d += elm.Line().right().at(a.center).length(2.5)
-        d += (c := elm.Dot())
-        d += elm.Capacitor().down().label("CAn 330p C0G", "bottom")
-        d += elm.Ground()
-        d += elm.Line().right().at(c.center).length(2.5)
-        d += elm.Label().label("AINn -> ADS131M04 AINxP", loc="right")
-        d += elm.Label().at((0, -5.5)).label("AINxN -> GND. No external clamp diodes: 100 k limits a +-24 V fault to 0.22 mA", loc="right")
-        d += elm.Label().at((0, -6.3)).label("(ADC abs max 10 mA); a Schottky to GND would clip the -0.8 V signal range.", loc="right")
-    return True
+    for p in parts:
+        for pin, net in p["pins"].items():
+            nets.setdefault(net, []).append((p["ref"], pin))
+    single = sorted(n for n, l in nets.items() if len(l) < 2 and not n.startswith("NC"))
+    # KiCad netlist (s-expression, version E) - importable into pcbnew
+    stock = stock_index()
+    with open(os.path.join(HERE, "kicad", "cv_interface.net"), "w") as f:
+        f.write('(export (version "E")\n  (design (source "hw/gen_hw.py") (tool "gen_hw.py"))\n  (components\n')
+        for p in parts:
+            _, lcsc, _ = unit_price(p, stock)
+            f.write(f'    (comp (ref "{p["ref"]}") (value "{p["value"]}") (footprint "{FP[p["fp"]]}")\n'
+                    f'      (fields (field (name "MPN") "{p["mpn"]}") (field (name "LCSC") "{lcsc}") '
+                    f'(field (name "Group") "{p["group"]}") (field (name "Assembly") "{p["assembly"]}")))\n')
+        f.write('  )\n  (nets\n')
+        for code, (net, nodes) in enumerate(sorted(nets.items()), start=1):
+            if net.startswith("NC"):
+                continue
+            f.write(f'    (net (code "{code}") (name "{net}")\n')
+            for ref, pin in nodes:
+                f.write(f'      (node (ref "{ref}") (pin "{pin}"))\n')
+            f.write('    )\n')
+        f.write('  )\n)\n')
+    # BOMs per population
+    summary = {}
+    for pop, groups in GROUPS.items():
+        lines = {}
+        for p in parts:
+            if p["group"] not in groups:
+                continue
+            key = (p["value"], p["fp"], p["mpn"], p["assembly"])
+            lines.setdefault(key, []).append(p["ref"])
+        smt_cost = hand_cost = 0.0
+        extended = set()
+        with open(os.path.join(HERE, f"bom_{pop}.csv"), "w", newline="") as f, \
+             open(os.path.join(HERE, "jlc", f"bom_{pop}.csv"), "w", newline="") as fj:
+            w = csv.writer(f); wj = csv.writer(fj)
+            w.writerow(["qty", "value", "designators", "footprint", "mpn", "lcsc", "jlc_library", "assembly", "usd_each", "usd_line"])
+            wj.writerow(["Comment", "Designator", "Footprint", "LCSC Part #"])
+            for (value, fp, mpn, asm), refs in sorted(lines.items(), key=lambda x: x[1][0]):
+                usd, lcsc, lib = unit_price({"value": value, "fp": fp, "mpn": mpn}, stock)
+                line = usd * len(refs)
+                if asm == "smt":
+                    smt_cost += line
+                    if lib != "base": extended.add(mpn or value)
+                    wj.writerow([value, ",".join(refs), FP[fp].split(":")[1], lcsc])
+                else:
+                    hand_cost += line
+                w.writerow([len(refs), value, " ".join(refs), FP[fp].split(":")[1], mpn, lcsc, lib, asm, f"{usd:.3f}", f"{line:.2f}"])
+        n_smt = sum(len(r) for (v, fp, m, a), r in lines.items() if a == "smt")
+        controller = 16.0     # T-Display-S3 (non-touch), approximate
+        pcb = 15.0            # 5 boards, 4-layer, ~100 x 120 mm, JLC economic, per-order share for 1 unit (approx)
+        pcba_fee = 8.0 + 1.5 + 3.0 * len(extended) + 0.0017 * 2 * n_smt
+        dcdc_hand = 0.0
+        summary[pop] = {
+            "smt_parts_usd": round(smt_cost, 2), "hand_parts_usd": round(hand_cost, 2),
+            "extended_part_types": len(extended), "jlc_assembly_fees_usd": round(pcba_fee, 2),
+            "pcb_usd_per_order": pcb, "controller_board_usd": controller,
+            "total_one_unit_usd": round(smt_cost + hand_cost + pcba_fee + pcb + controller + dcdc_hand, 2),
+            "smt_placements": n_smt,
+        }
+    with open(os.path.join(HERE, "results", "bom_summary.json"), "w") as f:
+        json.dump(summary, f, indent=1)
+    return nets, single, summary
 
 if __name__ == "__main__":
-    nets, single = write_netlist()
-    t4, t8 = write_bom()
-    drawn = draw()
+    nets, single, summary = write_outputs()
+    try:
+        sys.path.insert(0, HERE)
+        from draw_sheets import draw
+        drawn = draw(os.path.join(HERE, "schematic"))
+    except ImportError as e:
+        drawn = False
+        print("schematic skipped:", e)
     print(f"netlist: {len(parts)} parts, {len(nets)} nets; single-pin nets: {single or 'none'}")
-    print(f"bom: 4x4 ~GBP {t4:.2f}, 8x4 ~GBP {t8:.2f}; svg: {'yes' if drawn else 'skipped'}")
+    for pop, s in summary.items():
+        print(f"bom {pop}: ~USD {s['total_one_unit_usd']} for one unit (SMT {s['smt_parts_usd']}, hand {s['hand_parts_usd']}, "
+              f"JLC fees {s['jlc_assembly_fees_usd']}, {s['extended_part_types']} extended types)")
+    print("svg:", "yes" if drawn else "skipped")
     sys.exit(1 if single else 0)

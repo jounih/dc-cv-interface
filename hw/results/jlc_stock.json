@@ -1,0 +1,553 @@
+{
+ "fetched": "2026-10-08 20:09",
+ "parts": [
+  {
+   "query": "PCM3168A",
+   "lcsc": "C529289",
+   "mpn": "PCM3168APAPR",
+   "package": "TQFP-64(10x10)",
+   "library": "expand",
+   "stock": 378,
+   "usd_qty1": 6.3027,
+   "usd_qty10": 5.7435
+  },
+  {
+   "query": "DAC8568",
+   "lcsc": "C524819",
+   "mpn": "DAC8568ICPWR",
+   "package": "TSSOP-16",
+   "library": "expand",
+   "stock": 902,
+   "usd_qty1": 25.1668,
+   "usd_qty10": 23.3152
+  },
+  {
+   "query": "ADS131M08",
+   "lcsc": "C2862610",
+   "mpn": "ADS131M08IPBSR",
+   "package": "TQFP-32(5x5)",
+   "library": "expand",
+   "stock": 15165,
+   "usd_qty1": 4.3942,
+   "usd_qty10": 3.8106
+  },
+  {
+   "query": "OPA4172IDR",
+   "lcsc": "C2057383",
+   "mpn": "OPA4172IDR",
+   "package": "SOIC-14",
+   "library": "expand",
+   "stock": 1663,
+   "usd_qty1": 1.4274,
+   "usd_qty10": 1.3022
+  },
+  {
+   "query": "OPA1679IPWR",
+   "lcsc": "C2057264",
+   "mpn": "OPA1679IPWR",
+   "package": "TSSOP-14",
+   "library": "expand",
+   "stock": 12615,
+   "usd_qty1": 1.1575,
+   "usd_qty10": 0.9754
+  },
+  {
+   "query": "TL074CDR",
+   "lcsc": "C12594",
+   "mpn": "TL074CDR",
+   "package": "SOIC-14",
+   "library": "expand",
+   "stock": 94453,
+   "usd_qty1": 0.2852,
+   "usd_qty10": 0.2177
+  },
+  {
+   "query": "TPS7A4901DGNR",
+   "lcsc": "C16430",
+   "mpn": "TPS7A4901DGNR",
+   "package": "HVSSOP-8",
+   "library": "expand",
+   "stock": 15260,
+   "usd_qty1": 1.442,
+   "usd_qty10": 1.2599
+  },
+  {
+   "query": "TPS7A3001DGNR",
+   "lcsc": "C33835",
+   "mpn": "TPS7A3001DGNR",
+   "package": "HVSSOP-8",
+   "library": "expand",
+   "stock": 12081,
+   "usd_qty1": 2.0094,
+   "usd_qty10": 1.8094
+  },
+  {
+   "query": "LP5907MFX-4.5",
+   "lcsc": "C529554",
+   "mpn": "LP5907MFX-4.5/NOPB",
+   "package": "SOT-23-5",
+   "library": "expand",
+   "stock": 4954,
+   "usd_qty1": 0.569,
+   "usd_qty10": 0.4504
+  },
+  {
+   "query": "LP5907MFX-3.3",
+   "lcsc": "C5370990",
+   "mpn": "TPLP5907MFX-3.3",
+   "package": "SOT-23-5",
+   "library": "expand",
+   "stock": 193862,
+   "usd_qty1": 0.0991,
+   "usd_qty10": 0.086
+  },
+  {
+   "query": "AMS1117-3.3",
+   "lcsc": "C6186",
+   "mpn": "AMS1117-3.3",
+   "package": "SOT-223",
+   "library": "base",
+   "stock": 1305541,
+   "usd_qty1": 0.2076,
+   "usd_qty10": 0.162
+  },
+  {
+   "query": "SS14",
+   "lcsc": "C2480",
+   "mpn": "SS14",
+   "package": "SMA(DO-214AC)",
+   "library": "base",
+   "stock": 1504976,
+   "usd_qty1": 0.0191,
+   "usd_qty10": 0.0151
+  },
+  {
+   "query": "BAT54S",
+   "lcsc": "C47546",
+   "mpn": "BAT54S,215",
+   "package": "SOT-23",
+   "library": "expand",
+   "stock": 255622,
+   "usd_qty1": 0.0308,
+   "usd_qty10": 0.0231
+  },
+  {
+   "query": "B0515S-2WR3",
+   "lcsc": "C5369476",
+   "mpn": "B0515S-2WR3",
+   "package": "SIP,19.5x7mm",
+   "library": "expand",
+   "stock": 130,
+   "usd_qty1": 2.1443,
+   "usd_qty10": 1.811
+  },
+  {
+   "query": "ERA-6AEB103V",
+   "found": false
+  },
+  {
+   "query": "ERA-6AEB8252V",
+   "lcsc": "C4046443",
+   "mpn": "ERA-6AEB8252V",
+   "package": "0805",
+   "library": "expand",
+   "stock": 0,
+   "usd_qty1": 0.0446,
+   "usd_qty10": 0.0446
+  },
+  {
+   "query": "ERA-6AEB8061V",
+   "lcsc": "C2075122",
+   "mpn": "ERA-6AEB8061V",
+   "package": "0805",
+   "library": "expand",
+   "stock": 0,
+   "usd_qty1": 0.0425,
+   "usd_qty10": 0.0425
+  },
+  {
+   "query": "ERA-6AEB203V",
+   "found": false
+  },
+  {
+   "query": "ERA-6AEB5762V",
+   "lcsc": "C4088706",
+   "mpn": "ERA-6AEB5762V",
+   "package": "0805",
+   "library": "expand",
+   "stock": 0,
+   "usd_qty1": 0.0446,
+   "usd_qty10": 0.0446
+  },
+  {
+   "query": "RC0805FR-0749K9L",
+   "lcsc": "C114540",
+   "mpn": "RC0805FR-0749K9L",
+   "package": "0805",
+   "library": "expand",
+   "stock": 101037,
+   "usd_qty1": 0.0062,
+   "usd_qty10": 0.0055
+  },
+  {
+   "query": "RC0805FR-079K09L",
+   "lcsc": "C273842",
+   "mpn": "RC0805FR-079K09L",
+   "package": "0805",
+   "library": "expand",
+   "stock": 279,
+   "usd_qty1": 0.0051,
+   "usd_qty10": 0.0045
+  },
+  {
+   "query": "RC0805FR-0711KL",
+   "lcsc": "C137597",
+   "mpn": "RC0805FR-0711KL",
+   "package": "0805",
+   "library": "expand",
+   "stock": 18418,
+   "usd_qty1": 0.0063,
+   "usd_qty10": 0.0053
+  },
+  {
+   "query": "RC0805FR-078K2L",
+   "lcsc": "C114545",
+   "mpn": "RC0805FR-078K2L",
+   "package": "0805",
+   "library": "expand",
+   "stock": 94059,
+   "usd_qty1": 0.0053,
+   "usd_qty10": 0.0047
+  },
+  {
+   "query": "ERJ-P08J102V",
+   "lcsc": "C2088070",
+   "mpn": "ERJ-P08J102V",
+   "package": "1206",
+   "library": "expand",
+   "stock": 4590,
+   "usd_qty1": 0.0415,
+   "usd_qty10": 0.0327
+  },
+  {
+   "query": "SWPA4030S100MT",
+   "lcsc": "C38117",
+   "mpn": "SWPA4030S100MT",
+   "package": "SMD,4x4mm",
+   "library": "expand",
+   "stock": 97563,
+   "usd_qty1": 0.0584,
+   "usd_qty10": 0.049
+  },
+  {
+   "query": "A0515S-2WR3",
+   "lcsc": "C7465204",
+   "mpn": "A0515S-2WR3",
+   "package": "SIP,19.7x7mm",
+   "library": "expand",
+   "stock": 439,
+   "usd_qty1": 1.5916,
+   "usd_qty10": 1.3477
+  },
+  {
+   "query": "TLV9064IPWR",
+   "lcsc": "C779410",
+   "mpn": "TLV9064IPWR",
+   "package": "TSSOP-14",
+   "library": "expand",
+   "stock": 20618,
+   "usd_qty1": 0.3887,
+   "usd_qty10": 0.3044
+  },
+  {
+   "query": "LM66100DCKR",
+   "lcsc": "C2869734",
+   "mpn": "LM66100DCKR",
+   "package": "SC-70-6",
+   "library": "expand",
+   "stock": 31928,
+   "usd_qty1": 0.2346,
+   "usd_qty10": 0.1837
+  },
+  {
+   "query": "8.192MHz crystal 3225",
+   "lcsc": "C19674294",
+   "mpn": "0132M4-8.192F20DTNJL",
+   "package": "SMD3225-4P",
+   "library": "expand",
+   "stock": 7870,
+   "usd_qty1": 0.1946,
+   "usd_qty10": 0.1535
+  },
+  {
+   "query": "10uF 0805 25V",
+   "lcsc": "C15850",
+   "mpn": "CL21A106KAYNNNE",
+   "package": "0805",
+   "library": "base",
+   "stock": 4673512,
+   "usd_qty1": 0.0687,
+   "usd_qty10": 0.0506
+  },
+  {
+   "query": "22uF 0805",
+   "lcsc": "C45783",
+   "mpn": "CL21A226MAQNNNE",
+   "package": "0805",
+   "library": "base",
+   "stock": 3840245,
+   "usd_qty1": 0.2202,
+   "usd_qty10": 0.1638
+  },
+  {
+   "query": "10k\u03a9 0805 \u00b10.1%",
+   "lcsc": "C17414",
+   "mpn": "0805W8F1002T5E",
+   "package": "0805",
+   "library": "base",
+   "stock": 59392632,
+   "usd_qty1": 0.0033,
+   "usd_qty10": 0.0026
+  },
+  {
+   "query": "82.5k\u03a9 0805 \u00b10.1%",
+   "lcsc": "C2684597",
+   "mpn": "ARG05BTC8252N",
+   "package": "0805",
+   "library": "expand",
+   "stock": 2429,
+   "usd_qty1": 0.0327,
+   "usd_qty10": 0.0261
+  },
+  {
+   "query": "8.06k\u03a9 0805 \u00b10.1%",
+   "lcsc": "C865685",
+   "mpn": "RT0805BRD078K06L",
+   "package": "0805",
+   "library": "expand",
+   "stock": 5939,
+   "usd_qty1": 0.0532,
+   "usd_qty10": 0.0446
+  },
+  {
+   "query": "20k\u03a9 0805 \u00b10.1%",
+   "lcsc": "C4328",
+   "mpn": "0805W8F2002T5E",
+   "package": "0805",
+   "library": "base",
+   "stock": 2403718,
+   "usd_qty1": 0.0041,
+   "usd_qty10": 0.0032
+  },
+  {
+   "query": "57.6k\u03a9 0805 \u00b10.1%",
+   "lcsc": "C2849281",
+   "mpn": "PTFR0805B57K6P9",
+   "package": "0805",
+   "library": "expand",
+   "stock": 4,
+   "usd_qty1": 0.1595,
+   "usd_qty10": 0.129
+  },
+  {
+   "query": "RT0805BRD0757K6L",
+   "lcsc": "C865566",
+   "mpn": "RT0805BRD0757K6L",
+   "package": "0805",
+   "library": "expand",
+   "stock": 0,
+   "usd_qty1": 0.0226,
+   "usd_qty10": 0.0226
+  },
+  {
+   "query": "RT0805BRD0720KL",
+   "lcsc": "C469660",
+   "mpn": "RT0805BRD0720KL",
+   "package": "0805",
+   "library": "expand",
+   "stock": 30606,
+   "usd_qty1": 0.0924,
+   "usd_qty10": 0.082
+  },
+  {
+   "query": "RT0805BRD0782K5L",
+   "lcsc": "C865667",
+   "mpn": "RT0805BRD0782K5L",
+   "package": "0805",
+   "library": "expand",
+   "stock": 2141,
+   "usd_qty1": 0.0478,
+   "usd_qty10": 0.0394
+  },
+  {
+   "query": "28.7k\u03a9 0805 \u00b10.1%",
+   "lcsc": "C865355",
+   "mpn": "RT0805BRD0728K7L",
+   "package": "0805",
+   "library": "expand",
+   "stock": 4514,
+   "usd_qty1": 0.0488,
+   "usd_qty10": 0.0404
+  },
+  {
+   "query": "27.4k\u03a9 0805 \u00b10.1%",
+   "lcsc": "C5382600",
+   "mpn": "PTFR0805B27K4N9",
+   "package": "0805",
+   "library": "expand",
+   "stock": 20739,
+   "usd_qty1": 0.1726,
+   "usd_qty10": 0.1355
+  },
+  {
+   "query": "30.1k\u03a9 0805 \u00b10.1%",
+   "lcsc": "C2984455",
+   "mpn": "ARG05BTC3012",
+   "package": "0805",
+   "library": "expand",
+   "stock": 4865,
+   "usd_qty1": 0.0306,
+   "usd_qty10": 0.0238
+  },
+  {
+   "query": "29.4k\u03a9 0805 \u00b10.1%",
+   "lcsc": "C865361",
+   "mpn": "RT0805BRD0729K4L",
+   "package": "0805",
+   "library": "expand",
+   "stock": 2830,
+   "usd_qty1": 0.0467,
+   "usd_qty10": 0.0383
+  },
+  {
+   "query": "100nF 0805 X7R 50V",
+   "lcsc": "C49678",
+   "mpn": "CC0805KRX7R9BB104",
+   "package": "0805",
+   "library": "base",
+   "stock": 20566191,
+   "usd_qty1": 0.0189,
+   "usd_qty10": 0.014
+  },
+  {
+   "query": "1uF 0805 X7R 25V",
+   "lcsc": "C28323",
+   "mpn": "CL21B105KBFNNNE",
+   "package": "0805",
+   "library": "base",
+   "stock": 1978913,
+   "usd_qty1": 0.0399,
+   "usd_qty10": 0.0306
+  },
+  {
+   "query": "10nF 0805 X7R",
+   "lcsc": "C1710",
+   "mpn": "CL21B103KBANNNC",
+   "package": "0805",
+   "library": "base",
+   "stock": 1985713,
+   "usd_qty1": 0.0114,
+   "usd_qty10": 0.0088
+  },
+  {
+   "query": "220nF 0805 X7R",
+   "lcsc": "C5378",
+   "mpn": "CL21B224KBFNNNE",
+   "package": "0805",
+   "library": "base",
+   "stock": 576330,
+   "usd_qty1": 0.0187,
+   "usd_qty10": 0.0144
+  },
+  {
+   "query": "100pF 0805 C0G",
+   "lcsc": "C1790",
+   "mpn": "CL21C101JBANNNC",
+   "package": "0805",
+   "library": "base",
+   "stock": 549064,
+   "usd_qty1": 0.01,
+   "usd_qty10": 0.008
+  },
+  {
+   "query": "12pF 0805 C0G",
+   "lcsc": "C107108",
+   "mpn": "CC0805JRNPO9BN120",
+   "package": "0805",
+   "library": "expand",
+   "stock": 146568,
+   "usd_qty1": 0.007,
+   "usd_qty10": 0.0056
+  },
+  {
+   "query": "47pF 0805 C0G",
+   "lcsc": "C14857",
+   "mpn": "CL21C470JBANNNC",
+   "package": "0805",
+   "library": "base",
+   "stock": 102958,
+   "usd_qty1": 0.0106,
+   "usd_qty10": 0.0085
+  },
+  {
+   "query": "56pF 0805 C0G",
+   "lcsc": "C113831",
+   "mpn": "CC0805JRNPO9BN560",
+   "package": "0805",
+   "library": "expand",
+   "stock": 45949,
+   "usd_qty1": 0.013,
+   "usd_qty10": 0.0107
+  },
+  {
+   "query": "330pF 0805 C0G",
+   "lcsc": "C107116",
+   "mpn": "CC0805JRNPO9BN331",
+   "package": "0805",
+   "library": "expand",
+   "stock": 292028,
+   "usd_qty1": 0.0094,
+   "usd_qty10": 0.0076
+  },
+  {
+   "query": "33k\u03a9 0805 \u00b11%",
+   "lcsc": "C17633",
+   "mpn": "0805W8F3302T5E",
+   "package": "0805",
+   "library": "base",
+   "stock": 452360,
+   "usd_qty1": 0.0039,
+   "usd_qty10": 0.003
+  },
+  {
+   "query": "10k\u03a9 0805 \u00b11%",
+   "lcsc": "C17414",
+   "mpn": "0805W8F1002T5E",
+   "package": "0805",
+   "library": "base",
+   "stock": 59392632,
+   "usd_qty1": 0.0033,
+   "usd_qty10": 0.0026
+  },
+  {
+   "query": "100k\u03a9 0805 \u00b11%",
+   "lcsc": "C149504",
+   "mpn": "0805W8F1003T5E",
+   "package": "0805",
+   "library": "base",
+   "stock": 4016875,
+   "usd_qty1": 0.0059,
+   "usd_qty10": 0.0047
+  },
+  {
+   "query": "100\u03a9 0805 \u00b11%",
+   "lcsc": "C17408",
+   "mpn": "0805W8F1000T5E",
+   "package": "0805",
+   "library": "base",
+   "stock": 9215955,
+   "usd_qty1": 0.0042,
+   "usd_qty10": 0.0033
+  }
+ ]
+}

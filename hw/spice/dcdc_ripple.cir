@@ -1,0 +1,19 @@
+* DC-DC ripple through the pi filter
+.include models.lib
+Vdc src 0 DC 15 SIN(0 0.05 100000.0)
+Rs src a 0.5
+C1 a 0 22u
+L1 a b 10u
+RL1 b c 0.08
+C2 c 0 22u
+C3 c 0 22u
+Rload c 0 500
+.control
+tran 0.2u 3m 2m
+let r = v(c)
+meas tran vmax max r
+meas tran vmin min r
+let pp = vmax - vmin
+echo RES ripple_pp = $&pp
+.endc
+.end

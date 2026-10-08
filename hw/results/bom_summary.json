@@ -1,0 +1,32 @@
+{
+ "full": {
+  "smt_parts_usd": 43.85,
+  "hand_parts_usd": 14.55,
+  "extended_part_types": 26,
+  "jlc_assembly_fees_usd": 88.33,
+  "pcb_usd_per_order": 15.0,
+  "controller_board_usd": 16.0,
+  "total_one_unit_usd": 177.73,
+  "smt_placements": 243
+ },
+ "precision": {
+  "smt_parts_usd": 32.54,
+  "hand_parts_usd": 8.95,
+  "extended_part_types": 19,
+  "jlc_assembly_fees_usd": 66.94,
+  "pcb_usd_per_order": 15.0,
+  "controller_board_usd": 16.0,
+  "total_one_unit_usd": 139.42,
+  "smt_placements": 129
+ },
+ "audio": {
+  "smt_parts_usd": 16.68,
+  "hand_parts_usd": 8.15,
+  "extended_part_types": 15,
+  "jlc_assembly_fees_usd": 55.01,
+  "pcb_usd_per_order": 15.0,
+  "controller_board_usd": 16.0,
+  "total_one_unit_usd": 110.84,
+  "smt_placements": 150
+ }
+}

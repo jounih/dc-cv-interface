@@ -10,6 +10,14 @@
 - [x] ADC pin inside abs max (-1.6 V) at -15 V
 - [x] ADC ESD current < 1 mA at +-24 V
 - [x] reversed rail header blocks (< 10 uA)
+- [x] codec out: +-full scale reaches beyond +-10 V
+- [x] codec out: 0 V when the codec is unpowered or at VCOM
+- [x] codec out: DAC pin load >= 15 k (datasheet DC-coupled minimum)
+- [x] codec in: pin stays within 0..4.5 V for +-24 V at the jack
+- [x] codec in: 0 V maps to VCOM within 10 mV
+- [x] codec in: +-10 V inside the ADC full scale (VCOM +-1.27 V)
+- [x] DC-DC ripple at the jack < 50 uVpp (estimate)
+- [x] tier A in: ADS1115 pin inside -0.3..3.6 V (abs max) for +-15 V
 
 ```json
 {
@@ -24,25 +32,25 @@
  },
  "out_faults": {
   "hard_+15V_while_-10V": {
-   "opamp_out_current_mA": -25.0999,
-   "series_R_current_mA": -25.0999,
-   "series_R_power_W": 0.6300049800100002,
+   "opamp_out_current_mA": -24.3621,
+   "series_R_current_mA": -24.3621,
+   "series_R_power_W": 0.5935119164100001,
    "clamp_diode_current_mA": 0.0,
-   "opamp_out_V": -10.0999
+   "opamp_out_V": -9.36206
   },
   "hard_-15V_while_+10V": {
-   "opamp_out_current_mA": 25.0997,
-   "series_R_current_mA": 25.0997,
-   "series_R_power_W": 0.6299949400899999,
+   "opamp_out_current_mA": 24.3635,
+   "series_R_current_mA": 24.3635,
+   "series_R_power_W": 0.5935801322500001,
    "clamp_diode_current_mA": 0.0,
-   "opamp_out_V": 10.0997
+   "opamp_out_V": 9.36355
   },
   "module_+12V_1k_while_-10V": {
-   "opamp_out_current_mA": -11.0499,
-   "series_R_current_mA": -11.0499,
-   "series_R_power_W": 0.12210029001,
+   "opamp_out_current_mA": -11.0427,
+   "series_R_current_mA": -11.0427,
+   "series_R_power_W": 0.12194122329000003,
    "clamp_diode_current_mA": 0.0,
-   "opamp_out_V": -10.0999
+   "opamp_out_V": -10.0855
   },
   "hard_+15V_rails_off": {
    "opamp_out_current_mA": 0.00992839,
@@ -60,9 +68,9 @@
   }
  },
  "out_noise": {
-  "at_0V_uVrms": 115.08,
-  "at_+10V_uVrms": 113.477,
-  "note": "assumes 100 nV/rtHz DAC output noise and 50 nV/rtHz reference noise; 1 cent at 1 V/oct = 833 uV"
+  "at_0V_uVrms": 104.39099999999999,
+  "at_+10V_uVrms": 102.622,
+  "note": "assumes 90 nV/rtHz DAC output noise and 50 nV/rtHz reference noise; 1 cent at 1 V/oct = 833 uV"
  },
  "out_ac": {
   "f_minus3dB_kHz": 39.6974
@@ -133,6 +141,65 @@
  "power": {
   "forward_rail_V_at_40mA": 11.7279,
   "reversed_header_current_uA": 3.00001
+ },
+ "codec_out": {
+  "jack_at_+FS_V": 10.2459,
+  "jack_at_-FS_V": -10.2459,
+  "jack_at_zero_V": 3.89756e-09,
+  "jack_codec_unpowered_V": 1.5037e-27,
+  "codec_pin_load_kOhm": 111.19988797640914
+ },
+ "codec_in": {
+  "-24V": {
+   "codec_pin_V": 4.13106,
+   "input_current_uA": -253.477
+  },
+  "-15V": {
+   "codec_pin_V": 3.89683,
+   "input_current_uA": -170.275
+  },
+  "-10V": {
+   "codec_pin_V": 3.34805,
+   "input_current_uA": -120.27499999999999
+  },
+  "+0V": {
+   "codec_pin_V": 2.25049,
+   "input_current_uA": -20.2747
+  },
+  "+10V": {
+   "codec_pin_V": 1.15293,
+   "input_current_uA": 79.72529999999999
+  },
+  "+15V": {
+   "codec_pin_V": 0.604151,
+   "input_current_uA": 129.725
+  },
+  "+24V": {
+   "codec_pin_V": 0.366921,
+   "input_current_uA": 212.95499999999998
+  }
+ },
+ "dcdc_ripple": {
+  "module_ripple_mVpp": 100.0,
+  "after_pi_filter_mVpp": 0.0834299,
+  "rail_after_ldo_uVpp": 0.46916080526498305,
+  "estimated_at_jack_uVpp": 0.004339737448701093,
+  "assumptions": "100 kHz, LDO PSRR 45.0 dB, op-amp PSRR 60.0 dB"
+ },
+ "tier_a": {
+  "out_jack_V (TL074 swing 10.5 V on +-12 V)": {
+   "dac_0.0V": 10.0362,
+   "dac_2.048V": -0.00177757,
+   "dac_4.095V": -10.0328
+  },
+  "in_adc_pin_V": {
+   "-24V": -0.891892,
+   "-15V": -1.08293e-16,
+   "-10V": 0.495495,
+   "+10V": 2.47748,
+   "+15V": 2.97297,
+   "+24V": 3.86486
+  }
  }
 }
 ```

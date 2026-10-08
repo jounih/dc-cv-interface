@@ -18,7 +18,8 @@ os.makedirs(RES, exist_ok=True)
 VREF, R1, RF, RT, RB, RS, RL, CF = 2.5, 10e3, 82.5e3, 10e3, 8.06e3, 1e3, 100e3, 47e-12
 IN_RS1 = IN_RS2 = 49.9e3
 IN_RSH, IN_C, ADC_RIN, ADC_FS = 9.09e3, 330e-12, 330e3, 1.2
-EN_DAC = 100e-9   # assumed DAC output noise density (V/rtHz), conservative
+EN_DAC = 90e-9    # DAC8568 output noise density at 1 kHz (datasheet)
+RAIL = 11.0       # v2: post-LDO analog rails (+-11 V) from the USB DC-DC or the rack
 EN_REF = 50e-9    # DAC8568 internal reference noise density
 KT4 = 4 * 1.380649e-23 * 300.15
 ADC_NOISE_UV = 75.34  # ADS131M04 datasheet Table 7-1, OSR 64, gain 1 (uVrms)
@@ -77,7 +78,7 @@ Dn vee opo2 BAT54
 RS opo2 jack {RS:g}
 """
 
-def out_deck(title, load, analysis, params, rails=12.0):
+def out_deck(title, load, analysis, params, rails=RAIL):
     return f"""* {title}
 .include models.lib
 .param VREFV={params.get('VREFV', VREF)} CBV={params.get('CBV', 10e-9)}
@@ -117,9 +118,9 @@ results["out_dc"] = {
 # 2) Faults on the output jack
 faults = {}
 cases = [
-    ("hard_+15V_while_-10V", code_for(-10), "Vf jack 0 15", 12),
-    ("hard_-15V_while_+10V", code_for(10), "Vf jack 0 -15", 12),
-    ("module_+12V_1k_while_-10V", code_for(-10), "Rsrc jack fx 1k\nVf fx 0 12", 12),
+    ("hard_+15V_while_-10V", code_for(-10), "Vf jack 0 15", RAIL),
+    ("hard_-15V_while_+10V", code_for(10), "Vf jack 0 -15", RAIL),
+    ("module_+12V_1k_while_-10V", code_for(-10), "Rsrc jack fx 1k\nVf fx 0 12", RAIL),
     ("hard_+15V_rails_off", zero_code(), "Vf jack 0 15", 0.0),
     ("hard_-15V_rails_off", zero_code(), "Vf jack 0 -15", 0.0),
 ]
@@ -169,8 +170,8 @@ ton = {}
 for cb in (10e-9, 100e-12):
     deck = f"""* ref turn-on, CB={cb}
 .include models.lib
-Vcc vcc 0 12
-Vee vee 0 -12
+Vcc vcc 0 {RAIL}
+Vee vee 0 {-RAIL}
 Vcode code 0 DC {zero_code()}
 {OUT_STAGE.replace('{VREFV}', 'VR(time)').replace('{CBV}', f'{cb:g}')}
 .func VR(t) {{ {VREF}*min(max((t-100u)/50u,0),1) }}
@@ -262,6 +263,158 @@ r = run("power_reverse", deck)
 results["power"] = {"forward_rail_V_at_40mA": r.get("fwd_rail_V", float("nan")),
                     "reversed_header_current_uA": abs(r.get("rev_current", float("nan"))) * 1e6}
 
+# 8) Group A output: PCM3168A differential DAC -> difference amplifier (gain 2.87) -> 1 k -> jack
+CODEC_VCC, AO_RI, AO_RF = 4.5, 28.7e3, 82.5e3
+VCOM = CODEC_VCC / 2
+def ao_deck(name, vd, load="RL jack 0 100k", rails=RAIL, extra=""):
+    return f"""* {name}
+.include models.lib
+Vcc vcc 0 {rails}
+Vee vee 0 {-rails}
+Vp vp 0 {VCOM + vd / 2}
+Vm vm 0 {VCOM - vd / 2}
+R1 vm inn {AO_RI:g}
+RF inn opo {AO_RF:g}
+CF inn opo 47p
+R2 vp inp {AO_RI:g}
+RG inp 0 {AO_RF:g}
+CG inp 0 47p
+XU inp inn opo vcc vee OPA
+Vmeas opo opo2 0
+Dp opo2 vcc BAT54
+Dn vee opo2 BAT54
+RS opo2 jack 1k
+{load}
+{extra}
+.control
+op
+let j = v(jack)
+echo RES jack = $&j
+let ip = -i(vp)
+echo RES ivp = $&ip
+.endc
+.end
+"""
+fs_diff = 0.8 * CODEC_VCC        # full-scale differential peak (1.6 x VCC Vpp)
+ao = {}
+for label, vd in (("+FS", fs_diff), ("-FS", -fs_diff), ("zero", 0.0)):
+    r = run("ao_" + label.replace("+", "p").replace("-", "m"), ao_deck(label, vd))
+    ao[label] = r.get("jack", float("nan"))
+r = run("ao_codec_off", ao_deck("codec unpowered", 0.0).replace(f"Vp vp 0 {VCOM}", "Vp vp 0 0").replace(f"Vm vm 0 {VCOM}", "Vm vm 0 0"))
+ao["codec_unpowered"] = r.get("jack", float("nan"))
+r = run("ao_load", ao_deck("codec pin current at +FS", fs_diff))
+results["codec_out"] = {"jack_at_+FS_V": ao["+FS"], "jack_at_-FS_V": ao["-FS"], "jack_at_zero_V": ao["zero"],
+                        "jack_codec_unpowered_V": ao["codec_unpowered"],
+                        "codec_pin_load_kOhm": (VCOM + fs_diff / 2) / max(abs(r.get("ivp", 1e-9)), 1e-12) / 1e3}
+
+# 9) Group A input: jack -> 100 k -> inverting stage on the codec's 4.5 V, V+ = VCC*8.2/18.2 so 0 V maps to VCOM
+AI_RI, AI_RF = 100e3, 11e3
+def ai_deck(vin):
+    return f"""* codec input {vin}
+.include models.lib
+Vcc vcc 0 {CODEC_VCC}
+Vee vee 0 0
+Vcm vcm 0 {VCOM}
+Vin jack 0 {vin}
+RT vcc vplus 10k
+RB vplus 0 8.2k
+CB vplus 0 1u
+RI jack inn {AI_RI:g}
+RF inn opo {AI_RF:g}
+CF inn opo 100p
+XU vplus inn opo vcc vee OPA
+RO opo adc 100
+RADC adc vcm 45k
+.control
+op
+let a = v(adc)
+echo RES vadc = $&a
+let ii = -i(vin)
+echo RES iin = $&ii
+.endc
+.end
+"""
+ai = {}
+for vin in (-24, -15, -10, 0, 10, 15, 24):
+    r = run(f"ai_{'m' if vin < 0 else 'p'}{abs(vin)}", ai_deck(vin))
+    ai[f"{vin:+d}V"] = {"codec_pin_V": r.get("vadc", float("nan")), "input_current_uA": r.get("iin", float("nan")) * 1e6}
+results["codec_in"] = ai
+
+# 10) USB DC-DC ripple: isolated 5 V -> +-15 V module, pi filter, LDO to +-11 V, op-amp PSRR
+FSW, RIPPLE_PP = 100e3, 0.10          # B0515S-2WR3: assume 100 mVpp at ~100 kHz (check the datasheet)
+LDO_PSRR_DB, OPA_PSRR_DB = 45.0, 60.0  # TPS7A4901 / OPA4172 at 100 kHz, conservative readings of the curves
+deck = f"""* DC-DC ripple through the pi filter
+.include models.lib
+Vdc src 0 DC 15 SIN(0 {RIPPLE_PP / 2} {FSW})
+Rs src a 0.5
+C1 a 0 22u
+L1 a b 10u
+RL1 b c 0.08
+C2 c 0 22u
+C3 c 0 22u
+Rload c 0 500
+.control
+tran 0.2u 3m 2m
+let r = v(c)
+meas tran vmax max r
+meas tran vmin min r
+let pp = vmax - vmin
+echo RES ripple_pp = $&pp
+.endc
+.end
+"""
+r = run("dcdc_ripple", deck)
+pp_ldo_in = r.get("ripple_pp", float("nan"))
+pp_rail = pp_ldo_in * 10 ** (-LDO_PSRR_DB / 20)
+pp_jack = pp_rail * 10 ** (-OPA_PSRR_DB / 20) * (1 + 82.5 / 10)    # supply ripple is referred to the input, times noise gain
+results["dcdc_ripple"] = {"module_ripple_mVpp": RIPPLE_PP * 1e3, "after_pi_filter_mVpp": pp_ldo_in * 1e3,
+                          "rail_after_ldo_uVpp": pp_rail * 1e6, "estimated_at_jack_uVpp": pp_jack * 1e6,
+                          "assumptions": f"{FSW/1e3:.0f} kHz, LDO PSRR {LDO_PSRR_DB} dB, op-amp PSRR {OPA_PSRR_DB} dB"}
+
+# 11) Tier A (breadboard): MCP4728 0..4.096 V -> TL074 inverting stage, ADS1115 input network
+def ta_out_deck(vdac):
+    return f"""* tier A out
+.include models.lib
+Vcc vcc 0 12
+Vee vee 0 -12
+Vd dac 0 {vdac}
+Vdd vdd 0 3.3
+RT vdd vb 10k
+RB vb 0 10.7k
+R1 dac inn 10k
+RF inn opo 49.9k
+XU vb inn opo vccl veel OPA
+Vcl vccl 0 10.5
+Vel veel 0 -10.5
+RS opo jack 1k
+RL jack 0 100k
+.control
+op
+let j = v(jack)
+echo RES jack = $&j
+.endc
+.end
+"""
+ta = {f"dac_{v}V": run(f"ta_out_{v}".replace(".", "_"), ta_out_deck(v)).get("jack", float("nan")) for v in (0.0, 2.048, 4.095)}
+ta_in = {}
+for vin in (-24, -15, -10, 10, 15, 24):
+    deck = f"""* tier A in
+.include models.lib
+Vin jack 0 {vin}
+Vdd vdd 0 3.3
+R1 jack n 100k
+R2 vdd n 22k
+R3 n 0 22k
+.control
+op
+let a = v(n)
+echo RES vadc = $&a
+.endc
+.end
+"""
+    ta_in[f"{vin:+d}V"] = run(f"ta_in_{'m' if vin < 0 else 'p'}{abs(vin)}", deck).get("vadc", float("nan"))
+results["tier_a"] = {"out_jack_V (TL074 swing 10.5 V on +-12 V)": ta, "in_adc_pin_V": ta_in}
+
 with open(os.path.join(RES, "spice_results.json"), "w") as f:
     json.dump(results, f, indent=2)
 
@@ -283,6 +436,14 @@ checks = [
     ("ADC ESD current < 1 mA at +-24 V",
      max(abs(results["in_dc"][k2]["esd_current_uA"]) for k2 in ("+24V", "-24V")) < 1000),
     ("reversed rail header blocks (< 10 uA)", results["power"]["reversed_header_current_uA"] < 10),
+    ("codec out: +-full scale reaches beyond +-10 V", results["codec_out"]["jack_at_+FS_V"] > 10.0 and results["codec_out"]["jack_at_-FS_V"] < -10.0),
+    ("codec out: 0 V when the codec is unpowered or at VCOM", abs(results["codec_out"]["jack_codec_unpowered_V"]) < 0.01 and abs(results["codec_out"]["jack_at_zero_V"]) < 0.01),
+    ("codec out: DAC pin load >= 15 k (datasheet DC-coupled minimum)", results["codec_out"]["codec_pin_load_kOhm"] >= 15),
+    ("codec in: pin stays within 0..4.5 V for +-24 V at the jack", all(-0.05 < x["codec_pin_V"] < 4.55 for x in results["codec_in"].values())),
+    ("codec in: 0 V maps to VCOM within 10 mV", abs(results["codec_in"]["+0V"]["codec_pin_V"] - VCOM) < 0.01),
+    ("codec in: +-10 V inside the ADC full scale (VCOM +-1.27 V)", all(abs(results["codec_in"][k2]["codec_pin_V"] - VCOM) < 0.2 * CODEC_VCC * 2 ** 0.5 for k2 in ("+10V", "-10V"))),
+    ("DC-DC ripple at the jack < 50 uVpp (estimate)", results["dcdc_ripple"]["estimated_at_jack_uVpp"] < 50),
+    ("tier A in: ADS1115 pin inside -0.3..3.6 V (abs max) for +-15 V", all(-0.3 <= results["tier_a"]["in_adc_pin_V"][k2] <= 3.6 for k2 in ("+15V", "-15V"))),
 ]
 results["checks"] = {n: bool(ok) for n, ok in checks}
 with open(os.path.join(RES, "spice_results.json"), "w") as f:

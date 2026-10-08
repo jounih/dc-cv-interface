@@ -8,7 +8,7 @@ Vcode code 0 DC 32793 AC 1
 Bref vref 0 V={VREFV}+V(rn)
 Rrn rn 0 150820
 Bdac dac 0 V=V(vref)*V(code)/65536+V(dn)
-Rdn dn 0 603279
+Rdn dn 0 488656
 RT vref vb 10000
 RB vb 0 8060
 CB vb 0 {CBV}

@@ -1,13 +1,13 @@
 * ref turn-on, CB=1e-10
 .include models.lib
-Vcc vcc 0 12
-Vee vee 0 -12
+Vcc vcc 0 11.0
+Vee vee 0 -11.0
 Vcode code 0 DC 32793
 
 Bref vref 0 V=VR(time)+V(rn)
 Rrn rn 0 150820
 Bdac dac 0 V=V(vref)*V(code)/65536+V(dn)
-Rdn dn 0 603279
+Rdn dn 0 488656
 RT vref vb 10000
 RB vb 0 8060
 CB vb 0 1e-10

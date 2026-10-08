@@ -1,220 +1,225 @@
-# DIY DC-coupled USB interface for Circuit Studio
+# DIY DC-coupled USB interface for Circuit Studio (v2, ESP32-S3)
 
-A Raspberry Pi Pico 2 that enumerates as a normal **USB Audio Class 2** device with
-**4 outputs and 4 inputs at 48 kHz**, every channel DC-coupled to Eurorack levels
-(±10 V). The browser sees an ordinary multichannel sound card, so Circuit Studio's
-Milestone 2 interface work (getUserMedia with processing off, discrete multichannel
-output, calibration wizard, limiters, Interface In/Out modules) runs unchanged.
-A USB-MIDI port carries SysEx for status and the calibration table in flash.
+An ESP32-S3 display board (LilyGO T-Display-S3) on a factory-assembled carrier PCB. The
+computer sees a normal **USB Audio Class 2** device plus a **USB-MIDI** port; BLE-MIDI works
+without a computer. Jouni only solders through-hole parts.
 
-Status: **designed and verified in software, not built yet.**
-`./check.sh` passes: firmware builds for Pico 2 (4 and 8 outputs), 230 host unit-test
-checks, 10/10 SPICE checks on the analog front end, netlist/BOM/schematic generated.
-
-| | |
-|---|---|
-| Outputs | 4 (8 with a second op-amp), 16-bit DAC8568, updated at 48 kHz, ±10.2 V reach, 1 k series, 40 kHz smoothing pole |
-| Inputs | 4, 24-bit simultaneous ADS131M04 at 48 kSPS, 108 k input impedance, ±14.7 V full scale |
-| Scale | digital 1.0 = +10 V both directions (1 V/oct = 0.1 per octave) |
-| Latency (device side) | ~3.5 ms out (2 ms USB FIFO + 1.5 ms DAC queue), ~1-2 ms in |
-| Power | converters and Pico from USB; op-amps from the rack's ±12 V (10-pin header, reverse-blocked) |
-| Cost | ~£39 for 4 out / 4 in, ~£47 for 8 out / 4 in (hw/bom.csv, single quantity, approximate) |
-
-## SAFETY: a person reviews the board before it touches rack power
-
-Nothing here has been built or measured. Before connecting the 10-pin header to a rack,
-someone who can read the schematic checks the following, with the board on a **current-limited
-bench supply first** (±12 V, 50 mA limit):
-
-- [ ] **Polarity.** Red stripe of the ribbon = pin 1 = −12 V. J1 pins 1-2 go to −12 V, 9-10 to +12 V.
-      Check the header orientation against the busboard with the rack off.
-- [ ] **Reverse block.** D1/D2 (SS14) are in series with each rail, cathode toward +12 V on the top
-      rail, anode toward −12 V on the bottom rail. With the ribbon reversed, no current flows
-      (SPICE: 3 µA).
-- [ ] **Rails.** With the bench supply: +12 V and −12 V at the op-amp pins 4 and 11 (minus ~0.3 V
-      diode drop), no rail shorted to GND, supply current under ~15 mA idle.
-- [ ] **Converter rails come from USB only.** No path from ±12 V into +3V3_A, +3V3_D or VBUS
-      (meter it with everything unpowered).
-- [ ] **Output current limits.** 1 k series resistor on every output jack (0.66 W 1206 anti-surge
-      part: a hard ±15 V fault against an output at the opposite rail dissipates 0.63 W in it, SPICE),
-      BAT54S from the op-amp output to both rails, op-amp current under 26 mA in that fault.
-- [ ] **Power-on state.** Every jack reads 0 V (±50 mV) when USB is plugged in, when it is unplugged,
-      and while the rack powers up first. DAC8568 **B grade** (midscale reset), LDAC and **CLR tied
-      high** (a CLR edge would load zero-scale, which is +10 V).
-- [ ] **Inputs.** Each input is 100 k series before anything active; ±15 V at a jack puts −1.22 V on
-      the ADC pin (limit −1.6 V).
-- [ ] **Ground.** One ground point between rack GND, USB GND and the converters. If other modules hum,
-      add a full-speed USB isolator (ADuM3160-based).
-- [ ] Then the rack, with nothing patched, then one patch cable at a time.
-
-## Platform choice
-
-| | RP2350 Pico 2 (chosen) | RP2040 Pico | ESP32-S3 | Daisy Seed / Patch.SM (STM32H7) |
+| Group | Channels | Converter | Path to the browser | Use |
 |---|---|---|---|---|
-| Cost | ~£4.80 | ~£3.60 | ~£6-10 | ~£25-30 / ~£35 |
-| USB | FS, TinyUSB in the SDK | same | FS, TinyUSB via IDF | FS (HS PHY not wired on Seed) |
-| UAC2 maturity | TinyUSB 0.18 UAC2 + feedback EP, widely used on RP2040/RP2350 | same | works, less used, IDF layer in between | libDaisy has no UAC2 class; would need TinyUSB/ST port |
-| Determinism | PIO + DMA: converter timing in hardware, no ISR per sample | same | no PIO; SPI + ISR, Wi-Fi stack competes | good DMA/SAI, built-in codec is AC-coupled |
-| Clocking | 150 MHz / 3125 = 48 kHz exactly; 6.144 MHz ADC clock exact in the 16.16 GPOUT divider | 125 MHz: DAC exact, ADC clock 70 ppm off | fractional PLL | audio PLL |
-| Channels | limited by FS USB (~1 KB/frame): 4/4 at 24-bit in, 8/4 at 16-bit | same | same | same |
+| A audio-rate | 8 out, 6 in | PCM3168A codec, HPF bypassed, DC-coupled | UAC2, **32 kHz / 16-bit** (Web Audio) | audio, FM, envelopes, LFOs |
+| P precision CV | 8 out, 8 in | DAC8568 (16-bit) + ADS131M08 (24-bit) | SysEx CV frames over USB-MIDI (Web MIDI), 2 kHz device rate | 1 V/oct pitch, gates, slow CV |
 
-Picked RP2350: cheapest, already in Jouni's minimal-parts synth, proven TinyUSB UAC2 path,
-and PIO makes the converter SPI exactly periodic without interrupts. The Daisy's strength
-(codec, HS) is irrelevant here because the codec is AC-coupled. Rust/embassy has no maintained
-UAC2 class yet; C with the Pico SDK + TinyUSB is the proven route.
+Plus: MIDI->CV mapper on the P outputs (USB-MIDI and BLE-MIDI), a status display (meters,
+USB/BLE/calibration/power), USB-C power as the main supply, optional Eurorack +-12 V and LiPo.
 
-## How it works
+Status: **designed and verified in software, not built.** `./check.sh` passes: 468 host-test checks
+(+110 for the breadboard build), 18/18 ngspice checks, both ESP-IDF builds clean, netlist/KiCad
+netlist/BOMs/schematic generated. The Pico 2 v1 design is in `archive/pico-v1-firmware/` and git history.
 
-```
-USB OUT iso ─► TinyUSB FIFO ─► out_engine (limiter, cal, mute) ─► DAC frame ring ─► DMA (timer-paced) ─► PIO ─► DAC8568
-                (FIFO-count async feedback keeps it half full)                        4 x 48 kHz, 32-bit frames
-ADS131M04 DRDY ─► PIO frame reader ─► DMA ring ─► in_engine (cal) ─► TinyUSB IN FIFO ─► USB IN iso (47/48/49-sample packets)
-```
+## SAFETY: a person reviews the board before it touches rack power or a battery
 
-- **One clock domain.** The DAC pacing (DMA timer 4/3125 of 150 MHz) and the ADC clock
-  (150 MHz / 24.4140625 = 6.144 MHz, ADC OSR 64 → 48 kSPS) both come from the Pico's crystal,
-  so DAC and ADC run at the same 48 kHz. The host follows the device: asynchronous OUT endpoint
-  with a feedback endpoint (TinyUSB FIFO-count method; 3-byte 10.14 format on macOS full speed,
-  4-byte elsewhere, chosen at enumeration).
-- **No per-sample interrupts.** Both rings are DMA with a control channel that re-arms the data
-  channel (works on RP2040 too). The main loop on core 0 tops up the DAC ring to 1.5 ms ahead and
-  drains the ADC ring; it also writes 2 ms of "hold last value" beyond the write point, so a late
-  loop repeats the last sample instead of replaying old data.
-- **Every output updates at the same instant.** Channels 1..n−1 are written to input registers,
-  the last frame is "write and update all".
-- **Safe power-on.** Boot order: load calibration, DAC software reset (B grade → midscale,
-  internal reference off, so the ratiometric output stage sits at 0 V), write the calibrated 0 V
-  codes, then enable the reference. The output offset Vb is a divider from the DAC's own reference,
-  so with the reference off every jack is 0 V, and drift of the reference cancels at 0 V.
-- **Watchdog.** Host data stops (stream closed, USB suspend, unplug): the outputs hold the last value
-  for 20 ms, then ramp to 0 V in 5 ms. The hardware watchdog (200 ms) reboots a hung loop, and the
-  boot path above returns the jacks to 0 V. Unplugging a bus-powered board removes the DAC supply,
-  which also gives 0 V. Before rebooting into the bootloader the firmware parks every output at 0 V.
+Nothing has been built or measured. Before the first power-up, someone who can read the schematic
+checks, with a **current-limited bench supply first** (5 V, 1 A limit on the USB side):
 
-### Converter trade-offs
+- [ ] **USB 5 V:** +5V_SYS present through U20 (LM66100); no short to GND; idle draw under ~0.3 A before
+      the codec is configured.
+- [ ] **Analog rails:** +11 V / -11 V at every op-amp supply pin; A0515S module orientation matches its
+      datasheet; pi-filter inductors fitted.
+- [ ] **Converter rails:** +3V3_A, +3V3_D, +4V5_A correct; nothing from the +-11 V or rack reaches them.
+- [ ] **Eurorack (optional):** red stripe = pin 1 = -12 V; D22/D23 (SS14) in series with each rail; a
+      reversed ribbon draws ~3 uA (SPICE). Rack and USB DC-DC are diode-ORed, never back-feed the rack.
+- [ ] **Output current limits:** 1 k (0.66 W 1206 anti-surge) on every output jack, BAT54S to both rails;
+      a hard +-15 V fault on an output costs 0.59 W in the 1 k and 24 mA in the op-amp (SPICE).
+- [ ] **Power-on state:** every jack reads 0 V (+-50 mV) at power-up, USB unplug, rail dip and reboot.
+      DAC8568 must be the **B** grade (midscale reset), LDAC and **CLR tied high**. Firmware mutes all
+      outputs until the +11 V rail has been above 10.5 V for 100 ms.
+- [ ] **Inputs:** 100 k (precision) / 100 k into a 4.5 V-supplied op-amp (audio) before anything active:
+      +-24 V at a jack keeps the ADC/codec pins inside their limits (SPICE).
+- [ ] **LiPo (optional):** use only the T-Display-S3's own protected charger and a polarity-keyed JST 1.25
+      battery with a protection circuit; the carrier never charges the battery and the rails cannot feed it
+      (LM66100 ideal diodes, boost module output only). Check polarity before plugging the cell.
+- [ ] **Ground loop:** computer USB ground and rack ground join on this board. If other modules hum, use a
+      full-speed USB isolator (ADuM3160-based).
+- [ ] Then the rack with nothing patched, then one cable at a time.
 
-- **Audio-rate outputs.** 4 channels x 32-bit frames at 25 MHz SCLK take 5.5 µs of each 20.8 µs
-  period (8 channels: 11 µs), and the DAC settles in 5-10 µs, so 48 kHz is fine and the outputs
-  can carry audio, FM and sharp gates. The price is zero-order-hold images above 24 kHz (a single
-  40 kHz pole in the output stage softens them) and a pricier DAC. A CV-only design at 8 kHz could
-  use a cheap I²C DAC (MCP4728, 12-bit) but adds zipper steps on slow sweeps and ~1 ms of extra
-  jitter on gates.
-- **Input noise.** At 48 kSPS the ADS131M04 must run at OSR 64, its noisiest setting
-  (75 µVrms at the pin, ~0.93 mVrms at the jack over the full band; about 1.1 cent at 1 V/oct).
-  That noise is shaped toward Nyquist, so a 1 kHz low-pass on pitch inputs in Circuit Studio
-  removes most of it. Divider noise is 20 µVrms (SPICE).
-- **Output noise.** 115 µVrms at the jack, 20 Hz-20 kHz (SPICE, assuming 100 nV/√Hz DAC noise),
-  about 0.14 cent.
+## Decisions
+
+### Controller: ESP32-S3 display board (Jouni's choice), with the honest limits
+
+| | ESP32-S3 (T-Display-S3) | STM32H7 (Daisy / H7 boards) | ESP32-P4 board |
+|---|---|---|---|
+| Board with display | ~GBP 17-20 | ~GBP 30-60 | ~GBP 30-45 |
+| USB | full speed (12 Mbit/s) | FS on most boards, HS needs an external ULPI PHY | **high speed (480 Mbit/s)** on chip |
+| UAC2 | TinyUSB 0.21 (dwc2), async feedback, works | TinyUSB / ST stack | TinyUSB HS |
+| DSP | 2 x 240 MHz LX7, single-precision FPU, PIE int SIMD | 480 MHz M7, double FPU | 2 x 400 MHz RISC-V, FPU, SIMD |
+| Wireless | Wi-Fi + **BLE** on chip | none | via an ESP32-C6 companion on most boards |
+
+The S3 wins on board cost, built-in display boards and BLE. No dealbreaker for **8 audio-rate channels
+each way at 32 kHz** or for CV. The dealbreaker for Jouni's option "8 + 8 at 48 kHz" is USB full speed
+itself, which applies equally to the H7 boards without HS: see the next section. If 48 kHz / 24-bit audio
+on all channels matters, the fix is an **ESP32-P4 carrier** (HS USB; same ESP-IDF/TinyUSB firmware layout).
+
+### USB full-speed budget (why 32 kHz, and why the CV group uses a second path)
+
+Full speed is one shared 12 Mbit/s bus: OUT and IN share each 1 ms frame, and periodic (isochronous)
+traffic may use at most 90 % of it. With worst-case bit stuffing (USB 2.0 section 5.11.3) that is about
+1125 payload bytes per frame across all audio endpoints, not 1023 per direction.
+
+| Scheme | OUT B/frame | IN B/frame | Bus time | Fits |
+|---|---|---|---|---|
+| 8 out + 8 in, 48 kHz/16 (option a as asked) | 784 | 784 | 1248 us | no (more than the raw bus) |
+| 16 out + 16 in, 24 kHz/16 (option b) | 800 | 800 | 1273 us | no |
+| 8 out + 6 in, 48 kHz/16 | 784 | 588 | 1095 us | no |
+| 4 out + 4 in, 48 kHz/24 | 588 | 588 | 943 us | no |
+| 6 out + 4 in, 48 kHz/16 | 588 | 392 | 790 us | yes |
+| 8 out + 8 in, 32 kHz/16 | 528 | 528 | 849 us | yes (tight) |
+| **8 out + 6 in, 32 kHz/16 (chosen)** | 528 | 396 | **746 us** | **yes, 17 % margin** |
+
+So the audio-rate group runs at 32 kHz (14 kHz audio bandwidth; Chrome resamples a 48 kHz
+AudioContext to the device transparently, or Circuit Studio opens its context at 32 kHz). The 8
+precision channels each way go over the second path below, so the browser still sees all 30 jacks.
+The host tests check the descriptor against this budget.
+
+### CV path: USB-MIDI SysEx (Web MIDI), not WebUSB
+
+| | USB-MIDI SysEx (chosen) | WebUSB vendor bulk |
+|---|---|---|
+| Browser support | Chrome, Edge, Opera, Firefox (site permission); not Safari | Chromium only |
+| Permission | Web MIDI SysEx prompt (Circuit Studio needs it for calibration anyway) | device chooser prompt |
+| macOS with the audio driver attached | works (class-compliant MIDI) | composite-device claiming is fragile |
+| Also usable by | DAWs, BLE-MIDI, the on-device MIDI->CV mapper | only our page |
+| Rate | 1 kHz host frames (32 B each, 44 B on the wire), 500 Hz CV-in frames | several kHz |
+
+Format: one SysEx frame carries all 8 outputs as signed 21-bit values in 10 uV units (`firmware/common/proto.h`).
+The device glides each new value in over 2 ms, so 1 kHz frames with ~1 ms Web MIDI jitter give smooth
+2 kHz DAC updates without zipper steps. Latency host->jack is about 2-4 ms plus main-thread delays in the
+page (send with timestamps to keep jitter near 1 ms). CV inputs stream back at up to 1 kHz (default 500 Hz).
+The frames double as a heartbeat: if none arrive for 2 s, host-driven outputs glide to 0 V.
+
+### Converters: three tiers, one recommendation
+
+| | Tier A (breadboard) | Tier B precision | Tier C audio codec |
+|---|---|---|---|
+| Parts | 2x MCP4728 + 2x ADS1115 modules | DAC8568B + ADS131M08 | PCM3168A (8 out / 6 in) |
+| Resolution / rate | 12-bit ~1 kHz out; 16-bit ~125 Hz/ch in | 16-bit out, 24-bit in; 2 kHz here | 24-bit, 8-96 kHz (32 kHz here) |
+| DC accuracy | 5 mV steps (6 cents) | offset drift 0.5 uV/C, ref 2-5 ppm/C: pitch-grade after calibration | gain error +-2 %, bipolar zero +-1 % FSR (calibrated), **drift not specified**, gain follows the 4.5 V supply |
+| Audio quality | none | DAC: SNR 83 dB, THD -63 dB at 1 kHz (poor); ADC 102 dB DR | DAC 112 dB DR / -94 dB THD+N; ADC 107 dB / -93 dB |
+| Converter latency | ms | < 0.5 ms | ~1 ms (delta-sigma filters) |
+| Price | modules ~GBP 20-40 | ~USD 17 + 4.39 | USD 6.30 |
+| JLC stock (checked) | n/a | ADS131M08 15k; DAC8568B: global sourcing | PCM3168APAPR 378 |
+
+The PCM3168A holds up as the audio-rate engine: register 82 `BYP = 111` bypasses the ADC high-pass
+filter (datasheet 9.3.7), its DAC drives DC-coupled loads >= 15 k, and both sides take an op-amp level
+shift. Its unspecified offset drift and supply-ratiometric gain rule it out for 1 V/oct pitch, so it is the
+**audio** group, and the DAC8568/ADS131M08 pair is the **pitch** group. The S3's I2S does 8 x 32-bit TDM
+slots at 32 kHz with an exact MCLK (160 MHz / 9.765625, 9-bit fractional divider; checked in IDF's
+`i2s_ll.h`). Other codecs (CS42448: HPF disable bit; PCM186x) look possible but were not verified.
+
+### Power
+
+USB-C 5 V is the main supply: LM66100 ideal diode -> +5V_SYS -> isolated A0515S-2WR3 (+-15 V, 2 W) ->
+pi filters -> TPS7A4901/TPS7A3001 -> +-11 V for the op-amps; LP5907 4.5 V for the codec, LP5907 3.3 V for
+the precision converters, AMS1117 3.3 V for logic. Ripple: 100 mVpp at the module -> 0.08 mVpp after the
+pi filter (ngspice) -> sub-microvolt at the jacks after LDO and op-amp PSRR (datasheet curves, conservative).
+The rack +-12 V is diode-ORed into the LDO inputs (an alternative supply, not needed), and a LiPo boost
+module can feed +5V_SYS through a second LM66100 (optional). Switching between sources is seamless at
++5V_SYS; the firmware still mutes all outputs while the rail sense is below 10.5 V or not yet stable for 100 ms.
+
+| Population | 5 V current | Supply | LiPo 1000 mAh runtime |
+|---|---|---|---|
+| Full (A + P) | ~0.65-0.75 A | USB-C 1.5 A or a USB 3 port (USB 2 ports give 0.5 A) | ~1 h |
+| Precision only | ~0.3 A | any USB port | ~2 h |
+| Audio only | ~0.55 A | USB-C / USB 3 | ~1.2 h |
+
+The PCM3168A alone draws ~1.2 W, so the battery is a nice-to-have. The `low_power` flag limits outputs to
++-5 V, but op-amp quiescent current dominates, so it saves little; dimming the display saves more (~0.25 W).
+Battery %, auto-dim (30 s) and a 0 V shutdown + deep sleep below 3.3 V are in `firmware/common/power.c`.
 
 ## Hardware
 
-Files: `hw/schematic/*.svg` (open `hw/schematic/index.html`), `hw/netlist.csv` (every pin → net,
-the authoritative connection list), `hw/bom.csv`, `hw/breadboard.md`, SPICE in `hw/spice/`.
-All of them come from `hw/gen_hw.py` and `hw/spice/run_spice.py`; KiCad was not installed, so there
-is no .kicad_sch. The netlist is complete enough to enter into KiCad by hand later.
+`hw/schematic/index.html` (6 sheets), `hw/netlist.csv`, `hw/kicad/cv_interface.net`, BOMs per population
+(`hw/bom_full.csv`, `hw/bom_precision.csv`, `hw/bom_audio.csv`; JLC upload versions in `hw/jlc/`),
+`hw/LAYOUT.md` (layout rules, form factors, **JLCPCB order steps**), `hw/breadboard.md` (Tier A).
+Everything comes from `hw/gen_hw.py`; stock and prices from `tools/jlc_stock.py` (JLC's public parts search,
+fetched 2026-10-08; recheck before ordering). Every SMT line has a stocked LCSC part except the DAC8568**B**
+(JLC Global Sourcing from Mouser/Digi-Key; JLC only stocks the C grade, which needs a 5 V supply and resets to
+zero scale). Substitutions made for stock: Yageo RT0805 0.1 % resistors (the audio difference amp uses
+28.7 k / 82.5 k, gain 2.87), 3PEAK TPLP5907 (LP5907 pin-compatible) for 3.3 V, Mornsun A0515S-2WR3 (439 in stock).
 
-- **Output stage** (per channel, OPA4172 quarter): inverting amplifier referenced to Vb,
-  `Vjack = 0.990 x (9.25·Vb − 8.25·Vdac)`, Vb = 2.5 V x 8.06/18.06 = 1.116 V. Code 0 → +10.22 V,
-  code 65535 → −10.20 V into 100 k. 0.1 % resistors set gain and offset drift; calibration removes
-  the initial error. CB on Vb stays at 100 pF: a 10 nF cap makes Vb lag the DAC at reference
-  turn-on and gave a 5.8 V blip in SPICE (5 mV with 100 pF).
-- **Output protection:** 1 k series (outside the loop, calibrated for a 100 k load), BAT54S clamps
-  from the op-amp output to both rails. Rails off and ±15 V forced on a jack: 14.7 mA through the
-  1 k, carried by the Schottky, not the op-amp's own ESD diodes.
-- **Input stage:** 49.9 k + 49.9 k series, 9.09 k shunt, 330 pF (59 kHz pole) into the ADC, whose
-  inputs accept ±1.2 V around ground from a single 3.3 V supply. ±10 V → ±0.814 V. No external
-  clamp diodes: the 100 k limits a ±24 V fault to 0.22 mA (the ADC's limit is 10 mA), and a Schottky
-  to ground would clip the negative half of the signal.
-- **Power:** the Pico, DAC and ADC run from USB (MCP1700 3.3 V LDO from VBUS for the analog
-  supply), so nothing can back-power the converters from the rack. Only the op-amps use the
-  rack's ±12 V. With the rack off and USB on, the op-amps are unpowered and the DAC's 1.25 V
-  pushes only ~60 µA into them through 10 k. **USB-only option:** a Mornsun B0512S-1WR3
-  (5 V → ±12 V, 1 W) on VBUS replaces J1, for use without a rack.
-- **8 outputs:** populate DAC channels E-H with a second OPA4172 and the same stage; build with
-  `-DCV_N_OUT=8`. The USB input stream then drops to 16-bit to stay inside the full-speed
-  isochronous budget (1180 bytes/frame).
+| Population | One assembled board (USD) | Per board when ordering 5 | JLC extended part types |
+|---|---|---|---|
+| Full (8+6 audio, 8+8 CV, 30 jacks) | ~178 | ~95 | 26 |
+| Precision only (8+8 CV) | ~139 | ~74 | 19 |
+| Audio only (8+6) | ~111 | ~55 | 15 |
 
-Where to buy (UK; no orders placed): Pico 2 from The Pi Hut / Pimoroni; DAC8568BIPW,
-ADS131M04IPWR, OPA4172IDR and 0.1 % resistors from Mouser UK / DigiKey UK / Farnell; passives and
-SS14/BAT54S from LCSC; Thonkiconn jacks and Eurorack ribbons from Thonk or Tayda; TSSOP/SOIC adapters
-from any electronics seller. Prices in `hw/bom.csv` are estimates to check before ordering.
+Most of a single-board order is JLC's one-off fees (about USD 3 per extended part type, setup, stencil)
+and the 4-layer PCB; the parts themselves are USD 44 (full) including the USD 17 DAC. Estimates include the
+T-Display-S3 (~USD 16) and the through-hole parts (jacks, sockets, DC-DC module, header). Cost breakdown:
+`hw/results/bom_summary.json`.
 
-## Firmware
+Display boards that fit the carrier idea: **LilyGO T-Display-S3** (1.9" 170x320, LiPo charger, uses all 13
+free header GPIOs, the reference), LilyGO T-Display-S3 AMOLED (same pinout family, ~GBP 25), Waveshare
+ESP32-S3-LCD-1.69 / -1.47 (SPI displays leave more GPIOs free, but need a different socket footprint).
 
-`firmware/src/`: `main.c` (data path + USB callbacks), `converters.c` + `cv.pio` (PIO SPI and DMA
-rings), `usb_desc.c` (descriptors), `engine.c` (per-sample path, mute state machine, ring maths),
-`cal.c` (calibration maths), `cal_flash.c`, `proto.c` (SysEx), `conv_codec.h` (DAC/ADC frame
-encoding, clock maths). Pin map: `board.h`.
+## Firmware (ESP-IDF 5.4, TinyUSB 0.21)
 
-### Build on the Mac
+`firmware/common/` is plain C shared with the host tests: calibration, signal engines, SysEx protocol, USB
+descriptors, MIDI->CV mapper, BLE-MIDI codec, power supervision. `firmware/esp32s3/main/` has the drivers:
+`codec.c` (I2S TDM + PCM3168A control), `precision.c` (SPI2, 2 kHz gptimer), `usb.c`, `midi_router.c`,
+`ble_midi_nimble.c`, `display.c` (ST7789 i80), `power_mgr.c`, `storage.c` (NVS), `tier_a.c` (breadboard).
+
+- **Cores:** core 1 runs TinyUSB, the codec block loop (1 ms) and the precision loop (2 kHz), nothing
+  else; core 0 runs NimBLE (host and controller pinned there), the display, power and the MIDI router.
+  BLE never preempts the audio core. Estimated load: core 1 ~25 %, core 0 ~20 %, leaving most of core 0
+  for on-device DSP later.
+- **Glitch check with BLE active (to do on hardware):** loop Audio Out 1 -> Audio In 1, play a sine, flood
+  BLE-MIDI with 100 notes/s for 10 min, and read the xrun counters on the display / `cvcal.py info`
+  (`underruns`) plus discontinuities in the recorded loopback.
+- **On-device DSP later:** our Rust factory kernels can run as `no_std` f32 code via `espup` (Xtensa
+  LLVM) + `esp-hal`, or linked into this C firmware as a static library. Keep them f32 (the S3 FPU is single
+  precision; f64 is software), and call `esp-dsp` (C, uses the PIE SIMD) for FIRs/FFTs; Rust has no PIE
+  intrinsics. A ladder-class filter at 32 kHz is a few percent of one core.
+- **Safety in firmware:** P outputs: DAC soft reset (midscale, reference off -> 0 V) -> 0 V codes -> reference
+  on; A outputs: codec reset keeps VOUT at VCOM (0 V differential). Host stream stop -> hold 20 ms -> ramp
+  to 0 V in 5 ms. USB unmount, rail fault, low battery and DFU all force 0 V.
+
+Build:
 
 ```sh
-# one-time: toolchain + SDK (already in ~/.pico-sdk on Jouni's Mac)
-mkdir -p ~/.pico-sdk && cd ~/.pico-sdk
-curl -LO https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-darwin-arm64-arm-none-eabi.tar.xz
-tar xf arm-gnu-toolchain-14.2.rel1-darwin-arm64-arm-none-eabi.tar.xz
-git clone --depth 1 -b 2.2.0 https://github.com/raspberrypi/pico-sdk.git sdk
-git -C sdk submodule update --init --depth 1 lib/tinyusb
-
-# build
-export PICO_SDK_PATH=~/.pico-sdk/sdk
-export PICO_TOOLCHAIN_PATH=~/.pico-sdk/arm-gnu-toolchain-14.2.rel1-darwin-arm64-arm-none-eabi
-export PATH=$PICO_TOOLCHAIN_PATH/bin:$PATH
-cmake -S firmware -B firmware/build -DPICO_BOARD=pico2      # -DCV_N_OUT=8 for 8 outputs
-cmake --build firmware/build -j8                            # -> firmware/build/cv_interface.uf2
-
-./check.sh     # everything: host tests, SPICE, hw generation, both firmware builds (logs/)
+# one-time: ESP-IDF v5.4.2 (installed in ~/esp/esp-idf on Jouni's Mac)
+git clone -b v5.4.2 --recursive --shallow-submodules https://github.com/espressif/esp-idf.git ~/esp/esp-idf
+~/esp/esp-idf/install.sh esp32s3
+. ~/esp/esp-idf/export.sh
+cd firmware/esp32s3 && idf.py build                    # PCB build
+idf.py -B build-tiera -DCV_TIER_A=1 -DSDKCONFIG=build-tiera/sdkconfig build   # breadboard build
+idf.py -p /dev/cu.usbmodem* flash                      # first flash: hold BOOT, plug USB-C
+./check.sh                                             # all checks, logs in logs/
 ```
 
-Flash: hold BOOTSEL while plugging USB, copy the `.uf2` to the drive. Later updates:
-`python3 tools/cvcal.py bootsel`, then copy. CI: `ci/github-actions.yml` (Ubuntu, apt toolchain,
-same `check.sh`). The repo is local-only.
+Later updates: `python3 tools/cvcal.py dfu` reboots into the ROM USB downloader (outputs parked at 0 V).
 
-### USB device
-
-- VID:PID `1209:0001` (pid.codes test PID: fine on your own machines; apply for a free pid.codes PID
-  before giving builds to anyone else).
-- Product "Circuit Studio CV 4x4", IAD composite: UAC2 (AC, AS OUT alt 0/1 with async iso data +
-  feedback, AS IN alt 0/1 async iso) + USB-MIDI 1.0. Clock source: internal fixed 48 kHz.
-- UAC2 channel names "CV Out 1..4", "CV In 1..4" (shown in Audio MIDI Setup).
-- OUT 16-bit, IN 24-bit (4x4) or 16-bit (8x4). Terminal type "line connector".
-
-### Calibration
-
-The table (gain/offset per output and input, output range limiter) lives in the last flash
-sector with a CRC; without one the firmware uses values computed from the nominal resistors
-(within ~1 %). With `pip install mido python-rtmidi`:
+## Calibration
 
 ```sh
-python3 tools/cvcal.py cal-out      # DMM on each jack, 2 readings per channel
-python3 tools/cvcal.py cal-in       # patch Out n -> In n; measures -5 V and +5 V
+pip install mido python-rtmidi
+python3 tools/cvcal.py cal-out    # DMM on each of the 16 outputs, two readings each
+python3 tools/cvcal.py cal-in     # patch Out A1..A6 -> In A1..A6 and Out P1..P8 -> In P1..P8
 python3 tools/cvcal.py save
-python3 tools/cvcal.py range 3 uni10   # optional per-output limiter: bi10 | bi5 | uni10 | uni5
 ```
-
-Protocol (SysEx `F0 7D 43 56 cmd ... F7`, 7-bit packed u32/f32) is in `firmware/src/proto.h`;
-Circuit Studio's wizard could speak it over WebMIDI later.
 
 ## Verification without hardware
 
-| Check | What it covers | Result |
-|---|---|---|
-| `make -C firmware/test` | descriptor walk (lengths, IAD, endpoints, FS bandwidth, feedback EP variants), DAC8568/ADS131M04 frame encoding, clock dividers, calibration maths and CRC, limiter, mute/hold/ramp state machine, ring arithmetic under jitter, SysEx round trips (ASan/UBSan) | 230 + 234 checks pass (4 and 8 outputs) |
-| `hw/spice/run_spice.py` (ngspice) | output transfer vs the firmware model (0.09 mV), nonlinearity, ±15 V faults powered and unpowered, output noise, bandwidth (40 kHz), reference turn-on transient, input transfer, impedance, ±15/±24 V faults, input noise, reverse-polarity block | 10/10 pass, `hw/results/spice_summary.md` |
-| firmware build | Pico 2 4-out and 8-out, RP2040 compiles | clean, no warnings |
+| Check | Result |
+|---|---|
+| `make -C firmware/test`: descriptors + USB budget, codec/DAC/ADC encodings, exact clock dividers, calibration, engines, mapper (1 V/oct worst error 0.16 mV through calibration, bend, legato/retrigger, last-note priority), BLE-MIDI codec (running status, SysEx across packets, MTU split), power supervision, SysEx protocol | 468 checks pass; Tier A build 110 |
+| `hw/spice/run_spice.py`: precision out/in (gain vs firmware model 0.09 mV, faults at +-15/24 V, noise 104 uVrms, ref turn-on), codec out (+-10.25 V at full scale, 0 V unpowered, 111 k load on the codec), codec in (pin stays 0.37-4.13 V for +-24 V), DC-DC ripple, rail reverse block, Tier A stages | 18/18 |
+| ESP-IDF builds (PCB and Tier A), 0 warnings | 640 KB of 1 MB partition |
 
-The op-amp in SPICE is a behavioural OPA172-class model (10 MHz, rail-to-rail, 65 mA limit), not
-TI's vendor model; the ADC input is 330 k with ESD diodes. Datasheet facts used were read from the
-TI datasheets (DAC8568 control matrix, timing, POR; ADS131M04 registers, timing, noise table).
+## Open items
 
-## Known limits and open items
-
-- Untested on hardware. First bring-up risks: PIO SPI timing margins (DAC 25 MHz, ADC 9.4 MHz),
-  the ADS131M04 register write/ack sequence, and feedback behaviour on Windows.
-- Chrome's multichannel capture: check that `getSettings().channelCount` really is 4 for this
-  device on macOS (Chrome has downmixed some devices to 2). Noted for Milestone 2 in the Circuit
-  Studio queue.
-- RP2040 builds, but its 125 MHz clock puts the ADC 70 ppm off the DAC rate; use a Pico 2.
-- The DAC (~£14.50) is a third of the cost. A DAC80504 (WQFN, midscale reset) is a cheaper route
-  for a machine-assembled PCB, but it is not hand-solderable.
-- Ground loop between computer and rack: optional USB isolator.
+- Untested on hardware: I2S TDM framing vs the PCM3168A (LJ TDM, 256 fs BCK), ADS131M08 bring-up,
+  TinyUSB feedback on macOS/Windows at 32 kHz, BLE coexistence numbers, display orientation offsets.
+- Verify before layout: T-Display-S3 socket pin order, A0515S pinout, DAC8568B sourcing (see `hw/LAYOUT.md`).
+- Chrome must expose the 6-channel input and 8-channel output (`getSettings().channelCount`); noted in the
+  Circuit Studio queue.
+- VID:PID 1209:0001 is a pid.codes test ID: private use only.

@@ -1,91 +1,54 @@
-# Breadboard path (before any PCB)
+# Breadboard path (Tier A): pre-soldered modules only, no SMT
 
-Five phases. Each one adds parts only after the previous one works, and nothing touches the
-rack until phase 4 has passed the safety checklist in the README.
+Use this to try the whole chain (Circuit Studio <-> USB <-> modular) before ordering a PCB.
+It is honest about its limits:
 
-Parts that are not breadboard-friendly go on cheap adapter boards:
-DAC8568 (TSSOP-16) and ADS131M04 (TSSOP-20) on 0.65 mm TSSOP-to-DIP adapters, OPA4172 (SOIC-14)
-on a SOIC adapter. Drag-solder with flux and check for bridges with a loupe. A TL074CN (DIP) works
-in place of the OPA4172 on the breadboard, but it only reaches about +-9.5 V on +-12 V rails.
-
-Pico 2 pin numbers are the physical header pins (pin 1 = GP0, top left with USB at the top).
-
-## Phase 0: Pico only (no other parts)
-
-1. Build the firmware (README, "Build") and flash it: hold BOOTSEL, plug USB, drag
-   `firmware/build/cv_interface.uf2` onto the RP2350 drive.
-2. The device appears as **Circuit Studio CV 4x4** (audio 4 in / 4 out at 48 kHz) plus a MIDI port
-   **CV Interface Control**. The LED blinks fast: no ADC found, which is expected here.
-3. Check in Audio MIDI Setup (macOS) that 4 in / 4 out at 48 kHz show up with the channel names
-   CV Out 1-4 and CV In 1-4. Point Circuit Studio's Milestone 2 Interface modules at it: the inputs
-   read silence and the outputs go nowhere, but enumeration, channel count, feedback and latency
-   can all be tested.
-4. `python3 tools/cvcal.py info` (with `pip install mido python-rtmidi`) shows `adc_ok: False`.
-
-## Phase 1: DAC only, 3.3 V side (no +-12 V)
-
-| From | To | Note |
+| | Tier A breadboard | PCB (Tier B precision + Tier C codec) |
 |---|---|---|
-| Pico pin 40 (VBUS) | MCP1700 VIN | 1 uF VIN to GND. Pin order differs between TO-92 and SOT-23: check the datasheet for your package |
-| MCP1700 VOUT | rail `+3V3_A` | 1 uF to GND |
-| MCP1700 GND | GND | |
-| Pico pin 38 (GND) | GND rail | |
-| Pico pin 4 (GP2) | DAC8568 pin 16 SCLK | short wire |
-| Pico pin 5 (GP3) | DAC8568 pin 2 SYNC | 10 k pull-up to Pico pin 36 (3V3) |
-| Pico pin 6 (GP4) | DAC8568 pin 15 DIN | |
-| `+3V3_A` | DAC8568 pin 3 AVDD, pin 1 LDAC, pin 9 CLR | 100 nF + 1 uF at pin 3. CLR must never float |
-| GND | DAC8568 pin 14 | |
-| DAC8568 pin 8 VREF | 150 nF to GND | |
+| CV outputs | 8 x 12-bit (MCP4728), ~1 kHz update | 8 x 16-bit (DAC8568) at 2 kHz + 8 audio-rate (PCM3168A, 32 kHz) |
+| CV inputs | 8 x 16-bit (ADS1115), ~125 Hz per channel | 8 x 24-bit (ADS131M08) at 2 kHz + 6 audio-rate |
+| Pitch accuracy | 12-bit over +-10 V = 5 mV steps (about 6 cents): fine for modulation, gates and envelopes, **not** for 1 V/oct melodies | 0.31 mV steps (0.4 cent), 0.16 mV worst error in the mapper test |
+| Audio-rate DC | none (UAC2 still enumerates, so Circuit Studio's device code can be tested) | yes, 8 out / 6 in |
+| Soldering | headers on modules (often pre-soldered), perfboard through-hole for the op-amp stages | through-hole only (jacks, headers, sockets, DC-DC module) |
 
-Check with a DMM: with USB plugged and no host stream, every DAC output reads the 0 V code,
-about **1.251 V** (code 32793 of 65536 x 2.5 V), and VREF reads 2.500 V.
-`python3 tools/cvcal.py` is not needed yet. Unplug USB: VREF and the outputs fall to 0 V.
+## Parts (all pre-assembled or through-hole)
 
-## Phase 2: one output stage on +-12 V (bench supply, 50 mA current limit)
-
-| From | To |
-|---|---|
-| bench +12 V, through SS14 (anode at supply) | rail `+12V`, 10 uF + 100 nF to GND |
-| bench -12 V, through SS14 (cathode at supply) | rail `-12V`, 10 uF + 100 nF to GND |
-| bench 0 V | GND (one point, next to the op-amp) |
-| DAC8568 pin 8 VREF | 10 k 0.1 % to node `VB`; `VB` 8.06 k 0.1 % to GND; 100 pF VB-GND (no bigger) |
-| OPA4172 pin 4 / pin 11 | `+12V` / `-12V` |
-| OPA4172 pin 3 (+IN A) | `VB` |
-| DAC8568 pin 4 (VOUTA) | 10 k 0.1 % to OPA4172 pin 2 (-IN A) |
-| OPA4172 pin 2 to pin 1 | 82.5 k 0.1 % in parallel with 47 pF |
-| OPA4172 pin 1 (OUT A) | BAT54S pin 3; BAT54S pin 2 to `+12V`, pin 1 to `-12V` |
-| OPA4172 pin 1 | 1 k to the jack tip (jack sleeve to GND) |
-
-Check: with no stream the jack reads 0 V (+-50 mV before calibration). Run
-`python3 tools/cvcal.py cal-out` with the DMM on the jack, then play a slow ramp from Circuit Studio
-(or any DAW) and confirm the jack follows 0.1 digital = 1 V. Stop the stream: the jack holds for
-20 ms, then ramps to 0 V.
-
-Then build channels B-D the same way (op-amp pins 5/6/7, 10/9/8, 12/13/14; DAC pins 13, 5, 12).
-
-## Phase 3: inputs (ADS131M04)
-
-| From | To | Note |
+| Qty | Part | Notes, approx price |
 |---|---|---|
-| Pico pin 14 (GP10) | ADS131M04 pin 14 SCLK | |
-| Pico pin 15 (GP11) | ADS pin 12 CS | 10 k pull-up to Pico 3V3 |
-| Pico pin 16 (GP12) | ADS pin 15 DOUT | |
-| Pico pin 17 (GP13) | ADS pin 13 DRDY | |
-| Pico pin 19 (GP14) | ADS pin 16 DIN | |
-| Pico pin 20 (GP15) | ADS pin 11 SYNC/RESET | |
-| Pico pin 27 (GP21) | ADS pin 17 CLKIN | 6.144 MHz; keep this wire short and away from the inputs |
-| `+3V3_A` | ADS pin 1 AVDD | 1 uF |
-| Pico pin 36 (3V3) | ADS pin 20 DVDD | 1 uF |
-| GND | ADS pins 2, 19 and AIN0N/1N/2N/3N (pins 4, 5, 8, 9) | |
-| ADS pin 18 CAP | 220 nF to GND | |
-| each jack tip | 49.9 k + 49.9 k in series to AINxP (pins 3, 6, 7, 10) | 9.09 k and 330 pF from AINxP to GND |
+| 1 | LilyGO T-Display-S3 (non-touch) | ~GBP 16-20 (LilyGO store, The Pi Hut, AliExpress) |
+| 2 | MCP4728 breakout (Adafruit 4470 or generic) | ~GBP 7 each (generic ~GBP 3); default address 0x60, keep it |
+| 2 | ADS1115 breakout (Adafruit 1085 or generic) | ~GBP 12 / ~GBP 3; default address 0x48, keep it |
+| 2 | TL074CN (DIP-14) | ~GBP 0.50 each; output stages for 8 outputs |
+| 1 | Bench supply +-12 V with current limit, or a Mornsun A0512S-1WR3 (+-12 V from USB 5 V) on the perfboard | |
+| 16 | Thonkiconn PJ398SM + perfboard + 1 % resistors + 100 nF caps | ~GBP 10 |
 
-Check: the LED stops fast-blinking (ADC found), `cvcal.py info` shows `adc_ok: True`. Patch
-Out n -> In n and run `python3 tools/cvcal.py cal-in`, then `save`.
+The two module pairs sit on **two separate I2C buses**, so nothing needs re-addressing:
+bus 0 = SDA GPIO18 / SCL GPIO17 (outputs and inputs 1-4), bus 1 = SDA GPIO16 / SCL GPIO21 (5-8).
+Build the firmware with `idf.py -B build-tiera -DCV_TIER_A=1 -DSDKCONFIG=build-tiera/sdkconfig build`.
 
-## Phase 4: into the rack
+## Output stage (per channel, TL074 quarter, +-12 V)
 
-Only after the README safety checklist has been ticked by a person. Power the board from the
-rack's 10-pin header (red stripe = -12 V) through the SS14 diodes instead of the bench supply.
-Mind the ground loop: computer USB ground and rack ground are now joined through the board; if
-you hear hum on other modules, use a full-speed USB isolator (ADuM3160-based, 12 Mbit/s is enough).
+`Vjack = 0.99 x (6 x Vb - 4.99 x Vdac)`, Vb = 3.3 V x 10.7k/20.7k = 1.706 V:
+
+- MCP4728 VOUTx -> 10 k -> op-amp -IN; 49.9 k from -IN to OUT.
+- +IN = Vb from a 10 k / 10.7 k divider off the module's 3.3 V (shared by all four sections).
+- OUT -> 1 k -> jack tip. SPICE (TL074-like swing): code 0 -> +10.04 V, midscale -> 0 V, full -> -10.03 V.
+
+**Power-on:** a fresh MCP4728 starts at code 0, which this stage turns into **+10 V**. On first boot the
+firmware writes the 0 V codes into the MCP4728 EEPROM; after that every power-up starts at 0 V. So do the
+first boot with nothing patched.
+
+## Input network (per channel, passive)
+
+Jack -> 100 k -> ADS1115 AINx, with 22 k to 3.3 V and 22 k to GND at AINx:
+`Vadc = 1.486 V + 0.0991 x Vjack` (+-10 V -> 0.50..2.48 V). +-15 V stays inside the ADS1115's limits;
++-24 V exceeds them by under 0.6 V through 100 k (0.2 mA, inside its 10 mA input-current rating).
+
+## Steps
+
+1. Flash the Tier A build; the display shows the meters (the audio group streams silence).
+2. Wire bus 0 only (one MCP4728 + one ADS1115), no op-amp stage: `python3 tools/cvcal.py info` shows
+   `precision_ok: True` once any MCP4728 answers; its outputs read ~2.05 V (the 0 V code) on a DMM.
+3. Add the TL074 stages on +-12 V **from a current-limited supply** and check 0 V at every jack.
+4. `python3 tools/cvcal.py cal-out` (DMM), patch out -> in, `cal-in`, `save`.
+5. Send MIDI from any keyboard app over BLE or USB: P1 = pitch, P2 = gate, P3 = velocity.

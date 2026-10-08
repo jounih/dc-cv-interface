@@ -1,0 +1,27 @@
+* -FS
+.include models.lib
+Vcc vcc 0 11.0
+Vee vee 0 -11.0
+Vp vp 0 0.44999999999999996
+Vm vm 0 4.05
+R1 vm inn 28700
+RF inn opo 82500
+CF inn opo 47p
+R2 vp inp 28700
+RG inp 0 82500
+CG inp 0 47p
+XU inp inn opo vcc vee OPA
+Vmeas opo opo2 0
+Dp opo2 vcc BAT54
+Dn vee opo2 BAT54
+RS opo2 jack 1k
+RL jack 0 100k
+
+.control
+op
+let j = v(jack)
+echo RES jack = $&j
+let ip = -i(vp)
+echo RES ivp = $&ip
+.endc
+.end

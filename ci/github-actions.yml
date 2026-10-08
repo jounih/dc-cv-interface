@@ -4,25 +4,18 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-24.04
+    container: espressif/idf:v5.4.2
     steps:
       - uses: actions/checkout@v4
-      - name: Toolchain
-        run: |
-          sudo apt-get update -q
-          sudo apt-get install -y -q cmake gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib ngspice python3-venv
-      - name: Pico SDK 2.2.0 + TinyUSB
-        run: |
-          git clone -q --depth 1 -b 2.2.0 https://github.com/raspberrypi/pico-sdk.git $HOME/pico-sdk
-          git -C $HOME/pico-sdk submodule update -q --init --depth 1 lib/tinyusb
-      - name: Checks
-        env:
-          PICO_SDK_PATH: /home/runner/pico-sdk
+      - name: Tools
+        run: apt-get update -q && apt-get install -y -q ngspice python3-venv build-essential
+      - name: Checks (host tests, ngspice, hw generation, both ESP-IDF builds)
         run: |
           python3 -m venv .venv && .venv/bin/pip install -q schemdraw
-          ./check.sh || (tail -n 40 logs/*.log; exit 1)
+          IDF_PATH=/opt/esp/idf ./check.sh || (tail -n 40 logs/*.log; exit 1)
       - uses: actions/upload-artifact@v4
         with:
           name: firmware
           path: |
-            firmware/build/cv_interface.uf2
-            firmware/build8/cv_interface.uf2
+            firmware/esp32s3/build/cv_interface.bin
+            firmware/esp32s3/build-tiera/cv_interface.bin

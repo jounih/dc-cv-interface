@@ -1,0 +1,21 @@
+* tier A out
+.include models.lib
+Vcc vcc 0 12
+Vee vee 0 -12
+Vd dac 0 4.095
+Vdd vdd 0 3.3
+RT vdd vb 10k
+RB vb 0 10.7k
+R1 dac inn 10k
+RF inn opo 49.9k
+XU vb inn opo vccl veel OPA
+Vcl vccl 0 10.5
+Vel veel 0 -10.5
+RS opo jack 1k
+RL jack 0 100k
+.control
+op
+let j = v(jack)
+echo RES jack = $&j
+.endc
+.end
