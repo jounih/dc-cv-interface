@@ -16,3 +16,4 @@ firmware/test/test_host
 firmware/test/test_tiera
 hw/spice/*.raw
 logs/
+archive/pico-v1-firmware/test/test[0-9]*
