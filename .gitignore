@@ -7,3 +7,6 @@ __pycache__/
 hw/spice/*.raw
 .venv/
 logs/
+firmware/test/test4
+firmware/test/test8
+firmware/test/*.dSYM/

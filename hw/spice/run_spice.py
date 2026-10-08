@@ -134,7 +134,7 @@ for name, code, load, rails in cases:
                         "let vop = v(opo)\necho RES v_opamp = $&vop\n"
                         "let ivcc = i(vcc)\necho RES i_vcc = $&ivcc\n"
                         "let ivee = i(vee)\necho RES i_vee = $&ivee")
-    r = run("out_fault_" + re.sub(r"[^a-z0-9]+", "_", name.lower()), deck)
+    r = run("out_fault_" + re.sub(r"[^a-z0-9]+", "_", name.lower().replace("+", "p").replace("-", "m")), deck)
     i_rs = r.get("i_rs", float("nan"))
     faults[name] = {
         "opamp_out_current_mA": r.get("i_opamp", float("nan")) * 1e3,
