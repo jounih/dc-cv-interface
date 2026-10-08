@@ -229,3 +229,10 @@ python3 tools/cvcal.py save
 - Chrome must expose the 6-channel input and 8-channel output (`getSettings().channelCount`); noted in the
   Circuit Studio queue.
 - VID:PID 1209:0001 is a pid.codes test ID: private use only.
+
+## License
+
+- Firmware, tools and scripts: MIT (`LICENSE`).
+- Hardware design files (schematics, netlists, BOMs, layout specs, SPICE models under `hw/` and `variants/*/hw/`): CERN Open Hardware Licence v2 – Permissive (`LICENSE-HARDWARE`, SPDX `CERN-OHL-P-2.0`).
+
+No warranty: this design has not been built or tested on hardware. Do the safety checklist before powering anything.
