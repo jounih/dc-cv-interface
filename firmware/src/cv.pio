@@ -1,0 +1,87 @@
+; PIO programs for the converters. pio0, 150 MHz system clock (RP2350).
+
+; ---------------------------------------------------------------------------
+; DAC8568: one 32-bit frame per FIFO word, MSB first, CS (SYNC) framed.
+; Side-set bit 0 = SCLK, bit 1 = SYNC. Y holds (bits per frame - 1).
+; Bit cell = 6 cycles (25 MHz at clkdiv 1): data changes with SCLK low,
+; rising edge 2 cycles later, falling (latching) edge 2 cycles after that,
+; data held 2 more cycles. SYNC high >= 13 cycles (87 ns; DAC8568 t4 = 80 ns).
+; The DMA timer paces words into the TX FIFO, so the update instants are
+; locked to the system crystal.
+.program spi_frame_tx
+.side_set 2
+.wrap_target
+    pull block      side 0b10 [7]
+    nop             side 0b10 [4]
+    mov x, y        side 0b00
+bitloop:
+    out pins, 1     side 0b00 [1]
+    nop             side 0b01 [1]
+    jmp x-- bitloop side 0b00 [1]
+.wrap
+
+% c-sdk {
+static inline void spi_frame_tx_init(PIO pio, uint sm, uint offset, uint pin_sclk, uint pin_dout, uint bits) {
+    // pin_sclk and pin_sclk + 1 (SYNC) are side-set pins.
+    pio_sm_set_pins_with_mask(pio, sm, (2u << pin_sclk), (3u << pin_sclk) | (1u << pin_dout));
+    pio_sm_set_pindirs_with_mask(pio, sm, (3u << pin_sclk) | (1u << pin_dout), (3u << pin_sclk) | (1u << pin_dout));
+    pio_gpio_init(pio, pin_sclk);
+    pio_gpio_init(pio, pin_sclk + 1);
+    pio_gpio_init(pio, pin_dout);
+    pio_sm_config c = spi_frame_tx_program_get_default_config(offset);
+    sm_config_set_sideset_pins(&c, pin_sclk);
+    sm_config_set_out_pins(&c, pin_dout, 1);
+    sm_config_set_out_shift(&c, false, false, 32);   // MSB first, manual pull
+    sm_config_set_fifo_join(&c, PIO_FIFO_JOIN_TX);
+    sm_config_set_clkdiv_int_frac(&c, 1, 0);
+    pio_sm_init(pio, sm, offset, &c);
+    pio_sm_exec(pio, sm, pio_encode_set(pio_y, bits - 1));
+    pio_sm_set_enabled(pio, sm, true);
+}
+%}
+
+; ---------------------------------------------------------------------------
+; ADS131M04 frame reader. Waits for DRDY falling, asserts CS, clocks 6 x 24
+; bits in SPI mode 1 (data launched on SCLK rise, sampled at the fall),
+; autopushes each 24-bit word. DIN is held low by the CPU (= NULL command).
+; IN pin 0 = DOUT, IN pin 1 = DRDY. Side-set = SCLK, SET pin = CS.
+; clkdiv 2 (75 MHz): bit cell 8 cycles = 9.4 MHz SCLK; frame ~15.6 us < 20.8 us.
+; With the 2-cycle input synchroniser the pin is effectively sampled 40 ns after
+; the rising edge, past tp(SCDO) max 32 ns.
+.program ads131_rx
+.side_set 1 opt
+.wrap_target
+    wait 1 pin 1
+    wait 0 pin 1
+    set pins, 0
+    set y, 5
+word:
+    set x, 23
+bit:
+    nop          side 1 [4]   ; SCLK high 5 cycles (ADC launches the bit on the rise)
+    in pins, 1   side 0 [1]   ; sample at the falling edge, SCLK low 3 cycles
+    jmp x-- bit
+    jmp y-- word
+    set pins, 1
+.wrap
+
+% c-sdk {
+static inline void ads131_rx_init(PIO pio, uint sm, uint offset, uint pin_sclk, uint pin_cs, uint pin_dout) {
+    pio_sm_set_pins_with_mask(pio, sm, (1u << pin_cs), (1u << pin_cs) | (1u << pin_sclk));
+    pio_sm_set_pindirs_with_mask(pio, sm, (1u << pin_cs) | (1u << pin_sclk),
+                                 (1u << pin_cs) | (1u << pin_sclk) | (3u << pin_dout));
+    pio_gpio_init(pio, pin_sclk);
+    pio_gpio_init(pio, pin_cs);
+    pio_gpio_init(pio, pin_dout);
+    pio_gpio_init(pio, pin_dout + 1);
+    pio_sm_config c = ads131_rx_program_get_default_config(offset);
+    sm_config_set_sideset_pins(&c, pin_sclk);
+    sm_config_set_set_pins(&c, pin_cs, 1);
+    sm_config_set_in_pins(&c, pin_dout);
+    sm_config_set_in_shift(&c, false, true, 24);     // shift left, autopush 24 bits
+    sm_config_set_fifo_join(&c, PIO_FIFO_JOIN_RX);
+    sm_config_set_clkdiv_int_frac(&c, 2, 0);
+    pio_sm_init(pio, sm, offset, &c);
+    pio_sm_set_enabled(pio, sm, true);
+}
+%}

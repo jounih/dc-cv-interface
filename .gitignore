@@ -1,0 +1,9 @@
+.ds/
+build/
+firmware/build*/
+firmware/test/test_host
+*.log
+__pycache__/
+hw/spice/*.raw
+.venv/
+logs/

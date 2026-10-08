@@ -1,0 +1,34 @@
+group,qty_4x4,qty_8x4,description,part_number,approx_gbp_each,line_gbp_4x4,where_to_buy
+core,1,1,"Raspberry Pi Pico 2 (RP2350, with headers for breadboard)",Raspberry Pi SC1631 / SC1632 (H),4.80,4.80,"The Pi Hut, Pimoroni, Farnell"
+core,1,1,"16-bit 8-ch DAC, midscale reset, int. ref (U2)",TI DAC8568BIPW,14.50,14.50,"Mouser UK, DigiKey UK, Farnell"
+core,1,1,24-bit 4-ch simultaneous delta-sigma ADC (U3),TI ADS131M04IPWR,4.60,4.60,"Mouser UK, DigiKey UK, LCSC"
+core,1,2,"Quad RRO op-amp, 36 V (U4)",TI OPA4172IDR,3.20,3.20,"Mouser UK, DigiKey UK, LCSC"
+power,1,1,"3.3 V LDO, 250 mA (U5)",Microchip MCP1700-3302E/TO,0.40,0.40,"Mouser UK, Farnell, Rapid"
+power,2,2,"Schottky 1 A 40 V, rail reverse-polarity block",SS14 (or 1N5819 through-hole),0.10,0.20,"LCSC, Tayda, Rapid"
+power,1,1,Eurorack 10-pin shrouded header + 10-to-16 ribbon,2x5 IDC box header; Thonk/Tayda ribbon,1.20,1.20,"Thonk, Tayda"
+protect,4,8,Dual Schottky clamp per output (to +-12 V),Nexperia BAT54S,0.10,0.40,"LCSC, Mouser"
+protect,4,8,"1 k series output resistor, 0.66 W anti-surge 1206",Panasonic ERJ-P08J102V,0.15,0.60,"Mouser, DigiKey"
+analog,5,9,10 k 0.1 % 25 ppm (R1x gain set + Vb top),Panasonic ERA-6AEB103V,0.30,1.50,"Mouser, DigiKey"
+analog,4,8,82.5 k 0.1 % 25 ppm (RFx),Panasonic ERA-6AEB8252V,0.30,1.20,"Mouser, DigiKey"
+analog,1,1,8.06 k 0.1 % (Vb bottom),Panasonic ERA-6AEB8061V,0.30,0.30,"Mouser, DigiKey"
+analog,8,8,"49.9 k 1 % 50 ppm thin film (input series, 2 per input; calibrated)",Yageo RT0805FRE0749K9L,0.05,0.40,"Mouser, LCSC"
+analog,4,4,9.09 k 1 % 50 ppm thin film (input shunt; calibrated),Yageo RT0805FRE079K09L,0.05,0.20,"Mouser, LCSC"
+analog,4,8,"47 pF C0G (output filter, 41 kHz)",0805 C0G 50 V,0.05,0.20,LCSC
+analog,4,4,"330 pF C0G (input filter, 59 kHz)",0805 C0G 50 V,0.05,0.20,LCSC
+analog,1,1,100 pF C0G (Vb),0805 C0G 50 V,0.05,0.05,LCSC
+decoupling,3,4,100 nF X7R,0805 X7R 50 V,0.03,0.09,LCSC
+decoupling,1,1,150 nF X7R (VREF),0805 X7R 25 V,0.05,0.05,LCSC
+decoupling,1,1,220 nF X7R (ADC CAP),0805 X7R 25 V,0.05,0.05,LCSC
+decoupling,5,5,1 uF X7R,0805 X7R 25 V,0.05,0.25,LCSC
+decoupling,2,2,10 uF 25 V (rails),0805 X5R 25 V or radial electrolytic,0.10,0.20,"LCSC, Tayda"
+misc,2,2,"10 k pull-up (DAC SYNC, ADC CS)",0805 1 %,0.02,0.04,LCSC
+jacks,8,12,3.5 mm Eurorack jack,Thonkiconn PJ398SM,0.30,2.40,"Thonk, Tayda"
+board,1,1,Stripboard / prototype board (2-layer PCB later: 5 boards ~GBP 5 + post),-,2.00,2.00,"JLCPCB, PCBWay, Rapid"
+
+TOTAL,,,4 out / 4 in board,,,39.03,"approx, single quantity, ex. shipping"
+TOTAL,,,8 out / 4 in board,,,47.06,
+
+breadboard,1,1,TSSOP-16 to DIP adapter (DAC8568),"SOIC/TSSOP-to-DIP adapter, 0.65 mm pitch",0.80,0.80,"Amazon, eBay, Proto-PIC"
+breadboard,1,1,TSSOP-20 to DIP adapter (ADS131M04),"TSSOP-20 adapter, 0.65 mm pitch",0.80,0.80,"Amazon, eBay, Proto-PIC"
+breadboard,1,1,SOIC-14 to DIP adapter (OPA4172) - or TL074CN DIP (range ~+-9.5 V),SOIC-14 adapter,0.60,0.60,"Amazon, eBay"
+breadboard,1,1,Bench supply +-12 V with current limit (or Eurorack PSU via ribbon),-,0.00,0.00,existing

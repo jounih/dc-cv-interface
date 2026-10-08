@@ -1,0 +1,40 @@
+* module_+12V_1k_while_-10V
+.include models.lib
+.param VREFV=2.5 CBV=1e-08
+Vcc vcc 0 12
+Vee vee 0 -12
+Vcode code 0 DC 64886 AC 1
+
+Bref vref 0 V={VREFV}+V(rn)
+Rrn rn 0 150820
+Bdac dac 0 V=V(vref)*V(code)/65536+V(dn)
+Rdn dn 0 603279
+RT vref vb 10000
+RB vb 0 8060
+CB vb 0 {CBV}
+R1 dac inn 10000
+RF inn opo 82500
+CF inn opo 4.7e-11
+XU vb inn opo vcc vee OPA
+Vmeas opo opo2 0
+Dp opo2 vcc BAT54
+Dn vee opo2 BAT54
+RS opo2 jack 1000
+
+Rsrc jack fx 1k
+Vf fx 0 12
+.control
+op
+let iop = i(vmeas)
+echo RES i_opamp = $&iop
+let irs = (v(opo2)-v(jack))/1000
+echo RES i_rs = $&irs
+let vop = v(opo)
+echo RES v_opamp = $&vop
+let ivcc = i(vcc)
+echo RES i_vcc = $&ivcc
+let ivee = i(vee)
+echo RES i_vee = $&ivee
+
+.endc
+.end

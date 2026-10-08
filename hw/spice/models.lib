@@ -1,0 +1,33 @@
+* Shared models for the CV interface front-end simulations (ngspice).
+
+* Behavioural OPA172-class op-amp (one section of OPA4172):
+*   A0 = 1e6, GBW = 10 MHz, slew ~10 V/us, rail-to-rail output (0.35 V from rails),
+*   output resistance 50 ohm, current limit ~65 mA, en = 7 nV/rtHz (2.96 k noise resistor).
+.subckt OPA inp inn out vcc vee
+Rnz nz 0 2.96k
+Bin inx 0 V=V(inp)+V(nz)
+Rin inp inn 10Meg
+Bgm 0 n1 I=159u*tanh((V(inx)-V(inn))*1m/159u)
+R1 n1 0 1G
+C1 n1 0 15.9p
+Bclamp n2 0 V=min(max(V(n1), V(vee)+0.35), V(vcc)-0.35)
+* output stage only works with rails present; internal ESD diodes to the rails
+Bout 0 out I=65m*tanh((V(n2)-V(out))/(65m*50))*((V(vcc)-V(vee)) > 5 ? 1 : 0)
+Desdp out vcc DSI
+Desdn vee out DSI
+Iq vcc vee 1.6m
+.model DSI D(Is=1e-14 N=1 Rs=5)
+.ends OPA
+
+* Schottky clamps (BAT54S) and rail protection (SS14 / 1N5819).
+.model BAT54 D(Is=2e-7 N=1.04 Rs=2.1 Cjo=10p Bv=30 Ibv=100u)
+.model SS14 D(Is=3e-6 N=1.1 Rs=0.04 Cjo=110p Bv=40 Ibv=1m)
+
+* ADS131M04 analog input (gain 1): 330 k average input impedance, ESD to AVDD+0.3 / AGND-1.6.
+.model DESD D(Is=1e-14 N=1 Rs=10)
+.subckt ADCIN ain avdd
+Rin ain 0 330k
+Desdp ain avdd DESD
+Vneg nneg 0 -1.0
+Desdn nneg ain DESD
+.ends ADCIN

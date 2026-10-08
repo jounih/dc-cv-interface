@@ -1,0 +1,31 @@
+* ref turn-on, CB=1e-06
+.include models.lib
+Vcc vcc 0 12
+Vee vee 0 -12
+Vcode code 0 DC 32793
+
+Bref vref 0 V=VR(time)+V(rn)
+Rrn rn 0 150820
+Bdac dac 0 V=V(vref)*V(code)/65536+V(dn)
+Rdn dn 0 603279
+RT vref vb 10000
+RB vb 0 8060
+CB vb 0 1e-06
+R1 dac inn 10000
+RF inn opo 82500
+CF inn opo 4.7e-11
+XU vb inn opo vcc vee OPA
+Vmeas opo opo2 0
+Dp opo2 vcc BAT54
+Dn vee opo2 BAT54
+RS opo2 jack 1000
+
+.func VR(t) { 2.5*min(max((t-100u)/50u,0),1) }
+RL jack 0 100000
+.control
+tran 1u 30m
+let ja = abs(v(jack))
+meas tran pk max ja
+echo RES peak = $&pk
+.endc
+.end
